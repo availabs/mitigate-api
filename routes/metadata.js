@@ -1,0 +1,43 @@
+module.exports = {
+  HAZARD_META :{
+    'wind':{id:'wind', name:'Wind', description: '', sheldus: "Wind"},
+    'wildfire':{id:'wildfire', name:'Wildfire', description: '', sheldus: "Wildfire"},
+    'tsunami':{id:'tsunami', name:'Tsunami', description: '', sheldus: "Tsunami/Seiche"},
+    'tornado':{id:'tornado', name:'Tornado', description: '', sheldus: "Tornado"},
+    'riverine':{id:'riverine', name:'Riverine Flooding', description: '', sheldus: "Flooding"},
+    'lightning':{id:'lightning', name:'Lightning', description: '', sheldus: "Lightning"},
+    'landslide':{id:'landslide', name:'Landslide', description: '', sheldus: "Landslide"},
+    'icestorm':{id:'icestorm', name:'Ice Storm', description: '', sheldus: "Winter Weather"},
+    'hurricane':{id:'hurricane', name:'Hurricane', description: '', sheldus: "Hurricane/Tropical Storm"},
+    'heatwave':{id:'heatwave', name:'Heat Wave', description: '', sheldus: "Heat"},
+    'hail':{id:'hail', name:'Hail', description: '', sheldus:"Hail"},
+    'earthquake':{id:'earthquake', name:'Earthquake', description: '', sheldus: "Earthquake"},
+    'drought':{id:'drought', name:'Drought', description: '', sheldus: "Drought"},
+    'avalanche':{id:'avalanche', name:'Avalanche', description: '', sheldus: "Avalanche"},
+    'coldwave':{id:'coldwave', name:'Coldwave', description: ''},
+    'winterweat':{id:'winterweat', name:'Snow Storm', description: '', sheldus: "Winter Weather"},
+    'volcano':{id:'volcano', name:'Volcano', description: ''},
+    'coastal':{id:'coastal', name:'Costal Flooding', description:'',sheldus: "Coastal"}
+  },
+  sheldus2hazards: {
+    "Wind":'wind',
+    "Wildfire":'wildfire',
+    "Tsunami/Seiche":'tsunami',
+    "Tornado":'tornado',
+    "Flooding":"riverine",
+    "Lightning":"lightning",
+    "Landslide":"landslide",
+    "Winter Weather":"winterweat",
+    "Hurricane/Tropical":"hurricane",
+    "Heat":"heatwave",
+    "Hail":"hail",
+    "Earthquake":"earthquake",
+    "Drought":"drought",
+    "Avalanche":"avalanche",
+    "Coastal":'coastal'
+  },
+  hazards: ['wind','wildfire','tsunami','tornado','riverine','lightning',
+    'landslide','icestorm','hurricane','heatwave','hail','earthquake','drought',
+    'avalanche','coldwave','winterweat','volcano','coastal'],
+    secondary: ['builtenv', 'sovist', 'sovi', 'bric','nri']
+}

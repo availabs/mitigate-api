@@ -1,0 +1,23 @@
+{
+  "name": "mitigate-api",
+  "version": "0.0.1",
+  "description": "Falcor API for Hazard Mitigation Datasources",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.3",
+    "falcor-express": "^0.1.4",
+    "falcor-json-graph": "^2.2.1",
+    "falcor-path-utils": "^0.5.1",
+    "falcor-router": "^0.8.3",
+    "lodash.get": "^4.4.2",
+    "node-env-file": "^0.1.8",
+    "pg": "^7.4.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest test/riskIndex.spec.js",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

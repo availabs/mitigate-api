@@ -1,0 +1,33 @@
+<!-- index.html -->
+<html>
+  <head>
+    <!-- Do _not_  rely on this URL in production. Use only during development.  -->
+    <script src="//netflix.github.io/falcor/build/falcor.browser.js"></script>
+    <script>
+      var model = new falcor.Model({source: new falcor.HttpDataSource('/graph') });
+      
+      // retrieve the "greeting" key from the root of the Virtual JSON resource
+      model.
+        get("riskIndex.hazards").
+        then(function(data) {
+          document.write(
+            data.json.riskIndex.hazards.join('<br/>')
+          );
+
+          model.get(
+            ['riskIndex','meta', data.json.riskIndex.hazards, ['id', 'name']],
+            ['riskIndex', '36', data.json.riskIndex.hazards, ['score','value']],
+            ['riskIndex','36', ['wind','wildfire', 'tsunami'],['score', 'value']],
+            ['sheldus', '36', ['wind','wildfire','tsunami','tornado','riverine','lightning','landslide','icestorm','hurricane','heatwave','hail','earthquake','drought','avalanche','coldwave','winterweat','volcano','coastal'],{from: 1996, to: 2012}, ['num_events','property_damage', 'crop_damage', 'injuries', 'fatalities']]
+          ).then(resp => {
+            document.write(
+              JSON.stringify(resp)
+            )
+            console.log(model.getCache())
+          })
+        });
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
