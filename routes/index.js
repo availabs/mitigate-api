@@ -1,7 +1,8 @@
 const Router = require("falcor-router"),
     riskIndex = require('./riskIndex'),
-    sheldus = require('./sheldus')
-    geo = require('./geo');
+    sheldus = require('./sheldus'),
+    geo = require('./geo'),
+    severeWeather = require('./severeWeather');
 
 var routes = [
 
@@ -16,7 +17,10 @@ var routes = [
     //geo
     geo.GeoByGeoid,
     geo.CountiesByGeoid,
-    geo.TractsByGeoid
+    geo.TractsByGeoid,
+
+    // severe weather
+    severeWeather.SevereWeatherByGeoByYear
 ];
 
 var BaseRouter = Router.createClass(routes, { maxPaths: 20000 });
