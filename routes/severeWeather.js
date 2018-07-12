@@ -6,37 +6,37 @@ var SevereWeatherService = require("../services/severeWeatherController"),
 
 module.exports = {
 	SevereWeatherByGeoByYear: {
-		route: `severeweather[{keys:geoids}][{keys:hazardids}][{keys:years}]['num_events','property_damage', 'crop_damage', 'injuries', 'fatalities']`,
+		route: `severeweather[{keys:geoids}][{keys:hazardIds}][{keys:years}]['num_events','property_damage', 'crop_damage', 'injuries', 'fatalities']`,
 	    get: function (pathSet) {
 	    	return new Promise((resolve, reject) => {
-	    		const geoids = pathSet.geoids.map(d => d.toString()),
+	    		const response = [], 
+	    		    geoids = pathSet.geoids.map(d => d.toString()),
 	    			years = pathSet.years.map(d => +d),
-	    			hazardTypes = pathSet.hazardids.reduce((a, c) => a.concat(hazards2severeWeather[c]), []);
+	    			hazardTypes = pathSet.hazardIds.reduce((a, c) => a.concat(hazards2severeWeather[c]), []);
 
 	    		SevereWeatherService.SevereWeatherByGeoByYear(this.db_service, years, geoids, hazardTypes)
 	    			.then(rows => {
-	    				let DATA_MAP = {};
-
-	    				const valueNames = pathSet[4];
-
-	    				rows.forEach(row => {
-	    					const hazardid = severeWeather2hazards[row.hazard];
-    						valueNames.forEach(pk => {
-	    						const path = ['severeweather', row.geoid, hazardid, row.year, pk],
-	    							pathKey = path.join("-");
-
-		    					if (!(pathKey in DATA_MAP)) {
-		    						DATA_MAP[pathKey] = {
-		    							value: 0,
-		    							path
-		    						};
-		    					}
-								let value = +DATA_MAP[pathKey].value;
-								value += +row[pk];
-		    					DATA_MAP[pathKey].value = value;
-    						})
-	    				})
-		    			resolve(Object.values(DATA_MAP));
+	    				// let DATA_MAP = {};
+	    				const pathKeys = pathSet[4];
+	    				geoids.forEach(geoid => {
+		    				years.forEach(year => {
+		    					pathSet.hazardIds.forEach(haz => {
+			    					const hazardids = hazards2severeWeather[haz];
+			    					let hazardData = rows.filter(d => d.year === year && d.geoid === geoid && hazardids.includes(d.hazard))
+			    					pathKeys.forEach(key => {
+			    						let totalHazard = hazardData.reduce((a,b) => { 
+					    					a += +b[key];
+					    					return +a
+					    				},0)
+				    					response.push({
+				    						path: ['severeweather', geoid, haz, year, key],
+				    						value: totalHazard 
+				    					})
+				    				})
+			    				})
+			    			})
+		    			})
+		    			resolve(response)
 		    		})
 		    })
 	    } // END get

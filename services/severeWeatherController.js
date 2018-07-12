@@ -15,7 +15,7 @@ module.exports = {
           const sql = `
             SELECT 
               substring(geoid, 1, ${ geoLen }) AS geoid,
-              (begin_yearmonth / 100)::INTEGER AS year, 
+              year AS year, 
               event_type AS hazard,
               count(1) AS num_events,
               sum(injuries_direct) AS injuries,
@@ -24,11 +24,15 @@ module.exports = {
               sum(crop_damage) AS crop_damage
             FROM severe_weather.details
               WHERE substring(geoid, 1, ${ geoLen }) IN ('${ filteredGeoids.join(`','`) }')
-              AND (begin_yearmonth / 100)::INTEGER IN (${ years.join(',') })
+              AND year IN (${ years.join(',') })
               AND event_type IN ('${ hazardTypes.join(`','`) }')
               GROUP BY 1, 2, 3
               ORDER BY 1 DESC
           `;
+
+          // sql query for debugging
+          //console.log(sql)
+          
           db_service.query(sql, [], (err, data) => {
             if (err) reject(err);
             resolve(data.rows)

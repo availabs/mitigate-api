@@ -18,18 +18,6 @@ describe('RiskIndex', () => {
 		});
 	})
 
-	test('riskIndex by Geo state', (done) => {
-		var getEvent = {
-	  		'paths': `[['Geo','36','counties']]`,
-	  		'method': 'get'
-	  	}
-	  	
-		falcorGraph.respond({queryStringParameters: getEvent}, (error, response) => {
-			console.log(JSON.stringify(response))
-			expect(get(response, 'jsonGraph.riskIndex.36.wind.score', null)).toBe(39.03)
-			done()
-		});
-	})
 
 	test('riskIndex by Geo state', (done) => {
 		var getEvent = {
@@ -38,7 +26,6 @@ describe('RiskIndex', () => {
 	  	}
 	  	
 		falcorGraph.respond({queryStringParameters: getEvent}, (error, response) => {
-			console.log(JSON.stringify(response))
 			expect(get(response, 'jsonGraph.riskIndex.36.wind.score', null)).toBe(39.03)
 			done()
 		});
