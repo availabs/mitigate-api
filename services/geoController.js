@@ -1,4 +1,3 @@
-
 const typeTables = {
    '2': 'us_state',
    '5': 'us_county',
@@ -7,6 +6,9 @@ const typeTables = {
    'county': 'us_county',
    'tract': '36_tract'
 }
+
+const { fillCensusApiUrlArray } = require("./utils/censusApiUtils");
+const fetch = require("./utils/fetch");
 
 const ChildrenByGeoid= function ChildrenByGeoid(db_service, geoids, type) {
   return new Promise((resolve, reject) => {
@@ -89,9 +91,25 @@ const GeoByGeoid = function GeoByGeoid( db_service, geoids ) {
   });
 };
 
+const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
+  const urls = fillCensusApiUrlArray(geoids, years),
+    fetches = urls.map(([geoid, year, url]) =>
+      fetch(url)
+        .then(data => ({
+          population: +data[1][0],
+          under_5: +data[1][1] + +data[1][2],
+          geoid,
+          year
+        }))
+    );
+  return Promise.all(fetches)
+    .then(data => [].concat(...data));
+}
+
 module.exports = {
   GeoByGeoid,
-  ChildrenByGeoid
+  ChildrenByGeoid,
+  CensusAcsByGeoidByYear
 }
 
 

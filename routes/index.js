@@ -18,6 +18,7 @@ var routes = [
     geo.GeoByGeoid,
     geo.CountiesByGeoid,
     geo.TractsByGeoid,
+    geo.CensusAcsByGeoidByYear,
 
     // severe weather
     severeWeather.SevereWeatherByGeoByYear
@@ -27,7 +28,7 @@ var BaseRouter = Router.createClass(routes, { maxPaths: 20000 });
 
 // Creating a constructor for a class that derives from BaseRouter
 var MitigationRouter = function(db_service){
-    BaseRouter.call(this, { maxPaths: 20000 });
+    BaseRouter.call(this, { maxPaths: 200000 });
     this.db_service = db_service;
     // this.userId = userId;
 };

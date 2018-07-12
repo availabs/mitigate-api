@@ -8,14 +8,12 @@ var Router = require("falcor-router"),
     HAZARD_META = metadata.HAZARD_META
     hazards = metadata.hazards;
 
-
 const typeByGeoidLength =  {
 	'2': 'state',
 	'5': 'county',
 	'10': 'cousub',
 	'11': 'tract'
 }
-
 
 module.exports = {
 	GeoByGeoid: {
@@ -83,6 +81,47 @@ module.exports = {
 		    	})
 		    })
 	    }
+	},
+
+	CensusAcsByGeoidByYear: {
+		route: `geo[{keys:geoids}][{keys:years}]['population', 'under_5']`,
+		get: function(pathSet) {
+			const geoids = pathSet.geoids.map(d => d.toString()),
+				years = pathSet.years.map(d => +d);
+			return GeoService.CensusAcsByGeoidByYear(this.db_service, geoids, years)
+				.then(results => {
+					const valueNames = pathSet[3];
+
+					let DATA_MAP = {};
+					results.forEach((data) => {
+						valueNames.forEach(vn => {
+							const path = ['geo', data.geoid, data.year, vn],
+								pathKey = path.join("-");
+							if (!(pathKey in DATA_MAP)) {
+								DATA_MAP[pathKey] = {
+									value: data[vn],
+									path
+								}
+							}
+						})
+					})
+					pathSet.geoids.forEach(geoid => {
+						pathSet.years.forEach(year => {
+							valueNames.forEach(vn => {
+								const path = ['geo', geoid, year, vn],
+									pathKey = path.join("-");
+								if (!(pathKey in DATA_MAP)) {
+									DATA_MAP[pathKey] = {
+										value: 0,
+										path
+									}
+								}
+							})
+						})
+					})
+					return Object.values(DATA_MAP);
+				})
+		}
 	}
 }
 

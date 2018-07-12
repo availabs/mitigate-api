@@ -28,10 +28,24 @@ const pool = new Pool(config)
 const query = (text, values, cb) => pool.query(text, values, cb)
 const end = () => pool.end();
 
+const promise = (text, values=[]) => {
+	return new Promise((resolve, reject) => {
+		pool.query(text, values, (error, result) => {
+			if (error) {
+				reject(error);
+			}
+			else {
+				resolve(result.rows);
+			}
+		})
+	})
+}
+
 // Used in the database initialization scripts.
 // Keeps them from hanging at the end.
 
 module.exports = {
   query,
-  end
+  end,
+  promise
 }
