@@ -33,15 +33,20 @@ const SheldusByYearByGeoid = function RiskIndexHazardGeo( db_service, years, geo
         // console.log(sql)
         
         // run query resolve rows
+        //console.time(`sheldus query ${geoLen}`)
         db_service.query(sql, [], (err, data) => {
           if (err) reject(err);
+          //console.timeEnd(`sheldus query ${geoLen}`)
           resolve(data.rows)
         });
       })
     })
     
     //run all queries and resolve flattened 1-dimensional array
+    //console.log('sheldus sending qs')
+    //console.time('sheldus promise all')
     Promise.all(queries).then(riskData => {
+      //console.timeEnd('sheldus promise all')
       resolve([].concat(...riskData))
     })
   });

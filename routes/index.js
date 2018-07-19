@@ -1,33 +1,17 @@
-const Router = require("falcor-router"),
-    riskIndex = require('./riskIndex'),
-    sheldus = require('./sheldus'),
-    geo = require('./geo'),
-    severeWeather = require('./severeWeather');
+const Router = require("falcor-router");
 
-var routes = [
+const fs = require("fs");
 
-    // Risk Index
-    riskIndex.riskIndexHazards,
-    riskIndex.riskIndexByGeo,
-    riskIndex.riskIndexMeta,
+const regex = /^\w+.route.js$/;
 
-    //sheldus
-    sheldus.SheldusByGeoByYear,
+const routes = fs.readdirSync("./routes")
+    .filter(file => regex.test(file))
+    .reduce((routes, file) => routes.concat(require(`./${ file }`)), []);
 
-    //geo
-    geo.GeoByGeoid,
-    geo.CountiesByGeoid,
-    geo.TractsByGeoid,
-    geo.CensusAcsByGeoidByYear,
-
-    // severe weather
-    severeWeather.SevereWeatherByGeoByYear
-];
-
-var BaseRouter = Router.createClass(routes, { maxPaths: 20000 });
+var BaseRouter = Router.createClass(routes);
 
 // Creating a constructor for a class that derives from BaseRouter
-var MitigationRouter = function(db_service){
+var MitigationRouter = function(db_service) {
     BaseRouter.call(this, { maxPaths: 200000 });
     this.db_service = db_service;
     // this.userId = userId;

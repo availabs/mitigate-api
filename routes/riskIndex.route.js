@@ -10,8 +10,8 @@ var Router = require("falcor-router"),
 
 
 
-module.exports = {
-	riskIndexHazards: {
+module.exports = [
+	{ // riskIndexHazards
 		route: 'riskIndex.hazards',
 	    get: function () {
 	    	return {
@@ -41,8 +41,8 @@ module.exports = {
 			}
 	    		
 	    }
-	},
-	riskIndexMeta: {
+	}, // END riskIndexHazards
+	{ // riskIndexMeta
 		route: `riskIndex.meta[{keys:hazardIds}]['id', 'name', 'description']`,
 	    get: function (pathSet) {
     		let response = [];
@@ -57,8 +57,8 @@ module.exports = {
     		})
     		return response
 	    }
-	},
-	riskIndexByGeo: {
+	}, // END riskIndexMeta
+	{ // riskIndexByGeo
 		route: `riskIndex[{keys:geoids}][{keys:hazardIds}]['value', 'score']`,
 	    get: function (pathSet) {
 	    	let response = [];
@@ -82,8 +82,8 @@ module.exports = {
 		    	})
 		    })
 	    }
-	}
-}
+	} // END riskIndexByGeo
+]
 
 
 //------ Unassigned Sheldus events 

@@ -1,11 +1,15 @@
-const https = require("https");
+const http = require("http"),
+  https = require("https"),
+
+  regex = /^https:\/\//;
 
 module.exports = url => {
+  const SERVICE = regex.test(url) ? https : http;
   return new Promise((resolve, reject) => {
-    https.get(url, res => {
+    SERVICE.get(url, res => {
       const { statusCode } = res;
       if (statusCode !== 200) {
-        reject(new Error(`URL ${ url } failed, with: ${ statusCode }`));
+        return reject(new Error(`URL ${ url } failed, with: ${ statusCode }`));
       }
       let rawData = '';
       res.on('data', chunk => {
@@ -20,9 +24,7 @@ module.exports = url => {
           reject(e);
         }
       });
-      res.on('error', e => {
-        reject(e);
-      });
+      res.on('error', reject);
     })
   })
 }

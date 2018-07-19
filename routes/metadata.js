@@ -17,7 +17,7 @@ let META_DATA = {
     'coldwave':{id:'coldwave', name:'Coldwave', description: ''},
     'winterweat':{id:'winterweat', name:'Snow Storm', description: '', sheldus: "Winter Weather"},
     'volcano':{id:'volcano', name:'Volcano', description: ''},
-    'coastal':{id:'coastal', name:'Costal Flooding', description:'',sheldus: "Coastal"}
+    'coastal':{id:'coastal', name:'Coastal Flooding', description:'',sheldus: "Coastal"}
   },
   sheldus2hazards: {
     "Wind":'wind',

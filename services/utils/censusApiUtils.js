@@ -50,46 +50,45 @@ class Geoid {
 				break;
 		}
 	}
-}
-
-const makeCensusApiUrl = (_geoid, year) => {
-	let url = makeBaseCensusApiUrl(year);
-	if (url == null) return null;
-
-	const geoid = new Geoid(_geoid);
-
-	switch (geoid.length) {
-		case 2:
-			url += `&for=state:${ geoid.state }`;
-			break;
-		case 5:
-			url += `&for=county:${ geoid.county }`
-			url += `&in=state:${ geoid.state }`
-			break;
-		case 10:
-			url += `&for=county+subdivision:${ geoid.cousub }`
-			url += `&in=state:${ geoid.state }+county:${ geoid.county }`
-			break;
-		case 11:
-			url += `&for=tract:${ geoid.tract }`
-			url += `&in=state:${ geoid.state }+county:${ geoid.county }`
-			break;
-		default:
-			return null;
+	makeUrlAndKey(year) {
+		let url = makeBaseCensusApiUrl(year), key;
+		if (url !== null) {
+			switch (this.length) {
+				case 2:
+					url += `&for=state:${ this.state }`;
+					key = `${ year }-state-${ this.state }`;
+					break;
+				case 5:
+					url += `&for=county:*`;
+					url += `&in=state:${ this.state }`;
+					key = `${ year }-counties-${ this.state }`;
+					break;
+				case 10:
+					url += `&for=county+subdivision:*`
+					url += `&in=state:${ this.state }+county:${ this.county }`
+					key = `${ year }-cousubs-${ this.state }-${ this.county }`;
+					break;
+				case 11:
+					url += `&for=tract:*`
+					url += `&in=state:${ this.state }+county:${ this.county }`
+					key = `${ year }-tracts-${ this.state }-${ this.county }`;
+					break;
+			}
+		}
+		return { url, key };
 	}
-	return url;
 }
 
 module.exports = {
 	fillCensusApiUrlArray: (geoids, years) => {
-		let urlArray = [];
+		let urlMap = {};
 		geoids.forEach(geoid => {
-			years.forEach(year =>
-				urlArray.push(
-					[geoid, year, makeCensusApiUrl(geoid, year)]
-				)
-			)
+			years.forEach(year => {
+				const geoidObj = new Geoid(geoid),
+					{ url, key } = geoidObj.makeUrlAndKey(year);
+				urlMap[key] = [year, url];
+			})
 		})
-		return urlArray.filter(([geoid, year, url]) => Boolean(url));
+		return Object.values(urlMap).filter(([year, url]) => Boolean(url));
 	}
 }

@@ -17,7 +17,7 @@ describe('Sheldus', () => {
 	  	}
 	  	
 	  	falcorGraph.respond({queryStringParameters: getEvent}, (error, response) => {
-	  		console.log('meta response', JSON.stringify(response))
+	  		// console.log('meta response', JSON.stringify(response))
 	  		expect(get(response, 'jsonGraph.sheldus.36.wind.1996.num_events', null)).not.toBe(36582.86)
 			done()
 		});

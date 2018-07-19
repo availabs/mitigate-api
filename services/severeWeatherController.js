@@ -11,8 +11,11 @@ module.exports = {
       let filteredGeoids = geoids.filter(d => d.length === geoLen);
       const sql = `
         SELECT 
-          substring(geoid, 1, ${ geoLen }) AS geoid,
-          (begin_yearmonth / 100)::INTEGER AS year, 
+          ${ geoLen <= 5 ?
+            `substring(geoid, 1, ${ geoLen })`
+            : `cousub_geoid`
+          } AS geoid,
+          year, 
           event_type AS hazard,
           count(1) AS num_events,
           sum(injuries_direct) AS injuries,
@@ -20,15 +23,18 @@ module.exports = {
           sum(property_damage) AS property_damage,
           sum(crop_damage) AS crop_damage
         FROM severe_weather.details
-          WHERE substring(geoid, 1, ${ geoLen }) IN ('${ filteredGeoids.join(`','`) }')
-          AND (begin_yearmonth / 100)::INTEGER IN (${ years.join(',') })
+          ${ geoLen <= 5 ?
+            `WHERE substring(geoid, 1, ${ geoLen })`
+            : `WHERE cousub_geoid`
+          } IN ('${ filteredGeoids.join(`','`) }')
+          AND year IN (${ years.join(',') })
           AND event_type IN ('${ hazardTypes.join(`','`) }')
           GROUP BY 1, 2, 3
-          ORDER BY 1 DESC
       `;
+// console.log("SQL:",sql);
       return db_service.promise(sql);
     })
     return Promise.all(queries)
-      .then(data => [].concat(...data))
+      .then(data => [].concat(...data));
   } // END SevereWeatherByGeoByYear
 };

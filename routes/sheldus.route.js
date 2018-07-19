@@ -10,8 +10,8 @@ var Router = require("falcor-router"),
 
 
 
-module.exports = {
-	SheldusByGeoByYear: {
+module.exports = [
+	{ // SheldusByGeoByYear
 		route: `sheldus[{keys:geoids}][{keys:hazardIds}][{keys:years}]['num_events','property_damage', 'crop_damage', 'injuries', 'fatalities']`,
 	    get: function (pathSet) {
 	    	let response = [];
@@ -20,8 +20,13 @@ module.exports = {
 	    		// force types
 	    		let geoids = pathSet.geoids.map(d => d.toString()) // for keys to string
 	    		let years = pathSet.years.map(d => +d)
+	    		// console.log('1 - getting sheldus data')
+	    		// console.time('sheldusService Time')
 	    		SheldusService.SheldusByYearByGeoid(this.db_service, years, geoids).then(sheldusData => {
+	    		//console.timeEnd('sheldusService Time')
     				// console.log('sheldusData', sheldusData.length)
+    				// console.time('sheldus process time')
+    				// console.log('2 - got sheldus data')
     				years.forEach(year => {
 	    				geoids.forEach(geoid => {
 	    					pathSet.hazardIds.forEach(haz => {
@@ -36,12 +41,14 @@ module.exports = {
 		    				})
 		    			})
 	    			})
+	    			//console.log('3 - sending sheldus data')
+	    			//console.timeEnd('sheldus process time')
 		    		resolve(response);
 		    	})
 		    })
 	    }
-	}
-}
+	} // END SheldusByGeoByYear
+]
 
 
 //------ Unassigned Sheldus events 

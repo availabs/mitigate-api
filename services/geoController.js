@@ -4,7 +4,8 @@ const typeTables = {
    '10': '36_cousub',
    '11': '36_tract',
    'county': 'us_county',
-   'tract': '36_tract'
+   'tract': '36_tract',
+   'cousub': '36_cousub'
 }
 
 const { fillCensusApiUrlArray } = require("./utils/censusApiUtils");
@@ -21,6 +22,7 @@ const ChildrenByGeoid= function ChildrenByGeoid(db_service, geoids, type) {
             geoid
           FROM geo.tl_2017_${typeTables[type]}
             where geoid like '${geoid}%'
+            ${ type == "cousub" ? " AND cousubfp != '00000'": "" }
         `
 
         // sql query for debugging
@@ -92,17 +94,8 @@ const GeoByGeoid = function GeoByGeoid( db_service, geoids ) {
 };
 
 const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
-  const urls = fillCensusApiUrlArray(geoids, years),
-    fetches = urls.map(([geoid, year, url]) =>
-      fetch(url)
-        .then(data => ({
-          population: +data[1][0],
-          under_5: +data[1][1] + +data[1][2],
-          geoid,
-          year
-        }))
-    );
-  return Promise.all(fetches)
+  const urls = fillCensusApiUrlArray(geoids, years);
+  return Promise.all(generateCensusAcsByGeoidByYearFetches(urls))
     .then(data => [].concat(...data));
 }
 
@@ -112,6 +105,16 @@ module.exports = {
   CensusAcsByGeoidByYear
 }
 
-
-
-
+const generateCensusAcsByGeoidByYearFetches = urls =>
+  urls.map(([year, url]) =>
+    fetch(url)
+      .then(data =>
+        data.slice(1) // ignore description row
+          .map(d => ({
+            geoid: d.slice(3).sort((a, b) => a.length - b.length).join(""),
+            under_5: (+d[1] + +d[2]),
+            population: +d[0],
+            year
+          }))
+      )
+  )
