@@ -8,7 +8,11 @@ const typeTables = {
    'cousub': '36_cousub'
 }
 
-const { fillCensusApiUrlArray } = require("./utils/censusApiUtils");
+const {
+  fillCensusApiUrlArray,
+  processCensusApiRow
+} = require("./utils/censusApiUtils");
+
 const fetch = require("./utils/fetch");
 
 const ChildrenByGeoid= function ChildrenByGeoid(db_service, geoids, type) {
@@ -110,11 +114,6 @@ const generateCensusAcsByGeoidByYearFetches = urls =>
     fetch(url)
       .then(data =>
         data.slice(1) // ignore description row
-          .map(d => ({
-            geoid: d.slice(3).sort((a, b) => a.length - b.length).join(""),
-            under_5: (+d[1] + +d[2]),
-            population: +d[0],
-            year
-          }))
+          .map(d => processCensusApiRow(d, year))
       )
   )

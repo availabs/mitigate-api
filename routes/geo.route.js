@@ -1,4 +1,4 @@
-var Router = require("falcor-router"),
+const Router = require("falcor-router"),
     GeoService = require("../services/geoController"),
     jsonGraph = require('falcor-json-graph'),
     $ref = jsonGraph.ref,
@@ -7,6 +7,10 @@ var Router = require("falcor-router"),
     metadata = require('./metadata'),
     HAZARD_META = metadata.HAZARD_META
     hazards = metadata.hazards;
+
+const {
+	CENSUS_API_VARIABLE_NAMES
+} = require("../services/utils/censusApiUtils")
 
 const typeByGeoidLength =  {
 	'2': 'state',
@@ -104,7 +108,7 @@ module.exports = [//{
 	}, // END CousubsByGeoid
 
 	{ // CensusAcsByGeoidByYear
-		route: `geo[{keys:geoids}][{keys:years}]['population', 'under_5']`,
+		route: `geo[{keys:geoids}][{keys:years}]['${ CENSUS_API_VARIABLE_NAMES.join(`', '`)}']`,
 		get: function(pathSet) {
 			const geoids = pathSet.geoids.map(d => d.toString()),
 				years = pathSet.years.map(d => +d);
