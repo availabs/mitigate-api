@@ -75,7 +75,7 @@ module.exports = {
       .then(data => [].concat(...data));
   }, // END SevereWeatherEventsLengthByGeoByYear
 
-  SevereWeatherEventsByGeoByYearBy: function(db_service, geoids, hazardTypes, years) {
+  SevereWeatherEventsByGeoByYear: function(db_service, geoids, hazardTypes, years) {
 
     let geoidLengths = geoids.reduce((out, g) => {
       if (!out.includes(g.length)) { out.push(g.length) };
@@ -94,7 +94,8 @@ module.exports = {
           event_type AS hazard,
           year,
           property_damage,
-          magnitude
+          magnitude,
+          ST_AsGeoJson(begin_coords_geom) AS geom
         FROM severe_weather.details
         WHERE ${ geoLen <= 5 ?
           `substring(geoid, 1, ${ geoLen })`
@@ -104,7 +105,11 @@ module.exports = {
         AND event_type IN ('${ hazardTypes.join(`','`) }')
       `;
 // console.log("SQL:",sql);
-      return db_service.promise(sql);
+      return db_service.promise(sql)
+//         .then(data => {
+// console.log(sql, data);
+// return data;
+//         });
     })
 
     return Promise.all(queries)

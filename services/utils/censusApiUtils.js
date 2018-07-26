@@ -131,7 +131,7 @@ class Geoid {
 	}
 }
 
-const sum = (row, i, j) =>
+const sumSlices = (row, i, j) =>
 	row.slice(i, j)
 		.reduce((a, c) => a + +c, 0)
 const makeGeoid = row =>
@@ -160,7 +160,7 @@ module.exports = {
 		    year
 		};
 		for (const key in CENSUS_API_SLICES) {
-			data[key] = sum(row, ...CENSUS_API_SLICES[key]);
+			data[key] = sumSlices(row, ...CENSUS_API_SLICES[key]);
 		}
 	    return data;
 	}
