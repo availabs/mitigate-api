@@ -46,7 +46,7 @@ const contentInsert = (db_service, args) =>
 	db_service.promise(contentInsertSql, args)
 		.then(insertedRow =>
 			contentByIndexLength(db_service)
-				.then(length => ({ ...insertedRow[0], length }))
+				.then(length => ({ ...insertedRow[0], ...length }))
 		)
 
 

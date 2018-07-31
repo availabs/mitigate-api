@@ -72,7 +72,6 @@ module.exports = [
 				})
 		},
 		set: function(jsonGraph) {
-console.log("SET:",jsonGraph)
 			const contentById = jsonGraph.content.byId,
 				content_ids = Object.keys(contentById);
 			return contentController.setContentById(this.db_service, contentById)
