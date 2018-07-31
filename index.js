@@ -8,7 +8,7 @@ var app = express();
 app.use('/graph', falcorExpress.dataSourceRoute(function (req, res) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  return new MitigationRouter(db_service)
+	return MitigationRouter(db_service)
 }));
 
 // serve static files from current directory
