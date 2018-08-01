@@ -15,7 +15,7 @@ const {
 
 const fetch = require("./utils/fetch");
 
-const ChildrenByGeoid= function ChildrenByGeoid(db_service, geoids, type) {
+const ChildrenByGeoid = function ChildrenByGeoid(db_service, geoids, type) {
   return new Promise((resolve, reject) => {
     
     let queries = geoids.map(geoid => {

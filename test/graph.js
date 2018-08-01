@@ -28,7 +28,7 @@ module.exports.respond = function (event, cb) {
   if (context.method === 'set') {
     obs = dataSource[context.method](context.jsonGraph)
   } else if (context.method === 'call') {
-    obs = dataSource[context.method](context.callPath, context.arguments, context.pathSuffixes, context.paths)
+    obs = dataSource[context.method](context.callPath, context.args, context.refPaths, context.thisPaths)
   } else {
     obs = dataSource[context.method]([].concat(context.paths))
   }
@@ -43,8 +43,9 @@ module.exports.respond = function (event, cb) {
 var parseArgs = {
   'jsonGraph': true,
   'callPath': true,
-  'arguments': true,
-  'pathSuffixes': true,
+  'args': true,
+  'refPaths': true,
+  'thisPaths': true,
   'paths': true
 }
 
@@ -53,7 +54,7 @@ function requestToContext(queryMap) {
   if (queryMap) {
     Object.keys(queryMap).forEach(function(key) {
       var arg = queryMap[key]
-      if (parseArgs[key] && arg) {
+      if (parseArgs[key] && arg && (typeof arg === 'string')) {
         arg = arg.replace(/'/g, '"')
         arg = decodeURI(arg).replace(/%2C/g, ',').replace(/%3A/g, ':')
         context[key] = JSON.parse(arg)
