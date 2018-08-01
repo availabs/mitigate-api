@@ -138,8 +138,8 @@ module.exports = [
 				.then(({ length }) => {
 					return [
 						{
-							path: ['content', 'byIndex', 'length'],
-							value: $atom(+length)
+							path: ['content', 'byIndex'],
+							invalidated: true
 						},
 						{
 							path: ['content', 'byId', args[0]],
