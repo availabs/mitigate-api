@@ -16,28 +16,7 @@ module.exports = [
 	    get: function () {
 	    	return {
 	    		path: ['riskIndex', 'hazards'],
-	    		value: $atom(
-					[
-						'wind',
-					  	'wildfire',
-						'tsunami',
-						'tornado',
-						'riverine',
-						'lightning',
-						'landslide',
-						'icestorm',
-						'hurricane',
-						'heatwave',
-						'hail',
-						'earthquake',
-						'drought',
-						'avalanche',
-						'coldwave',
-						'winterweat',
-						'volcano',
-						'coastal'
-					]
-				)
+	    		value: $atom(hazards)
 			}
 	    		
 	    }
