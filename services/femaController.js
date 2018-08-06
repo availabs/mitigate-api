@@ -30,6 +30,7 @@ const femadisasterDisasterNumbers = (db_service, geoids, disasters, years) =>
 
 
 const DISASTER_ATTRIUBUTES = [
+	'disasternumber',
 	'disastername',
 	'declarationtype',
 	'geoid',
@@ -43,7 +44,7 @@ const femadisasterByDisasterNumberSql = (disasternumbers) =>
 		declarationtype,
 		geoid,
 		extract(year FROM incidentbegindate) AS year,
-		incidentbegindate::TIMESTAMP AS date
+		incidentbegindate::TIMESTAMP::TEXT AS date
 	FROM public.fema_disaster_declarations
 	WHERE disasternumber IN (${ disasternumbers });
 `
