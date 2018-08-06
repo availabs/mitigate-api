@@ -46,7 +46,7 @@ module.exports = [
 	},
 
 	{
-		route: `content.byId[{keys:content_ids}]['attributes', 'body', 'created_at', 'updated_at']`,
+		route: `content.byId[{keys:content_ids}]['content_id', 'attributes', 'body', 'created_at', 'updated_at']`,
 		get: function(pathSet) {
 			return contentController.getContentById(this.db_service, pathSet.content_ids)
 				.then(rows => {
@@ -86,12 +86,30 @@ module.exports = [
 							})
 						}
 						else {
-							for (const key in row) {
-								if (key === 'content_id') continue;
+							const new_content_id = ('content_id' in row) ? row.content_id : content_id;
+							if (new_content_id != content_id) {
 								result.push({
-									path: ['content', 'byId', content_id, key],
-									value: $atom(row[key])
+									path: ['content', 'byId', content_id],
+									invalidated: true
 								})
+								result.push({
+									path: ['content', 'byIndex'],
+									invalidated: true
+								})
+								for (const key in row) {
+									result.push({
+										path: ['content', 'byId', new_content_id, key],
+										value: $atom(row[key])
+									})
+								}
+							}
+							else {
+								for (const key in row) {
+									result.push({
+										path: ['content', 'byId', content_id, key],
+										value: $atom(row[key])
+									})
+								}
 							}
 						}
 					})

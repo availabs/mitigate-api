@@ -11,11 +11,6 @@ app.use('/graph', falcorExpress.dataSourceRoute(function (req, res) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   
- //  console.log('-----------------------------------')
- //  console.log(req.body)
- //  console.log(req.query)
-	// console.log('-----------------------------------')
-  
   return MitigationRouter(db_service)
 }));
 

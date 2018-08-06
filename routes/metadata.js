@@ -37,6 +37,68 @@ let META_DATA = {
     "Coastal":'coastal'
   },
 
+  // Uncategorized:
+  // "Toxic Substances"
+  // "Fishing Losses"
+  // "Dam/Levee Break"
+  // "Terrorist"
+  // "Other"
+  // "Chemical"
+  // "Human Cause"
+  hazards2femadisasters: {
+    'wind': [
+        "Severe Storm(s)"
+    ],
+    'wildfire': [
+        "Fire"
+    ],
+    'tsunami': [
+        "Tsunami"
+    ],
+    'tornado': [
+        "Tornado"
+    ],
+    'riverine': [
+        "Flood"
+    ],
+    'lightning': [
+    ],
+    'landslide': [
+        "Mud/Landslide"
+    ],
+    'icestorm': [
+        "Severe Ice Storm"
+    ],
+    'hurricane': [
+        "Hurricane",
+        "Typhoon"
+    ],
+    'heatwave': [
+    ],
+    'hail': [
+    ],
+    'earthquake': [
+        "Earthquake"
+    ],
+    'drought': [
+        "Drought"
+    ],
+    'avalanche': [
+    ],
+    'coldwave': [
+        "Freezing"
+    ],
+    'winterweat': [
+        "Snow"
+    ],
+    'volcano': [
+        "Volcano"
+    ],
+    'coastal': [
+        "Coastal Storm"
+    ]
+  },
+
   hazards2severeWeather: {
   // Uncategorized:
   // "Marine Dense Fog"
@@ -152,19 +214,27 @@ let META_DATA = {
     ]
   }, // END hazards2severeWeather
 
-  hazards: ['wind','wildfire','tsunami','tornado','riverine','lightning',
-    'landslide','icestorm','hurricane','heatwave','hail','earthquake','drought',
-    'avalanche','coldwave','winterweat','volcano','coastal'],
   secondary: ['builtenv', 'sovist', 'sovi', 'bric','nri']
 }
-function populateSevereWeather2hazards() {
-    META_DATA.severeWeather2hazards = {};
-    for (const hazard in META_DATA.hazards2severeWeather) {
-        const swArray = META_DATA.hazards2severeWeather[hazard];
-        swArray.forEach(d => {
-            META_DATA.severeWeather2hazards[d] = hazard;
-        })
-    }
+
+META_DATA.hazards = Object.keys(META_DATA.HAZARD_META);
+
+// Populates mappings from severe weather names to hazard ids
+META_DATA.severeWeather2hazards = {};
+for (const hazard in META_DATA.hazards2severeWeather) {
+    const swArray = META_DATA.hazards2severeWeather[hazard];
+    swArray.forEach(sw => {
+        META_DATA.severeWeather2hazards[sw] = hazard;
+    })
 }
-populateSevereWeather2hazards();
+
+// Populates mappings from fema disasters to hazard ids
+META_DATA.femadisasters2hazards = {}
+for (const hazard in META_DATA.hazards2femadisasters) {
+    const swArray = META_DATA.hazards2femadisasters[hazard];
+    swArray.forEach(sw => {
+        META_DATA.femadisasters2hazards[sw] = hazard;
+    })
+}
+
 module.exports = META_DATA;
