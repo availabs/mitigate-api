@@ -21,19 +21,27 @@ const getContentById = (db_service, content_ids) =>
 	db_service.promise(getContentByIdSql(content_ids));
 
 
-const setContentByIdSql = (content_id, values) => `
+const setContentByIdSql = `
 	UPDATE public.content
-	SET ${ Object.keys(values).map(key => `${ key } = '${ values[key] }'`) },
-	updated_at = now()
-	WHERE content_id = '${ content_id }'
+	SET content_id = $1,
+		body = $2,
+		attributes = $3,
+		updated_at = now()
+	WHERE content_id = $4
 	RETURNING *;
 `
 const setContentById = (db_service, contentById) =>
 	Promise.all(
 		Object.keys(contentById)
-			.map(content_id =>
-				db_service.promise(setContentByIdSql(content_id, contentById[content_id]))
-			)
+			.map(content_id => {
+				const args = [
+					contentById[content_id].content_id,
+					contentById[content_id].body,
+					contentById[content_id].attributes,
+					content_id
+				]
+				return db_service.promise(setContentByIdSql, args);
+			})
 	).then(values => [].concat(...values));
 
 
