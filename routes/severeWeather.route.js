@@ -200,7 +200,7 @@ module.exports = [
 	}, // END SevereWeatherEventsById
 
 	{ // SevereWeatherEventsByGeoByYear
-		route: `severeWeather.events.byId[{keys:geoids}][{keys:hazardids}][{integers:years}]['geoid', 'property_damage', 'magnitude', 'episode_narrative', 'event_narrative', 'geom']`,
+		route: `severeWeather.events.byId[{keys:geoids}][{keys:hazardids}][{integers:years}]['property_damage']`,
 		get: function(pathSet) {
     		const {
     			geoids,
