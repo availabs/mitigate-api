@@ -2,23 +2,6 @@ const falcorGraph = require('./graph'),
 	get = require('lodash.get');
 
 describe('SBA TESTS', () => {
-// `sba.events.byId[{keys:entry_ids}]['${ ATTRIBUTES.join("', '")}']`
-	test('sba.events.byId', done => {
-		const getEvent = {
-	  		'paths': [
-	  			['sba', 'events', 'byId', [1,2,3,4], ['total_loss', 'loan_total', 'geoid']]
-	  		],
-	  		'method': 'get'
-	  	}
-		falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
-			const data = get(response, 'jsonGraph.sba.events.byId', null);
-			expect(data[1].loan_total).toBe(38100.0);
-			expect(data[2].total_loss).toBe(3741.0);
-			expect(data[3].loan_total).toBe(600.0);
-			expect(data[4].total_loss).toBe(33331.0);
-			done();
-		});
-	})
 
 // `sba['business', 'home', 'all'][{keys:geoids}][{keys:hazardids}][{integers:years}]['total_loss', 'total_approved_loan', 'num_loans']`
 	test('sba.byGeoByYear', done => {
@@ -78,9 +61,9 @@ describe('SBA TESTS', () => {
 	  		'method': 'get'
 	  	}
 	  	falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
-			expect(get(response, 'jsonGraph.sba.events.3611564782.hurricane.2011.byIndex.0.entry_id', null)).toBe(84744)
-			expect(get(response, 'jsonGraph.sba.events.3611526715.hurricane.2011.byIndex.0.entry_id', null)).toBe(84164)
-			expect(get(response, 'jsonGraph.sba.events.36119.hurricane.2011.byIndex.8.entry_id', null)).toBe(85522)
+			expect(get(response, 'jsonGraph.sba.events.3611564782.hurricane.2011.byIndex.0.entry_id', null)).toBe(50345)
+			expect(get(response, 'jsonGraph.sba.events.3611526715.hurricane.2011.byIndex.0.entry_id', null)).toBe(50083)
+			expect(get(response, 'jsonGraph.sba.events.36119.hurricane.2011.byIndex.8.entry_id', null)).toBe(50251)
 	  		done();
 	  	})
 	})
@@ -89,16 +72,16 @@ describe('SBA TESTS', () => {
 	test('sba.events.byId', done => {
 		const getEvent = {
 	  		'paths': [
-	  			['sba', 'events', 'byId', [84744,84164,85522], ['total_loss', 'loan_total', 'geoid']]
+	  			['sba', 'events', 'byId', [50345,50083,50251], ['total_loss', 'loan_total', 'geoid']]
 	  		],
 	  		'method': 'get'
 	  	}
 		falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
 			const data = get(response, 'jsonGraph.sba.events.byId', null);
-			expect(data[84744].total_loss).toBe(5451.0);
-			expect(data[84164].total_loss).toBe(25486.0);
-			expect(data[85522].loan_total).toBe(19700.0);
-			expect(data[85522].total_loss).toBe(86295.0);
+			expect(data[50083].total_loss).toBe(8900.0);
+			expect(data[50083].loan_total).toBe(7900.0);
+			expect(data[50251].loan_total).toBe(11100.0);
+			expect(data[50345].total_loss).toBe(275072.0);
 			done();
 		});
 	})
