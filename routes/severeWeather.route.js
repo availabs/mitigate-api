@@ -15,11 +15,6 @@ const getPathSetVariables = pathSet => ({
 	hazardids: pathSet.hazardids
 })
 
-const DATA_TYPES = {
-	property_damage: d => +d,
-	magnitude: d => +d
-}
-
 module.exports = [
 	{ // SevereWeatherByGeoByYear
 		route: `severeWeather[{keys:geoids}][{keys:hazardids}][{integers:years}]['num_events', 'property_damage', 'crop_damage', 'injuries', 'fatalities']`,
@@ -200,7 +195,7 @@ module.exports = [
 	}, // END SevereWeatherEventsById
 
 	{ // SevereWeatherEventsByGeoByYear
-		route: `severeWeather.events.byId[{keys:geoids}][{keys:hazardids}][{integers:years}]['property_damage']`,
+		route: `severeWeather.events.borked[{keys:geoids}][{keys:hazardids}][{integers:years}].property_damage`,
 		get: function(pathSet) {
     		const {
     			geoids,
@@ -213,23 +208,21 @@ module.exports = [
     			.then(rows => {
 
 					const response = [];
-					const valueNames = pathSet[5];
 
     				geoids.forEach(geoid => {
 	    				years.forEach(year => {
 	    					hazardids.forEach(hazardid => {
 								const hazards = hazards2severeWeather[hazardid],
 									filtered = rows.filter(row => (row.geoid == geoid) && hazards.includes(row.hazard) && (row.year == year));
-	    						valueNames.forEach(valueName => {
-									const path = ['severeWeather', 'events', geoid, hazardid, year, valueName],
-										data = filtered.map(d => ({ geoid, hazardid, year, [valueName]: DATA_TYPES[valueName](d[valueName]), geom: d.geom }))
-													.filter(d => Boolean(d[valueName]));
-									
-									response.push({
-										value: $atom(data),
-										path
-									});
-								})
+	    						
+								const path = ['severeWeather', 'events', 'borked', geoid, hazardid, year, 'property_damage'],
+									data = filtered.map(d => ({ geoid, hazardid, year, property_damage: +d.property_damage, geom: d.geom }))
+												.filter(d => Boolean(d.property_damage));
+								
+								response.push({
+									value: $atom(data),
+									path
+								});
 		    				})
 		    			})
 	    			})
