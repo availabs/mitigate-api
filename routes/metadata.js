@@ -4,7 +4,7 @@ let META_DATA = {
     'wildfire':{id:'wildfire', name:'Wildfire', description: '', sheldus: "Wildfire"},
     'tsunami':{id:'tsunami', name:'Tsunami', description: '', sheldus: "Tsunami/Seiche"},
     'tornado':{id:'tornado', name:'Tornado', description: '', sheldus: "Tornado"},
-    'riverine':{id:'riverine', name:'Riverine Flooding', description: '', sheldus: "Flooding"},
+    'riverine':{id:'riverine', name:'Flooding', description: '', sheldus: "Flooding"},
     'lightning':{id:'lightning', name:'Lightning', description: '', sheldus: "Lightning"},
     'landslide':{id:'landslide', name:'Landslide', description: '', sheldus: "Landslide"},
     'icestorm':{id:'icestorm', name:'Ice Storm', description: '', sheldus: "Winter Weather"},
@@ -17,8 +17,14 @@ let META_DATA = {
     'coldwave':{id:'coldwave', name:'Coldwave', description: ''},
     'winterweat':{id:'winterweat', name:'Snow Storm', description: '', sheldus: "Winter Weather"},
     'volcano':{id:'volcano', name:'Volcano', description: ''},
-    'coastal':{id:'coastal', name:'Coastal Flooding', description:'',sheldus: "Coastal"}
+    // --------- No Data ---------------//
+    // expansive_soil: {id: 'expansive_soil', name: 'Expansive Soil', sheldus: '' },
+    // landsubsidence: {id: 'landsubsidence', name: 'Land Subsidence' },
+    // sealevel: {id: 'Sea Level', name: 'Sea Level'},
+    // coastal: {id:'coastal', name:'Coastal Flooding', description:'',sheldus: "Coastal Erosion"}
+    
   },
+
   sheldus2hazards: {
     "Wind":'wind',
     "Wildfire":'wildfire',
@@ -148,7 +154,8 @@ let META_DATA = {
         'Flood',
         'Flash Flood',
         "THUNDERSTORM WINDS/FLASH FLOOD",
-        "THUNDERSTORM WINDS/ FLOOD"
+        "THUNDERSTORM WINDS/ FLOOD",
+        'Coastal Flood'
     ],
     'lightning': [
         'Lightning',
@@ -183,7 +190,10 @@ let META_DATA = {
     'avalanche': ['Avalanche'],
     'coldwave': [
         'Cold/Wind Chill',
-        'Extreme Cold/Wind Chill'
+        'Extreme Cold/Wind Chill',
+        "Frost/Freeze",
+        "Cold/Wind Chill"
+        
     ],
     'winterweat': [
         'Winter Weather',
@@ -191,19 +201,15 @@ let META_DATA = {
         'Heavy Snow',
         'Blizzard',
         'Ice Storm',
-        "Frost/Freeze",
-        "Cold/Wind Chill",
         "High Snow",
         "Lake-Effect Snow",
-        "Sleet",
-        "Extreme Cold/Wind Chill"
+        "Sleet"
     ],
     'volcano': [
         'Volcanic Ash',
         'Volcanic Ashfall'
     ],
     'coastal': [
-        'Coastal Flood',
         'High Surf',
         "Marine Tropical Storm",
         "Sneakerwave",
