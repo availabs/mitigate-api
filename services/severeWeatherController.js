@@ -1,5 +1,4 @@
-const getGeoidLengths = geoids =>
-  [...new Set(geoids.map(geoid => geoid.length)).values()]
+const { getGeoidLengths } = require("./utils");
 
 module.exports = {
   SevereWeatherByGeoByYear: function(db_service, geoids, hazardTypes, years) {

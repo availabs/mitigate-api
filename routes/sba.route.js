@@ -2,7 +2,8 @@ const falcorJsonGraph = require('falcor-json-graph'),
 	$atom = falcorJsonGraph.atom,
 
 	sbaController = require("../services/sbaController")
-	attributes = sbaController.attributes;
+	ATTRIBUTES = sbaController.ATTRIBUTES,
+	COERCE = sbaController.COERCE;
 
 const getPathSetVariables = pathSet => ({
 	geoids: pathSet.geoids.map(geoid => geoid.toString()),
@@ -13,7 +14,7 @@ const getPathSetVariables = pathSet => ({
 
 module.exports = [
 	{ // sbaByGeoByYear
-		route: `sba[{keys:geoids}][{keys:hazardids}][{integers:years}]['${ attributes.join("', '")}']`,
+		route: `sba['business', 'home', 'all'][{keys:geoids}][{keys:hazardids}][{integers:years}]['total_loss', 'loan_total', 'num_loans']`,
 	    get: function (pathSet) {
 	    	const {
 	    		geoids,
@@ -24,30 +25,45 @@ module.exports = [
 	    		.then(rows => {
 					let DATA_MAP = {};
 
-    				geoids.forEach(geoid => {
-	    				years.forEach(year => {
-	    					hazardids.forEach(hazardid => {
-	    						pathSet[4].forEach(attribute => {
-									const path = ['sba', geoid, hazardid, year, attribute],
-										pathKey = path.join("-");
+					pathSet[1].forEach(loan_type => {
+	    				geoids.forEach(geoid => {
+		    				years.forEach(year => {
+		    					hazardids.forEach(hazardid => {
+		    						pathSet[5].forEach(attribute => {
+										const path = ['sba', loan_type, geoid, hazardid, year, attribute],
+											pathKey = path.join("-");
 
-									if (!(pathKey in DATA_MAP)) {
-										DATA_MAP[pathKey] = {
-											value: 0,
-											path
-										};
-									}
-								})
-		    				})
+										if (!(pathKey in DATA_MAP)) {
+											DATA_MAP[pathKey] = {
+												value: 0,
+												path
+											};
+										}
+									})
+			    				})
+			    			})
 		    			})
-	    			})
+		    		})
 
 					rows.forEach(row => {
-						pathSet[4].forEach(attribute => {
-							const path = ['sba', row.geoid, row.hazardid, row.year, attribute],
-								pathKey = path.join("-");
-							let value = DATA_MAP[pathKey].value + (+row[attribute]);
-							DATA_MAP[pathKey].value = value;
+						pathSet[1].forEach(loan_type => {
+							pathSet[5].forEach(attribute => {
+								const path = ['sba', loan_type, row.geoid, row.hazardid, row.year, attribute],
+									pathKey = path.join("-");
+								let value = 0;
+								if ((loan_type == "home") && (row.loan_type == "home")) {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+								else if ((loan_type == "business") && (row.loan_type == "business")) {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+								else if (loan_type == "all") {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+							})
 						})
 					})
 
@@ -123,7 +139,7 @@ module.exports = [
 									}
 									else {
 										result.push({
-											path: ["severeWeather", "events", geoid, hazardid, year, "byIndex", index, "entry_id"],
+											path: ["sba", "events", geoid, hazardid, year, "byIndex", index, "entry_id"],
 											value: row.entry_id
 										})
 									}
@@ -138,7 +154,7 @@ module.exports = [
 	}, // END sbaEventsByIndex
 
 	{ // sbaEventsByEntryId
-		route: `sba.events.byId[{keys:entry_ids}]['${ attributes.join("', '")}']`,
+		route: `sba.events.byId[{keys:entry_ids}]['${ ATTRIBUTES.join("', '")}']`,
 	    get: function (pathSet) {
 	    	const entry_ids = pathSet.entry_ids;
 	    	return sbaController.sbaEventsByEntryId(this.db_service, entry_ids)
@@ -154,10 +170,10 @@ module.exports = [
 							})
 						}
 						else {
-							pathSet[2].forEach(attribute => {
+							pathSet[4].forEach(attribute => {
 								result.push({
 									path: ["sba", "events", "byId", entry_id, attribute],
-									value: row[attribute]
+									value: COERCE[attribute](row[attribute])
 								})
 							})
 						}

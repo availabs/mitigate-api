@@ -8,8 +8,6 @@ var Router = require("falcor-router"),
     HAZARD_META = metadata.HAZARD_META,
     hazards = metadata.hazards;
 
-
-
 module.exports = [
 	{ // riskIndexHazards
 		route: 'riskIndex.hazards',
@@ -21,6 +19,7 @@ module.exports = [
 	    		
 	    }
 	}, // END riskIndexHazards
+
 	{ // riskIndexMeta
 		route: `riskIndex.meta[{keys:hazardIds}]['id', 'name', 'description']`,
 	    get: function (pathSet) {
@@ -37,6 +36,7 @@ module.exports = [
     		return response
 	    }
 	}, // END riskIndexMeta
+	
 	{ // riskIndexByGeo
 		route: `riskIndex[{keys:geoids}][{keys:hazardIds}]['value', 'score']`,
 	    get: function (pathSet) {
