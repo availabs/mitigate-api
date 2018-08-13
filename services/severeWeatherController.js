@@ -15,6 +15,8 @@ module.exports = {
           event_type AS hazard,
           year, 
           count(1) AS num_events,
+          count(distinct episode_id) as num_episodes,
+          sum(CASE WHEN property_damage > 1000000 THEN 1 ELSE 0 END) as num_severe_events,
           sum(injuries_direct) AS injuries,
           sum(deaths_direct) AS fatalities,
           sum(property_damage) AS property_damage,
@@ -28,7 +30,7 @@ module.exports = {
         AND event_type IN ('${ hazardTypes.join(`','`) }')
         GROUP BY 1, 2, 3
       `;
-// console.log("SQL:",sql);
+      // console.log("SQL:",sql);
       return db_service.promise(sql);
     })
 
