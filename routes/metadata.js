@@ -1,4 +1,4 @@
-let META_DATA = {
+    let META_DATA = {
   HAZARD_META :{
     'wind':{id:'wind', name:'Wind', description: '', sheldus: "Wind"},
     'wildfire':{id:'wildfire', name:'Wildfire', description: '', sheldus: "Wildfire"},
@@ -200,7 +200,6 @@ let META_DATA = {
         'Winter Storm',
         'Heavy Snow',
         'Blizzard',
-        'Ice Storm',
         "High Snow",
         "Lake-Effect Snow",
         "Sleet"
