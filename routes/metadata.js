@@ -64,7 +64,8 @@
         "Tornado"
     ],
     'riverine': [
-        "Flood"
+        "Flood",
+         "Severe Storm(s)"
     ],
     'lightning': [
     ],
@@ -76,8 +77,7 @@
     ],
     'hurricane': [
         "Hurricane",
-        "Typhoon",
-        "Severe Storm(s)"
+        "Typhoon"
 
     ],
     'heatwave': [

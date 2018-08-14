@@ -19,6 +19,7 @@ module.exports = {
           sum(CASE WHEN property_damage > 1000000 THEN 1 ELSE 0 END) as num_severe_events,
           sum(injuries_direct) AS injuries,
           sum(deaths_direct) AS fatalities,
+          sum(property_damage + crop_damage) as total_damage,
           sum(property_damage) AS property_damage,
           sum(crop_damage) AS crop_damage
         FROM severe_weather.details

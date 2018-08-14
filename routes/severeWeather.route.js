@@ -17,7 +17,7 @@ const getPathSetVariables = pathSet => ({
 
 module.exports = [
 	{ // SevereWeatherByGeoByYear
-		route: `severeWeather[{keys:geoids}][{keys:hazardids}][{integers:years}]['num_events', 'num_episodes', 'num_severe_events', 'property_damage', 'crop_damage', 'injuries', 'fatalities']`,
+		route: `severeWeather[{keys:geoids}][{keys:hazardids}][{integers:years}]['num_events', 'num_episodes', 'num_severe_events', 'total_damage', 'property_damage', 'crop_damage', 'injuries', 'fatalities']`,
 	    get: function (pathSet) {
     		const {
     			geoids,
