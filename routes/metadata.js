@@ -7,7 +7,7 @@
     'riverine':{id:'riverine', name:'Flooding', description: '', sheldus: "Flooding"},
     'lightning':{id:'lightning', name:'Lightning', description: '', sheldus: "Lightning"},
     'landslide':{id:'landslide', name:'Landslide', description: '', sheldus: "Landslide"},
-    'icestorm':{id:'icestorm', name:'Ice Storm', description: '', sheldus: "Winter Weather"},
+    'icestorm':{id:'icestorm', name:'Ice Storm', description: '', sheldus: ""},
     'hurricane':{id:'hurricane', name:'Hurricane', description: '', sheldus: "Hurricane/Tropical Storm"},
     'heatwave':{id:'heatwave', name:'Heat Wave', description: '', sheldus: "Heat"},
     'hail':{id:'hail', name:'Hail', description: '', sheldus:"Hail"},
