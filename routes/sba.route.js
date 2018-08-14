@@ -6,10 +6,11 @@ const falcorJsonGraph = require('falcor-json-graph'),
 	COERCE = sbaController.COERCE;
 
 const getPathSetVariables = pathSet => ({
-	geoids: pathSet.geoids.map(geoid => geoid.toString()),
+	geoids: pathSet.geoids && pathSet.geoids.map(geoid => geoid.toString()),
 	years: pathSet.years,
 	indices: pathSet.indices,
-	hazardids: pathSet.hazardids
+	hazardids: pathSet.hazardids,
+	zip_codes: pathSet.zip_codes && pathSet.zip_codes.map(geoid => geoid.toString())
 })
 
 module.exports = [
@@ -27,8 +28,8 @@ module.exports = [
 
 					pathSet[1].forEach(loan_type => {
 	    				geoids.forEach(geoid => {
-		    				years.forEach(year => {
-		    					hazardids.forEach(hazardid => {
+		    				hazardids.forEach(hazardid => {
+		    					years.forEach(year => {
 		    						pathSet[5].forEach(attribute => {
 										const path = ['sba', loan_type, geoid, hazardid, year, attribute],
 											pathKey = path.join("-");
@@ -71,6 +72,120 @@ module.exports = [
 	    		})
 	    }
 	}, // END sbaByGeoByYear
+
+	{ // sbaByZip
+		route: `sba['business', 'home', 'all'].byZip[{keys:zip_codes}][{keys:hazardids}][{integers:years}]['total_loss', 'loan_total', 'num_loans']`,
+		get: function(pathSet) {
+	    	const {
+	    		zip_codes,
+	    		hazardids,
+	    		years
+	    	} = getPathSetVariables(pathSet);
+	    	return sbaController.sbaByZip(this.db_service, zip_codes, hazardids, years)
+	    		.then(rows => {
+					let DATA_MAP = {};
+
+					pathSet[1].forEach(loan_type => {
+	    				zip_codes.forEach(zip_code => {
+		    				hazardids.forEach(hazardid => {
+		    					years.forEach(year => {
+		    						pathSet[6].forEach(attribute => {
+										const path = ['sba', loan_type, 'byZip', zip_code, hazardid, year, attribute],
+											pathKey = path.join("-");
+
+										if (!(pathKey in DATA_MAP)) {
+											DATA_MAP[pathKey] = {
+												value: 0,
+												path
+											};
+										}
+									})
+			    				})
+			    			})
+		    			})
+		    		})
+
+					rows.forEach(row => {
+						pathSet[1].forEach(loan_type => {
+							pathSet[6].forEach(attribute => {
+								const path = ['sba', loan_type, 'byZip', row.zip_code, row.hazardid, row.year, attribute],
+									pathKey = path.join("-");
+								let value = 0;
+								if ((loan_type == "home") && (row.loan_type == "home")) {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+								else if ((loan_type == "business") && (row.loan_type == "business")) {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+								else if (loan_type == "all") {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+							})
+						})
+					})
+					return Object.values(DATA_MAP);
+	    		})
+		}
+	}, // END sbaByZip
+
+	{ // sbaByZipAllTime
+		route: `sba['business', 'home', 'all'].byZip[{keys:zip_codes}][{keys:hazardids}].allTime['total_loss', 'loan_total', 'num_loans']`,
+		get: function(pathSet) {
+	    	const {
+	    		zip_codes,
+	    		hazardids,
+	    		years
+	    	} = getPathSetVariables(pathSet);
+	    	return sbaController.sbaByZipAllTime(this.db_service, zip_codes, hazardids, years)
+	    		.then(rows => {
+					let DATA_MAP = {};
+
+					pathSet[1].forEach(loan_type => {
+	    				zip_codes.forEach(zip_code => {
+		    				hazardids.forEach(hazardid => {
+	    						pathSet[6].forEach(attribute => {
+									const path = ['sba', loan_type, 'byZip', zip_code, hazardid, "allTime", attribute],
+										pathKey = path.join("-");
+
+									if (!(pathKey in DATA_MAP)) {
+										DATA_MAP[pathKey] = {
+											value: 0,
+											path
+										};
+									}
+								})
+			    			})
+		    			})
+		    		})
+
+					rows.forEach(row => {
+						pathSet[1].forEach(loan_type => {
+							pathSet[6].forEach(attribute => {
+								const path = ['sba', loan_type, 'byZip', row.zip_code, row.hazardid, "allTime", attribute],
+									pathKey = path.join("-");
+								let value = 0;
+								if ((loan_type == "home") && (row.loan_type == "home")) {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+								else if ((loan_type == "business") && (row.loan_type == "business")) {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+								else if (loan_type == "all") {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+							})
+						})
+					})
+					return Object.values(DATA_MAP);
+	    		})
+		}
+	}, // END sbaByZipAllTime
 
 	{ // sbaEventsLength
 		route: `sba.events[{keys:geoids}][{keys:hazardids}][{integers:years}].length`,

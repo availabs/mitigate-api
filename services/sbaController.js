@@ -23,7 +23,7 @@ const COERCE = {
 	"entry_id": toNum
 }
 
-sbaByGeoByYear = function(db_service, geoids, hazardids, years) {
+const sbaByGeoByYear = function(db_service, geoids, hazardids, years) {
 	let queries = getGeoidLengths(geoids).map(geoLen => {
 	  	let filteredGeoids = geoids.filter(d => d.length === geoLen);
 	  	const sql = `
@@ -48,7 +48,45 @@ sbaByGeoByYear = function(db_service, geoids, hazardids, years) {
 	  	.then(data => [].concat(...data));
 } // END sbaByGeoByYear
 
-sbaEventsLength = function(db_service, geoids, hazardids, years) {
+const sbaByZip = function(db_service, zip_codes, hazardids, years) {
+  	const sql = `
+    	SELECT
+    		loan_type,
+      		damaged_property_zip_code AS zip_code,
+      		hazardid,
+      		extract(year FROM fema_date) AS year,
+      		count(1) AS num_loans,
+      		sum(total_verified_loss) AS total_loss,
+      		sum(total_approved_loan_amount) AS loan_total
+    	FROM public.sba_disaster_loan_data
+    	WHERE damaged_property_zip_code IN ('${ zip_codes.join(`','`) }')
+	    AND extract(year FROM fema_date) IN (${ years.join(',') })
+	    AND hazardid IN ('${ hazardids.join(`','`) }')
+	    GROUP BY 1, 2, 3, 4
+  	`;
+// console.log("SQL:",sql);
+	return db_service.promise(sql);
+} // END sbaByZip
+
+const sbaByZipAllTime = (db_service, zip_codes, hazardids) => {
+  	const sql = `
+    	SELECT
+    		loan_type,
+      		damaged_property_zip_code AS zip_code,
+      		hazardid,
+      		count(1) AS num_loans,
+      		sum(total_verified_loss) AS total_loss,
+      		sum(total_approved_loan_amount) AS loan_total
+    	FROM public.sba_disaster_loan_data
+    	WHERE damaged_property_zip_code IN ('${ zip_codes.join(`','`) }')
+	    AND hazardid IN ('${ hazardids.join(`','`) }')
+	    GROUP BY 1, 2, 3
+  	`;
+// console.log("SQL:",sql);
+	return db_service.promise(sql);
+}
+
+const sbaEventsLength = function(db_service, geoids, hazardids, years) {
     let queries = getGeoidLengths(geoids).map(geoLen => {
       	let filteredGeoids = geoids.filter(d => d.length === geoLen);
       	const sql = `
@@ -71,7 +109,7 @@ sbaEventsLength = function(db_service, geoids, hazardids, years) {
 } // END sbaEventsLength
 
 
-sbaEventsByIndex = function(db_service, geoids, hazardids, years) {
+const sbaEventsByIndex = function(db_service, geoids, hazardids, years) {
     let queries = getGeoidLengths(geoids).map(geoLen => {
       	let filteredGeoids = geoids.filter(d => d.length === geoLen);
       	const sql = `
@@ -113,6 +151,8 @@ const sbaEventsByEntryId = (db_service, entry_ids) => {
 
 module.exports = {
 	sbaByGeoByYear,
+	sbaByZip,
+	sbaByZipAllTime,
 	sbaEventsLength,
 	sbaEventsByIndex,
 	sbaEventsByEntryId,
