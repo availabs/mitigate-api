@@ -7,7 +7,7 @@
     'riverine':{id:'riverine', name:'Flooding', description: '', sheldus: "Flooding"},
     'lightning':{id:'lightning', name:'Lightning', description: '', sheldus: "Lightning"},
     'landslide':{id:'landslide', name:'Landslide', description: '', sheldus: "Landslide"},
-    'icestorm':{id:'icestorm', name:'Ice Storm', description: '', sheldus: "Winter Weather"},
+    'icestorm':{id:'icestorm', name:'Ice Storm', description: '', sheldus: ""},
     'hurricane':{id:'hurricane', name:'Hurricane', description: '', sheldus: "Hurricane/Tropical Storm"},
     'heatwave':{id:'heatwave', name:'Heat Wave', description: '', sheldus: "Heat"},
     'hail':{id:'hail', name:'Hail', description: '', sheldus:"Hail"},
@@ -21,7 +21,7 @@
     // expansive_soil: {id: 'expansive_soil', name: 'Expansive Soil', sheldus: '' },
     // landsubsidence: {id: 'landsubsidence', name: 'Land Subsidence' },
     // sealevel: {id: 'Sea Level', name: 'Sea Level'},
-    // coastal: {id:'coastal', name:'Coastal Flooding', description:'',sheldus: "Coastal Erosion"}
+    // coastal: {id:'coastal', name:'Coastal Erosion', description:'',sheldus: "Coastal Erosion"}
     
   },
 
@@ -53,7 +53,6 @@
   // "Human Cause"
   hazards2femadisasters: {
     'wind': [
-        "Severe Storm(s)"
     ],
     'wildfire': [
         "Fire"
@@ -77,7 +76,9 @@
     ],
     'hurricane': [
         "Hurricane",
-        "Typhoon"
+        "Typhoon",
+        "Severe Storm(s)"
+
     ],
     'heatwave': [
     ],

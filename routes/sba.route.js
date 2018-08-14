@@ -1,15 +1,21 @@
 const falcorJsonGraph = require('falcor-json-graph'),
 	$atom = falcorJsonGraph.atom,
 
+	META_DATA = require("./metadata"),
+	hazards2femadisasters = META_DATA.hazards2femadisasters,
+	femadisasters2hazards = META_DATA.femadisasters2hazards,
+
 	sbaController = require("../services/sbaController")
 	ATTRIBUTES = sbaController.ATTRIBUTES,
 	COERCE = sbaController.COERCE;
 
 const getPathSetVariables = pathSet => ({
-	geoids: pathSet.geoids.map(geoid => geoid.toString()),
+	geoids: pathSet.geoids && pathSet.geoids.map(geoid => geoid.toString()),
 	years: pathSet.years,
 	indices: pathSet.indices,
-	hazardids: pathSet.hazardids
+	hazardids: pathSet.hazardids,
+	zip_codes: pathSet.zip_codes && pathSet.zip_codes.map(geoid => geoid.toString()),
+	incidentTypes: pathSet.hazardids.reduce((a, c) => a.concat(hazards2femadisasters[c]), [])
 })
 
 module.exports = [
@@ -19,16 +25,17 @@ module.exports = [
 	    	const {
 	    		geoids,
 	    		hazardids,
-	    		years
+	    		years,
+	    		incidentTypes
 	    	} = getPathSetVariables(pathSet);
-	    	return sbaController.sbaByGeoByYear(this.db_service, geoids, hazardids, years)
+	    	return sbaController.sbaByGeoByYear(this.db_service, geoids, incidentTypes, years)
 	    		.then(rows => {
 					let DATA_MAP = {};
 
 					pathSet[1].forEach(loan_type => {
 	    				geoids.forEach(geoid => {
-		    				years.forEach(year => {
-		    					hazardids.forEach(hazardid => {
+		    				hazardids.forEach(hazardid => {
+		    					years.forEach(year => {
 		    						pathSet[5].forEach(attribute => {
 										const path = ['sba', loan_type, geoid, hazardid, year, attribute],
 											pathKey = path.join("-");
@@ -46,9 +53,10 @@ module.exports = [
 		    		})
 
 					rows.forEach(row => {
+						const hazardid = femadisasters2hazards[row.incidenttype];
 						pathSet[1].forEach(loan_type => {
 							pathSet[5].forEach(attribute => {
-								const path = ['sba', loan_type, row.geoid, row.hazardid, row.year, attribute],
+								const path = ['sba', loan_type, row.geoid, hazardid, row.year, attribute],
 									pathKey = path.join("-");
 								let value = 0;
 								if ((loan_type == "home") && (row.loan_type == "home")) {
@@ -72,15 +80,133 @@ module.exports = [
 	    }
 	}, // END sbaByGeoByYear
 
+	{ // sbaByZip
+		route: `sba['business', 'home', 'all'].byZip[{keys:zip_codes}][{keys:hazardids}][{integers:years}]['total_loss', 'loan_total', 'num_loans']`,
+		get: function(pathSet) {
+	    	const {
+	    		zip_codes,
+	    		hazardids,
+	    		years,
+	    		incidentTypes
+	    	} = getPathSetVariables(pathSet);
+	    	return sbaController.sbaByZip(this.db_service, zip_codes, incidentTypes, years)
+	    		.then(rows => {
+					let DATA_MAP = {};
+
+					pathSet[1].forEach(loan_type => {
+	    				zip_codes.forEach(zip_code => {
+		    				hazardids.forEach(hazardid => {
+		    					years.forEach(year => {
+		    						pathSet[6].forEach(attribute => {
+										const path = ['sba', loan_type, 'byZip', zip_code, hazardid, year, attribute],
+											pathKey = path.join("-");
+
+										if (!(pathKey in DATA_MAP)) {
+											DATA_MAP[pathKey] = {
+												value: 0,
+												path
+											};
+										}
+									})
+			    				})
+			    			})
+		    			})
+		    		})
+
+					rows.forEach(row => {
+						const hazardid = femadisasters2hazards[row.incidenttype];
+						pathSet[1].forEach(loan_type => {
+							pathSet[6].forEach(attribute => {
+								const path = ['sba', loan_type, 'byZip', row.zip_code, hazardid, row.year, attribute],
+									pathKey = path.join("-");
+								let value = 0;
+								if ((loan_type == "home") && (row.loan_type == "home")) {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+								else if ((loan_type == "business") && (row.loan_type == "business")) {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+								else if (loan_type == "all") {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+							})
+						})
+					})
+					return Object.values(DATA_MAP);
+	    		})
+		}
+	}, // END sbaByZip
+
+	{ // sbaByZipAllTime
+		route: `sba['business', 'home', 'all'].byZip[{keys:zip_codes}][{keys:hazardids}].allTime['total_loss', 'loan_total', 'num_loans']`,
+		get: function(pathSet) {
+	    	const {
+	    		zip_codes,
+	    		hazardids,
+	    		incidentTypes
+	    	} = getPathSetVariables(pathSet);
+	    	return sbaController.sbaByZipAllTime(this.db_service, zip_codes, incidentTypes)
+	    		.then(rows => {
+					let DATA_MAP = {};
+
+					pathSet[1].forEach(loan_type => {
+	    				zip_codes.forEach(zip_code => {
+		    				hazardids.forEach(hazardid => {
+	    						pathSet[6].forEach(attribute => {
+									const path = ['sba', loan_type, 'byZip', zip_code, hazardid, "allTime", attribute],
+										pathKey = path.join("-");
+
+									if (!(pathKey in DATA_MAP)) {
+										DATA_MAP[pathKey] = {
+											value: 0,
+											path
+										};
+									}
+								})
+			    			})
+		    			})
+		    		})
+
+					rows.forEach(row => {
+						const hazardid = femadisasters2hazards[row.incidenttype];
+						pathSet[1].forEach(loan_type => {
+							pathSet[6].forEach(attribute => {
+								const path = ['sba', loan_type, 'byZip', row.zip_code, hazardid, "allTime", attribute],
+									pathKey = path.join("-");
+								let value = 0;
+								if ((loan_type == "home") && (row.loan_type == "home")) {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+								else if ((loan_type == "business") && (row.loan_type == "business")) {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+								else if (loan_type == "all") {
+									value = DATA_MAP[pathKey].value + (+row[attribute]);
+									DATA_MAP[pathKey].value = value;
+								}
+							})
+						})
+					})
+					return Object.values(DATA_MAP);
+	    		})
+		}
+	}, // END sbaByZipAllTime
+
 	{ // sbaEventsLength
 		route: `sba.events[{keys:geoids}][{keys:hazardids}][{integers:years}].length`,
 	    get: function (pathSet) {
 	    	const {
 	    		geoids,
 	    		hazardids,
-	    		years
+	    		years,
+	    		incidentTypes
 	    	} = getPathSetVariables(pathSet);
-	    	return sbaController.sbaEventsLength(this.db_service, geoids, hazardids, years)
+	    	return sbaController.sbaEventsLength(this.db_service, geoids, incidentTypes, years)
 	    		.then(rows => {
 					let DATA_MAP = {};
 
@@ -101,9 +227,10 @@ module.exports = [
 	    			})
 
 					rows.forEach(row => {
-						const path = ['sba', 'events', row.geoid, row.hazardid, row.year, 'length'],
-							pathKey = path.join("-");
-						let value = DATA_MAP[pathKey].value + (+row.length);
+						const hazardid = femadisasters2hazards[row.incidenttype],
+							path = ['sba', 'events', row.geoid, hazardid, row.year, 'length'],
+							pathKey = path.join("-"),
+							value = DATA_MAP[pathKey].value + (+row.length);
 						DATA_MAP[pathKey].value = value;
 					})
 
@@ -119,16 +246,18 @@ module.exports = [
 	    		geoids,
 	    		hazardids,
 	    		years,
-	    		indices
+	    		indices,
+	    		incidentTypes
 	    	} = getPathSetVariables(pathSet);
-	    	return sbaController.sbaEventsByIndex(this.db_service, geoids, hazardids, years, indices)
+	    	return sbaController.sbaEventsByIndex(this.db_service, geoids, incidentTypes, years, indices)
 	    		.then(rows => {
     				const result = [];
 
     				geoids.forEach(geoid => {
     					hazardids.forEach(hazardid => {
+    						const incidentTypes = hazards2femadisasters[hazardid];
     						years.forEach(year => {
-    							const filtered = rows.filter(row => (row.geoid == geoid) && (row.hazardid == hazardid) && (row.year == year));
+    							const filtered = rows.filter(row => (row.geoid == geoid) && incidentTypes.includes(row.incidenttype) && (row.year == year));
 								indices.forEach(index => {
 									const row = filtered[index];
 									if (!row) {

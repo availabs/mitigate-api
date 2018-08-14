@@ -23,14 +23,14 @@ const COERCE = {
 	"entry_id": toNum
 }
 
-sbaByGeoByYear = function(db_service, geoids, hazardids, years) {
+const sbaByGeoByYear = function(db_service, geoids, incidentTypes, years) {
 	let queries = getGeoidLengths(geoids).map(geoLen => {
 	  	let filteredGeoids = geoids.filter(d => d.length === geoLen);
 	  	const sql = `
 	    	SELECT
 	    		loan_type,
 	      		substring(geoid, 1, ${ geoLen }) AS geoid,
-	      		hazardid,
+	      		incidenttype,
 	      		extract(year FROM fema_date) AS year,
 	      		count(1) AS num_loans,
 	      		sum(total_verified_loss) AS total_loss,
@@ -38,7 +38,7 @@ sbaByGeoByYear = function(db_service, geoids, hazardids, years) {
 	    	FROM public.sba_disaster_loan_data
 	    	WHERE substring(geoid, 1, ${ geoLen }) IN ('${ filteredGeoids.join(`','`) }')
 		    AND extract(year FROM fema_date) IN (${ years.join(',') })
-		    AND hazardid IN ('${ hazardids.join(`','`) }')
+		    AND incidenttype IN ('${ incidentTypes.join(`','`) }')
 		    GROUP BY 1, 2, 3, 4
 	  	`;
 // console.log("SQL:",sql);
@@ -48,19 +48,57 @@ sbaByGeoByYear = function(db_service, geoids, hazardids, years) {
 	  	.then(data => [].concat(...data));
 } // END sbaByGeoByYear
 
-sbaEventsLength = function(db_service, geoids, hazardids, years) {
+const sbaByZip = function(db_service, zip_codes, incidentTypes, years) {
+  	const sql = `
+    	SELECT
+    		loan_type,
+      		damaged_property_zip_code AS zip_code,
+      		incidenttype,
+      		extract(year FROM fema_date) AS year,
+      		count(1) AS num_loans,
+      		sum(total_verified_loss) AS total_loss,
+      		sum(total_approved_loan_amount) AS loan_total
+    	FROM public.sba_disaster_loan_data
+    	WHERE damaged_property_zip_code IN ('${ zip_codes.join(`','`) }')
+	    AND extract(year FROM fema_date) IN (${ years.join(',') })
+	    AND incidenttype IN ('${ incidentTypes.join(`','`) }')
+	    GROUP BY 1, 2, 3, 4
+  	`;
+// console.log("SQL:",sql);
+	return db_service.promise(sql);
+} // END sbaByZip
+
+const sbaByZipAllTime = (db_service, zip_codes, incidentTypes) => {
+  	const sql = `
+    	SELECT
+    		loan_type,
+      		damaged_property_zip_code AS zip_code,
+      		incidenttype,
+      		count(1) AS num_loans,
+      		sum(total_verified_loss) AS total_loss,
+      		sum(total_approved_loan_amount) AS loan_total
+    	FROM public.sba_disaster_loan_data
+    	WHERE damaged_property_zip_code IN ('${ zip_codes.join(`','`) }')
+	    AND incidenttype IN ('${ incidentTypes.join(`','`) }')
+	    GROUP BY 1, 2, 3
+  	`;
+// console.log("SQL:",sql);
+	return db_service.promise(sql);
+}
+
+const sbaEventsLength = function(db_service, geoids, incidentTypes, years) {
     let queries = getGeoidLengths(geoids).map(geoLen => {
       	let filteredGeoids = geoids.filter(d => d.length === geoLen);
       	const sql = `
         	SELECT
 	      		substring(geoid, 1, ${ geoLen }) AS geoid,
-	      		hazardid,
+	      		incidenttype,
 	      		extract(year FROM fema_date) AS year,
           		count(1) AS length
         	FROM public.sba_disaster_loan_data
         	WHERE substring(geoid, 1, ${ geoLen }) IN ('${ filteredGeoids.join(`','`) }')
 	        AND extract(year FROM fema_date) IN (${ years.join(',') })
-	        AND hazardid IN ('${ hazardids.join(`','`) }')
+	        AND incidenttype IN ('${ incidentTypes.join(`','`) }')
 	        GROUP BY 1, 2, 3
       	`;
 // console.log("SQL:",sql);
@@ -71,19 +109,19 @@ sbaEventsLength = function(db_service, geoids, hazardids, years) {
 } // END sbaEventsLength
 
 
-sbaEventsByIndex = function(db_service, geoids, hazardids, years) {
+const sbaEventsByIndex = function(db_service, geoids, incidentTypes, years) {
     let queries = getGeoidLengths(geoids).map(geoLen => {
       	let filteredGeoids = geoids.filter(d => d.length === geoLen);
       	const sql = `
 	        SELECT
 	      		substring(geoid, 1, ${ geoLen }) AS geoid,
-          		hazardid,
+          		incidenttype,
           		extract(year FROM fema_date) AS year,
           		entry_id
         	FROM public.sba_disaster_loan_data
         	WHERE substring(geoid, 1, ${ geoLen }) IN ('${ filteredGeoids.join(`','`) }')
 	        AND extract(year FROM fema_date) IN (${ years.join(',') })
-    	    AND hazardid IN ('${ hazardids.join(`','`) }')
+    	    AND incidenttype IN ('${ incidentTypes.join(`','`) }')
       	`;
 // console.log("SQL:",sql);
       return db_service.promise(sql)
@@ -98,7 +136,7 @@ const sbaEventsByEntryIdSql = entry_ids =>
 		total_verified_loss AS total_loss,
 		total_approved_loan_amount AS loan_total,
 		loan_type,
-		hazardid,
+		incidenttype,
 		geoid,
 		extract(year FROM fema_date) AS year,
 		entry_id
@@ -113,6 +151,8 @@ const sbaEventsByEntryId = (db_service, entry_ids) => {
 
 module.exports = {
 	sbaByGeoByYear,
+	sbaByZip,
+	sbaByZipAllTime,
 	sbaEventsLength,
 	sbaEventsByIndex,
 	sbaEventsByEntryId,
