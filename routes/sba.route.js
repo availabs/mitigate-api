@@ -1,6 +1,10 @@
 const falcorJsonGraph = require('falcor-json-graph'),
 	$atom = falcorJsonGraph.atom,
 
+	META_DATA = require("./metadata"),
+	hazards2femadisasters = META_DATA.hazards2femadisasters,
+	femadisasters2hazards = META_DATA.femadisasters2hazards,
+
 	sbaController = require("../services/sbaController")
 	ATTRIBUTES = sbaController.ATTRIBUTES,
 	COERCE = sbaController.COERCE;
@@ -10,7 +14,8 @@ const getPathSetVariables = pathSet => ({
 	years: pathSet.years,
 	indices: pathSet.indices,
 	hazardids: pathSet.hazardids,
-	zip_codes: pathSet.zip_codes && pathSet.zip_codes.map(geoid => geoid.toString())
+	zip_codes: pathSet.zip_codes && pathSet.zip_codes.map(geoid => geoid.toString()),
+	incidentTypes: pathSet.hazardids.reduce((a, c) => a.concat(hazards2femadisasters[c]), [])
 })
 
 module.exports = [
@@ -20,9 +25,10 @@ module.exports = [
 	    	const {
 	    		geoids,
 	    		hazardids,
-	    		years
+	    		years,
+	    		incidentTypes
 	    	} = getPathSetVariables(pathSet);
-	    	return sbaController.sbaByGeoByYear(this.db_service, geoids, hazardids, years)
+	    	return sbaController.sbaByGeoByYear(this.db_service, geoids, incidentTypes, years)
 	    		.then(rows => {
 					let DATA_MAP = {};
 
@@ -47,9 +53,10 @@ module.exports = [
 		    		})
 
 					rows.forEach(row => {
+						const hazardid = femadisasters2hazards[row.incidenttype];
 						pathSet[1].forEach(loan_type => {
 							pathSet[5].forEach(attribute => {
-								const path = ['sba', loan_type, row.geoid, row.hazardid, row.year, attribute],
+								const path = ['sba', loan_type, row.geoid, hazardid, row.year, attribute],
 									pathKey = path.join("-");
 								let value = 0;
 								if ((loan_type == "home") && (row.loan_type == "home")) {
@@ -79,9 +86,10 @@ module.exports = [
 	    	const {
 	    		zip_codes,
 	    		hazardids,
-	    		years
+	    		years,
+	    		incidentTypes
 	    	} = getPathSetVariables(pathSet);
-	    	return sbaController.sbaByZip(this.db_service, zip_codes, hazardids, years)
+	    	return sbaController.sbaByZip(this.db_service, zip_codes, incidentTypes, years)
 	    		.then(rows => {
 					let DATA_MAP = {};
 
@@ -106,9 +114,10 @@ module.exports = [
 		    		})
 
 					rows.forEach(row => {
+						const hazardid = femadisasters2hazards[row.incidenttype];
 						pathSet[1].forEach(loan_type => {
 							pathSet[6].forEach(attribute => {
-								const path = ['sba', loan_type, 'byZip', row.zip_code, row.hazardid, row.year, attribute],
+								const path = ['sba', loan_type, 'byZip', row.zip_code, hazardid, row.year, attribute],
 									pathKey = path.join("-");
 								let value = 0;
 								if ((loan_type == "home") && (row.loan_type == "home")) {
@@ -137,9 +146,9 @@ module.exports = [
 	    	const {
 	    		zip_codes,
 	    		hazardids,
-	    		years
+	    		incidentTypes
 	    	} = getPathSetVariables(pathSet);
-	    	return sbaController.sbaByZipAllTime(this.db_service, zip_codes, hazardids, years)
+	    	return sbaController.sbaByZipAllTime(this.db_service, zip_codes, incidentTypes)
 	    		.then(rows => {
 					let DATA_MAP = {};
 
@@ -162,9 +171,10 @@ module.exports = [
 		    		})
 
 					rows.forEach(row => {
+						const hazardid = femadisasters2hazards[row.incidenttype];
 						pathSet[1].forEach(loan_type => {
 							pathSet[6].forEach(attribute => {
-								const path = ['sba', loan_type, 'byZip', row.zip_code, row.hazardid, "allTime", attribute],
+								const path = ['sba', loan_type, 'byZip', row.zip_code, hazardid, "allTime", attribute],
 									pathKey = path.join("-");
 								let value = 0;
 								if ((loan_type == "home") && (row.loan_type == "home")) {
@@ -193,9 +203,10 @@ module.exports = [
 	    	const {
 	    		geoids,
 	    		hazardids,
-	    		years
+	    		years,
+	    		incidentTypes
 	    	} = getPathSetVariables(pathSet);
-	    	return sbaController.sbaEventsLength(this.db_service, geoids, hazardids, years)
+	    	return sbaController.sbaEventsLength(this.db_service, geoids, incidentTypes, years)
 	    		.then(rows => {
 					let DATA_MAP = {};
 
@@ -216,9 +227,10 @@ module.exports = [
 	    			})
 
 					rows.forEach(row => {
-						const path = ['sba', 'events', row.geoid, row.hazardid, row.year, 'length'],
-							pathKey = path.join("-");
-						let value = DATA_MAP[pathKey].value + (+row.length);
+						const hazardid = femadisasters2hazards[row.incidenttype],
+							path = ['sba', 'events', row.geoid, hazardid, row.year, 'length'],
+							pathKey = path.join("-"),
+							value = DATA_MAP[pathKey].value + (+row.length);
 						DATA_MAP[pathKey].value = value;
 					})
 
@@ -234,16 +246,18 @@ module.exports = [
 	    		geoids,
 	    		hazardids,
 	    		years,
-	    		indices
+	    		indices,
+	    		incidentTypes
 	    	} = getPathSetVariables(pathSet);
-	    	return sbaController.sbaEventsByIndex(this.db_service, geoids, hazardids, years, indices)
+	    	return sbaController.sbaEventsByIndex(this.db_service, geoids, incidentTypes, years, indices)
 	    		.then(rows => {
     				const result = [];
 
     				geoids.forEach(geoid => {
     					hazardids.forEach(hazardid => {
+    						const incidentTypes = hazards2femadisasters[hazardid];
     						years.forEach(year => {
-    							const filtered = rows.filter(row => (row.geoid == geoid) && (row.hazardid == hazardid) && (row.year == year));
+    							const filtered = rows.filter(row => (row.geoid == geoid) && incidentTypes.includes(row.incidenttype) && (row.year == year));
 								indices.forEach(index => {
 									const row = filtered[index];
 									if (!row) {
