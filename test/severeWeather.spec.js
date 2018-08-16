@@ -156,6 +156,25 @@ describe('SevereWeather', () => {
 		});
 	})
 
+	test('severeWeatherAllTime', (done) => {
+		var getEvent = {
+	  		'paths': [
+	  			['severeWeather',
+	  				['36'],
+		  			['riverine', 'coastal', 'wind', 'winterweat'],
+		  			'allTime',
+		  			['property_damage', 'crop_damage', 'total_damage', 'annualized_num_events']
+				]
+	  		],
+	  		'method': 'get'
+	  	}
+		falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+			let data = get(response, 'jsonGraph.severeWeather.36', null);
+// console.log(JSON.stringify(data,null,3))
+			done();
+		});
+	})
+
 })
 
 afterAll(() => {

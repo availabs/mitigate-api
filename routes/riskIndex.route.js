@@ -1,5 +1,4 @@
-var Router = require("falcor-router"),
-    RiskIndeService = require("../services/riskIndexController"),
+var RiskIndexService = require("../services/riskIndexController"),
     jsonGraph = require('falcor-json-graph'),
     $ref = jsonGraph.ref,
     $error = jsonGraph.error,
@@ -44,24 +43,79 @@ module.exports = [
 	    	var pathKeys = pathSet[3]; // why? look into this
 	    	return new Promise((resolve, reject) => {
 	    		let geoids = pathSet.geoids.map(d => d.toString()) // for keys to string
-	    		RiskIndeService.HazardsByGeoid(this.db_service, geoids).then(riskData => {
-	    			riskData.forEach(row => {
-		    			if(geoids.includes(row.geoid)) {
-		    				pathSet.hazardIds.forEach(haz => {
-		    					pathKeys.forEach(col => {
-			    					response.push({
-			    						path: ['riskIndex', row.geoid, haz, col],
-			    						value: +(+row[`${haz}_${col}`]).toFixed(2)
-			    					})
-			    				})
-		    				})
-		    			}
-		    		})
-		    		resolve(response);
-		    	})
+	    		RiskIndexService.HazardsByGeoid(this.db_service, geoids)
+	    			.then(riskData => {
+		    			// riskData.forEach(row => {
+			    		// 	if(geoids.includes(row.geoid)) {
+			    		// 		pathSet.hazardIds.forEach(haz => {
+			    		// 			pathKeys.forEach(col => {
+				    	// 				response.push({
+				    	// 					path: ['riskIndex', row.geoid, haz, col],
+				    	// 					value: +(+row[`${haz}_${col}`]).toFixed(2)
+				    	// 				})
+				    	// 			})
+			    		// 		})
+			    		// 	}
+			    		// })
+						geoids.forEach(geoid => {
+							const row = riskData.reduce((a, c) => c.geoid === geoid ? c : a, null);
+							pathSet[2].forEach(hazard => {
+								if (!row) {
+									response.push({
+										path: ['riskIndex', geoid, hazard],
+										value: null
+									})
+								}
+								else {
+									pathSet[3].forEach(attribute => {
+										let value = row[`${ hazard }_${ attribute }`];
+										if (value) {
+											value = +(+value).toFixed(2);
+										}
+										response.push({
+											path: ['riskIndex', geoid, hazard, attribute],
+											value
+										})
+									})
+								}
+							})
+						})
+			    		resolve(response);
+			    	})
 		    })
 	    }
-	} // END riskIndexByGeo
+	}, // END riskIndexByGeo
+
+	{
+		route: `riskIndex[{keys:geoids}]['nri','bric','sovi','sovist', 'builtenv']['score', 'value']`,
+		get: function(pathSet) {
+			const geoids = pathSet.geoids.map(d => d.toString());
+			return RiskIndexService.riskIndexOthers(this.db_service, geoids)
+				.then(rows => {
+					const result = [];
+					geoids.forEach(geoid => {
+						const row = rows.reduce((a, c) => c.geoid === geoid ? c : a, null);
+						pathSet[2].forEach(other => {
+							if (!row) {
+								result.push({
+									path: ['riskIndex', geoid, other],
+									value: null
+								})
+							}
+							else {
+								pathSet[3].forEach(attribute => {
+									result.push({
+										path: ['riskIndex', geoid, other, attribute],
+										value: row[other] ? +row[other] : null
+									})
+								})
+							}
+						})
+					})
+					return result;
+				})
+		}
+	}
 ]
 
 
