@@ -93,8 +93,13 @@ module.exports = {
       return db_service.promise(sql);
     })
 
+    console.time('SevereWeatherByGeoByYearController query')
     return Promise.all(queries)
-      .then(data => [].concat(...data));
+      .then(data => {
+        console.timeEnd('SevereWeatherByGeoByYearController query')
+    
+        return [].concat(...data)
+      });
   }, // END SevereWeatherByGeoByYear
 
   SevereWeatherEventsLengthByGeoByYear: function(db_service, geoids, hazardTypes, years) {

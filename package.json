@@ -4,6 +4,7 @@
   "description": "Falcor API for Hazard Mitigation Datasources",
   "main": "index.js",
   "dependencies": {
+    "@graphistry/falcor-router": "^2.9.20",
     "express": "^4.16.3",
     "falcor-express": "^0.1.4",
     "falcor-json-graph": "^2.2.1",
