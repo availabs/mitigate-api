@@ -16,6 +16,57 @@ const getPathSetVariables = pathSet => ({
 })
 
 module.exports = [
+	{ // severeWeatherAllTime
+		route: "severeWeather[{keys:geoids}][{keys:hazardids}].allTime"+
+			" ['num_events', 'num_episodes', 'num_severe_events', "+
+			" 'total_damage', 'property_damage', 'crop_damage', "+
+			" 'injuries', 'fatalities', 'annualized_damage', "+
+			" 'annualized_num_events', 'annualized_num_severe_events', "+
+			" 'daily_event_prob', 'daily_severe_event_prob'] ",
+		get: function(pathSet) {
+    		const {
+    			geoids,
+    			hazardTypes,
+    			hazardids
+    		} = getPathSetVariables(pathSet);
+
+    		return SevereWeatherService.severeWeatherAllTime(this.db_service, geoids, hazardTypes)
+    			.then(rows => {
+
+					let DATA_MAP = {};
+					const valueNames = pathSet[4];
+
+    				geoids.forEach(geoid => {
+    					hazardids.forEach(hazardid => {
+    						valueNames.forEach(valueName => {
+								const path = ['severeWeather', geoid, hazardid, "allTime", valueName],
+									pathKey = path.join("-");
+
+								if (!(pathKey in DATA_MAP)) {
+									DATA_MAP[pathKey] = {
+										value: 0,
+										path
+									};
+								}
+							})
+	    				})
+	    			})
+
+					rows.forEach(row => {
+						const hazardid = severeWeather2hazards[row.hazard];
+						valueNames.forEach(valueName => {
+							const path = ['severeWeather', row.geoid, hazardid, "allTime", valueName],
+								pathKey = path.join("-");
+							let value = DATA_MAP[pathKey].value + (+row[valueName]);
+							DATA_MAP[pathKey].value = value;
+						})
+					})
+
+					return Object.values(DATA_MAP);
+    			})
+    	}
+	}, // END severeWeatherAllTime
+
 	{ // SevereWeatherByGeoByYear
 		route: `severeWeather[{keys:geoids}][{keys:hazardids}][{integers:years}]['num_events', 'num_episodes', 'num_severe_events', 'total_damage', 'property_damage', 'crop_damage', 'injuries', 'fatalities']`,
 	    get: function (pathSet) {
