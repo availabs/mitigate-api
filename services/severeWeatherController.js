@@ -202,7 +202,7 @@ module.exports = {
     const sql = 
     `
       SELECT 
-        geoid,
+        swd.geoid,
         cousub_geoid,
         year,
         event_type AS hazard,
@@ -216,10 +216,16 @@ module.exports = {
         ST_AsGeoJson(end_coords_geom) AS end_geom,
         injuries_direct AS injuries,
         deaths_direct AS fatalities,
-        crop_damage
-      FROM severe_weather.details
+        crop_damage,
+        namelsad AS municipality,
+        cz_name AS county,
+        begin_date_time::TEXT AS date
+      FROM severe_weather.details AS swd
+        LEFT OUTER JOIN geo.tl_2017_36_cousub AS geotl
+        ON cousub_geoid = geotl.geoid
       WHERE event_id IN (${ event_ids })
     `;
+// console.log("SQL:",sql)
     return db_service.promise(sql);
   }
 
