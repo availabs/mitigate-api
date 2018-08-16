@@ -85,6 +85,18 @@ describe('RiskIndex', () => {
 		});
 	})
 
+	test('riskIndex meta', (done) => {
+		var getEvent = {
+	  		'paths': `[['riskIndex',['36011'],['nri', 'sovi'],['score']]]`,
+	  		'method': 'get'
+	  	}
+	  	
+		falcorGraph.respond({queryStringParameters: getEvent}, (error, response) => {
+console.log(response.jsonGraph.riskIndex['36011']);
+			done()
+		});
+	})
+
 })
 
 afterAll(() => {
