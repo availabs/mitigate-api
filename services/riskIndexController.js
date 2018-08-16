@@ -1,7 +1,9 @@
 let metadata = require('../routes/metadata'),
     HAZARD_META = metadata.HAZARD_META
     hazards = metadata.hazards,
-    secondary = metadata.secondary;
+    secondary = metadata.secondary,
+
+    { getGeoidLengths } = require("./utils");
 
 const HazardsByGeoid = function RiskIndexHazardGeo( db_service, geoids ) {
   return new Promise((resolve, reject) => {
@@ -47,6 +49,29 @@ const HazardsByGeoid = function RiskIndexHazardGeo( db_service, geoids ) {
   });
 };
 
+const riskIndexOthers = (db_service, geoids) => {
+  const queries = getGeoidLengths(geoids)
+    .map(geoLen => {
+      const filteredGeoids = geoids.filter(d => d.length === geoLen),
+        sql = `
+          SELECT
+            substring(geoid, 1 ,${geoLen}) AS geoid,
+            nri,
+            bric,
+            sovi,
+            sovist,
+            builtenv
+          FROM risk_index.risk_index
+          WHERE substring(geoid, 1, ${geoLen}) IN ('${ filteredGeoids.join(`','`) }')
+        `;
+// console.log("SQL:",sql);
+      return db_service.promise(sql);
+    })
+  return Promise.all(queries)
+    .then(results => [].concat(...results))
+}
+
 module.exports = {
-  HazardsByGeoid
+  HazardsByGeoid,
+  riskIndexOthers
 }
