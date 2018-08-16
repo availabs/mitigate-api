@@ -1,4 +1,4 @@
-var RiskIndeService = require("../services/riskIndexController"),
+var RiskIndexService = require("../services/riskIndexController"),
     jsonGraph = require('falcor-json-graph'),
     $ref = jsonGraph.ref,
     $error = jsonGraph.error,

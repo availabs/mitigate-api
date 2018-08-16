@@ -1,4 +1,4 @@
-const Router = require('falcor-router')
+const Router = require('../utils/falcor-router')
 //require("@graphistry/falcor-router");
 
 const fs = require("fs");

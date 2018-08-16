@@ -97,7 +97,7 @@ module.exports = {
     return Promise.all(queries)
       .then(data => {
         console.timeEnd('SevereWeatherByGeoByYearController query')
-    
+        console.log('finished queries')
         return [].concat(...data)
       });
   }, // END SevereWeatherByGeoByYear

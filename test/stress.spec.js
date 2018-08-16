@@ -8,7 +8,7 @@ describe('Sheldus', () => {
 	test('riskIndex worst query', (done) => {
 		var getEvent = {
 	  		'paths': `[
-	  			["severeWeather",[${counties}],${JSON.stringify(hazards)},{"from":2009,"to":2017},["crop_damage","fatalities","injuries","num_events","property_damage"]]]`,
+	  			["severeWeather",[${counties}],${JSON.stringify(hazards)},{"from":1996,"to":2017},["crop_damage","fatalities","injuries","num_events","property_damage"]]]`,
 	  		'method': 'get'
 	  	}
 	  	console.time('get big query')
@@ -16,6 +16,7 @@ describe('Sheldus', () => {
 	  		// console.log('meta response', JSON.stringify(response))
 	  		console.timeEnd('get big query')
 	  		expect(get(response, 'jsonGraph.sheldus.36001.wind.1996.num_events', null)).not.toBe(36582.86)
+	  		// console.log(JSON.stringify(response))
 			done()
 		});
 	})
