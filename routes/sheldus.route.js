@@ -1,5 +1,4 @@
-var Router = require("falcor-router"),
-    SheldusService = require("../services/sheldusController"),
+var SheldusService = require("../services/sheldusController"),
     jsonGraph = require('falcor-json-graph'),
     $ref = jsonGraph.ref,
     $error = jsonGraph.error,

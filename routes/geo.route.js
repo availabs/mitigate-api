@@ -1,11 +1,10 @@
-const Router = require("falcor-router"),
-    GeoService = require("../services/geoController"),
+const GeoService = require("../services/geoController"),
     jsonGraph = require('falcor-json-graph'),
     $ref = jsonGraph.ref,
     $error = jsonGraph.error,
     $atom = jsonGraph.atom
     metadata = require('./metadata'),
-    HAZARD_META = metadata.HAZARD_META
+    HAZARD_META = metadata.HAZARD_META,
     hazards = metadata.hazards;
 
 const {

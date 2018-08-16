@@ -8,7 +8,7 @@ describe('Sheldus', () => {
 	test('riskIndex worst query', (done) => {
 		var getEvent = {
 	  		'paths': `[
-	  			["severeWeather",[${counties}],${JSON.stringify(hazards)},{"from":1996,"to":2012},["crop_damage","fatalities","injuries","num_events","property_damage"]]]`,
+	  			["severeWeather",[${counties}],${JSON.stringify(hazards)},{"from":2009,"to":2017},["crop_damage","fatalities","injuries","num_events","property_damage"]]]`,
 	  		'method': 'get'
 	  	}
 	  	console.time('get big query')
