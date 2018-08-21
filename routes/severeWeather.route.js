@@ -116,6 +116,8 @@ module.exports = [
 						})
 					})
 					console.timeEnd('SevereWeatherByGeoByYear')
+					console.log('SevereWeatherByGeoByYear END')
+    		
 					return Object.values(DATA_MAP);
 	    		})
 	    } // END get
