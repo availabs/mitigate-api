@@ -1,11 +1,11 @@
 const typeTables = {
    '2': 'us_state',
    '5': 'us_county',
-   '10': '36_cousub',
-   '11': '36_tract',
+   '10': 'cousub',
+   '11': 'tract',
    'county': 'us_county',
-   'tract': '36_tract',
-   'cousub': '36_cousub'
+   'tract': 'tract',
+   'cousub': 'cousub'
 }
 
 const {
@@ -17,7 +17,8 @@ const fetch = require("./utils/fetch");
 
 const ChildrenByGeoid = function ChildrenByGeoid(db_service, geoids, type) {
   return new Promise((resolve, reject) => {
-    
+
+console.log(geoids)
     let queries = geoids.map(geoid => {
       return new Promise((resolve, reject) => {
         
@@ -30,7 +31,7 @@ const ChildrenByGeoid = function ChildrenByGeoid(db_service, geoids, type) {
         `
 
         // sql query for debugging
-        // console.log(sql,type, typeTables[type])
+console.log(sql,type, typeTables[type])
         
         // run query resolve rows
         db_service.query(sql, [], (err, data) => {
