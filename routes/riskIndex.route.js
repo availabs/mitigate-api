@@ -42,14 +42,11 @@ module.exports = [
 	    	let response = [];
 	    	let hazardIds = pathSet[2];
 	    	var pathKeys = pathSet[3];
-	    	console.log('RiskIndex Hazards')
-	    	console.time('RiskIndex Query')
 	    	
 	    	return new Promise((resolve, reject) => {
 	    		let geoids = pathSet.geoids.map(d => d.toString()) // for keys to string
 	    		RiskIndexService.HazardsByGeoid(this.db_service, geoids, hazardIds)
 	    			.then(riskData => {
-	    			console.timeEnd('RiskIndex Query')
 	    	
 		    			// riskData.forEach(row => {
 			    		// 	if(geoids.includes(row.geoid)) {

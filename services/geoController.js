@@ -18,7 +18,7 @@ const fetch = require("./utils/fetch");
 const ChildrenByGeoid = function ChildrenByGeoid(db_service, geoids, type) {
   return new Promise((resolve, reject) => {
 
-console.log(geoids)
+// console.log(geoids)
     let queries = geoids.map(geoid => {
       return new Promise((resolve, reject) => {
         
@@ -27,11 +27,10 @@ console.log(geoids)
             geoid
           FROM geo.tl_2017_${typeTables[type]}
             where geoid like '${geoid}%'
-            ${ type == "cousub" ? " AND cousubfp != '00000'": "" }
         `
 
         // sql query for debugging
-console.log(sql,type, typeTables[type])
+// console.log(sql,type, typeTables[type])
         
         // run query resolve rows
         db_service.query(sql, [], (err, data) => {

@@ -30,7 +30,7 @@ const HazardsByGeoid = function RiskIndexHazardGeo( db_service, geoids, hazardId
         `;
 
         // sql query for debugging
-        // console.log(sql)
+// console.log(sql)
 
         // run query resolve rows
         db_service.query(sql, [], (err, data) => {
