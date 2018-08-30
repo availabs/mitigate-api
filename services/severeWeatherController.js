@@ -93,11 +93,8 @@ module.exports = {
       return db_service.promise(sql);
     })
 
-    console.time('SevereWeatherByGeoByYearController query')
     return Promise.all(queries)
       .then(data => {
-        console.timeEnd('SevereWeatherByGeoByYearController query')
-        console.log('finished queries')
         return [].concat(...data)
       });
   }, // END SevereWeatherByGeoByYear

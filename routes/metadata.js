@@ -1,4 +1,4 @@
-    let META_DATA = {
+let META_DATA = {
   HAZARD_META :{
     'wind':{id:'wind', name:'Wind', description: '', sheldus: "Wind"},
     'wildfire':{id:'wildfire', name:'Wildfire', description: '', sheldus: "Wildfire"},
@@ -111,13 +111,12 @@
   // Uncategorized:
   // "Marine Dense Fog"
   // "OTHER"
-  // "Dust Storm" -- wind?
+  // "Dust Storm"
   // "Astronomical Low Tide"
   // "Northern Lights"
   // "Dense Smoke"
   // "Freezing Fog"
-  // "Dust Devil" -- wind?
-  // "Lakeshore Flood"
+  // "Dust Devil"
   // "HAIL FLOODING"
   // "Heavy Rain"
   // "Dense Fog"
@@ -157,7 +156,7 @@
         'Flash Flood',
         "THUNDERSTORM WINDS/FLASH FLOOD",
         "THUNDERSTORM WINDS/ FLOOD",
-        'Coastal Flood'
+        
     ],
     'lightning': [
         'Lightning',
@@ -168,7 +167,7 @@
         'Landslide',
         "Debris Flow"
     ],
-    'icestorm': ['Ice Storm'],
+    'icestorm': ['Ice Storm', "Sleet"],
     'hurricane': [
         'Hurricane',
         'Hurricane (Typhoon)',
@@ -203,8 +202,7 @@
         'Heavy Snow',
         'Blizzard',
         "High Snow",
-        "Lake-Effect Snow",
-        "Sleet"
+        "Lake-Effect Snow"
     ],
     'volcano': [
         'Volcanic Ash',
@@ -217,7 +215,9 @@
         "Storm Surge/Tide",
         "Tropical Depression",
         "Marine Tropical Depression",
-        "Rip Current"
+        "Rip Current",
+        'Coastal Flood',
+        'Lakeshore Flood'
     ]
   }, // END hazards2severeWeather
 

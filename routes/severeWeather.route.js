@@ -76,15 +76,9 @@ module.exports = [
     			years,
     			hazardids
     		} = getPathSetVariables(pathSet);
-    		console.log('SevereWeatherByGeoByYear')
-    		console.time('SevereWeatherByGeoByYear')
-
-    		console.time('SevereWeatherByGeoByYear dbquery')
-    		return SevereWeatherService.SevereWeatherByGeoByYear(this.db_service, geoids, hazardTypes, years)
+    			return SevereWeatherService.SevereWeatherByGeoByYear(this.db_service, geoids, hazardTypes, years)
     			.then(rows => {
-    				console.log('SevereWeatherByGeoByYear dbquery')
-    				console.timeEnd('SevereWeatherByGeoByYear dbquery')
-    		
+    				
 					let DATA_MAP = {};
 					const valueNames = pathSet[4];
 
@@ -115,9 +109,7 @@ module.exports = [
 							DATA_MAP[pathKey].value = value;
 						})
 					})
-					console.timeEnd('SevereWeatherByGeoByYear')
-					console.log('SevereWeatherByGeoByYear END')
-    		
+					
 					return Object.values(DATA_MAP);
 	    		})
 	    } // END get
