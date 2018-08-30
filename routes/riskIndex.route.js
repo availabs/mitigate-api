@@ -43,6 +43,7 @@ module.exports = [
 	    	var pathKeys = pathSet[3]; // why? look into this
 	    	return new Promise((resolve, reject) => {
 	    		let geoids = pathSet.geoids.map(d => d.toString()) // for keys to string
+// console.log("<`riskIndex[{keys:geoids}][{keys:hazardIds}]['value', 'score']`> GEOIDS:",geoids);
 	    		RiskIndexService.HazardsByGeoid(this.db_service, geoids)
 	    			.then(riskData => {
 		    			// riskData.forEach(row => {
