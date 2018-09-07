@@ -1,11 +1,9 @@
 const falcorGraph = require('./graph'),
 	get = require('lodash.get');
 
-describe('content', () => {
+describe('capabilities', () => {
 
-	const content_id = `my-special-content-id`;
-
-	test('content.byIndex.length', (done) => {
+	test('capabilities.length', (done) => {
 		const getEvent = {
 	  		'paths': [
 	  			['capabilities', 'length']
@@ -14,6 +12,19 @@ describe('content', () => {
 	  	}
 		falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
 			expect(typeof get(response, 'jsonGraph.capabilities.length.value', null)).toBe("number");
+			done();
+		});
+	})
+
+	test('capabilities.byId', (done) => {
+		const getEvent = {
+	  		'paths': [
+	  			['capabilities', 'byId', [1, 2, 3], 'name']
+	  		],
+	  		'method': 'get'
+	  	}
+		falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+			expect(get(response, 'jsonGraph.capabilities.byId.1.name.value', null)).toBe("Notify NYC");
 			done();
 		});
 	})
