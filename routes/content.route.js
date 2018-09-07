@@ -125,8 +125,8 @@ module.exports = [
 				.then(({ created_at, updated_at, length }) => {
 					return [
 						{
-							path: ['content', 'byIndex', 'length'],
-							value: $atom(+length)
+							path: ['content', 'byIndex'],
+							invalidated: true
 						},
 						{
 							path: ['content', 'byId', args[0], 'attributes'],
