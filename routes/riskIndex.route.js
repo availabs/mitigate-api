@@ -40,12 +40,14 @@ module.exports = [
 		route: `riskIndex[{keys:geoids}][{keys:hazardIds}]['value', 'score']`,
 	    get: function (pathSet) {
 	    	let response = [];
-	    	var pathKeys = pathSet[3]; // why? look into this
+	    	let hazardIds = pathSet[2];
+	    	var pathKeys = pathSet[3];
+	    	
 	    	return new Promise((resolve, reject) => {
 	    		let geoids = pathSet.geoids.map(d => d.toString()) // for keys to string
-// console.log("<`riskIndex[{keys:geoids}][{keys:hazardIds}]['value', 'score']`> GEOIDS:",geoids);
-	    		RiskIndexService.HazardsByGeoid(this.db_service, geoids)
+	    		RiskIndexService.HazardsByGeoid(this.db_service, geoids, hazardIds)
 	    			.then(riskData => {
+	    	
 		    			// riskData.forEach(row => {
 			    		// 	if(geoids.includes(row.geoid)) {
 			    		// 		pathSet.hazardIds.forEach(haz => {

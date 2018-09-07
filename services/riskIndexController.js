@@ -5,7 +5,7 @@ let metadata = require('../routes/metadata'),
 
     { getGeoidLengths } = require("./utils");
 
-const HazardsByGeoid = function RiskIndexHazardGeo( db_service, geoids ) {
+const HazardsByGeoid = function RiskIndexHazardGeo( db_service, geoids, hazardIds ) {
   return new Promise((resolve, reject) => {
     
     // split geography type by geoid length
@@ -23,9 +23,7 @@ const HazardsByGeoid = function RiskIndexHazardGeo( db_service, geoids ) {
         const sql = `
           SELECT 
             substring(geoid,1,${geoLen}) as geoid,
-            ${hazards.map(haz => `AVG(CASE WHEN ${haz} >= 0.01 THEN  ${haz} ELSE NULL END) as ${haz}_value`).join(',')},
-            ${hazards.map(haz => `AVG(CASE WHEN ${haz}_score >= 0.01 THEN  ${haz}_score ELSE NULL END) as ${haz}_score`).join(',')},
-            ${secondary.map(haz => `AVG(CASE WHEN ${haz} >= 0.01 THEN  ${haz} ELSE NULL END) as ${haz}`).join(',')}
+            ${hazardIds.map(haz => `AVG(CASE WHEN ${haz}_score >= 0.01 THEN  ${haz}_score ELSE NULL END) as ${haz}_score`).join(',')}
           FROM risk_index.risk_index
             where substring(geoid,1,${geoLen}) in  ('${filteredGeoids.join(`','`)}')
           group by substring(geoid,1,${geoLen})
