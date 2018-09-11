@@ -1,24 +1,24 @@
 const falcorJsonGraph = require('falcor-json-graph'),
 	$atom = falcorJsonGraph.atom,
 
-	criticalController = require("../services/criticalController"),
-	ATTRIBUTES = criticalController.ATTRIBUTES,
-	COERCE = criticalController.COERCE;
+	ogsController = require("../services/ogsController"),
+	ATTRIBUTES = ogsController.ATTRIBUTES,
+	COERCE = ogsController.COERCE;
 
 const getGeoids = pathSet => pathSet.geoids.map(geoid => geoid.toString());
 
 module.exports = [
 	{
-		route: `critical.byGeoid[{keys:geoids}].length`,
+		route: `ogs.byGeoid[{keys:geoids}].length`,
 		get: function(pathSet) {
 			const geoids = getGeoids(pathSet);
-			return criticalController.critLength(this.db_service, geoids)
+			return ogsController.length(this.db_service, geoids)
 				.then(rows => {
 					const response = [];
 					geoids.forEach(geoid => {
 						const value = rows.reduce((a, c) => c.geoid === geoid ? +c.length : a, 0);
 						response.push({
-							path: ['critical', 'byGeoid', geoid, 'length'],
+							path: ['ogs', 'byGeoid', geoid, 'length'],
 							value
 						})
 					})
@@ -28,11 +28,11 @@ module.exports = [
 	},
 
 	{
-		route: `critical.byGeoid[{keys:geoids}].byIndex[{integers:indices}].id`,
+		route: `ogs.byGeoid[{keys:geoids}].byIndex[{integers:indices}].id`,
 		get: function(pathSet) {
 			const geoids = getGeoids(pathSet),
 				indices = pathSet.indices;
-			return criticalController.critIndices(this.db_service, geoids)
+			return ogsController.byIndex(this.db_service, geoids)
 				.then(rows => {
 					const response = [];
 					geoids.forEach(geoid => {
@@ -41,13 +41,13 @@ module.exports = [
 							const row = filtered[index];
 							if (row) {
 								response.push({
-									path: ['critical', 'byGeoid', geoid, 'byIndex', index, 'id'],
-									value: row.id
+									path: ['ogs', 'byGeoid', geoid, 'byIndex', index, 'id'],
+									value: +row.id
 								})
 							}
 							else {
 								response.push({
-									path: ['critical', 'byGeoid', geoid, 'byIndex', index],
+									path: ['ogs', 'byGeoid', geoid, 'byIndex', index],
 									value: null
 								})
 							}
@@ -59,37 +59,26 @@ module.exports = [
 	},
 
 	{
-		route: `critical.byId[{keys:ids}]['${ ATTRIBUTES.join(`','`) }']`,
+		route: `ogs.byId[{keys:ids}]['${ ATTRIBUTES.join(`','`) }']`,
 		get: function(pathSet) {
-			const ids = pathSet.ids
+			const ids = pathSet.ids,
 				attributes = pathSet[3];
-			return criticalController.critById(this.db_service, ids)
+			return ogsController.byId(this.db_service, ids)
 				.then(rows => {
 					const response = [];
 					ids.forEach(id => {
-						const obj = rows.reduce((a, c) => c.id === id ? c : a, null);
+						const obj = rows.reduce((a, c) => +c.id === id ? c : a, null);
 						if (obj) {
 							attributes.forEach(attribute => {
-								if (attribute === "address") {
-									const address = [obj.address, obj.city, obj.state, obj.zip]
-											.filter(d => Boolean(d))
-											.join(", ");
-									response.push({
-										path: ['critical', 'byId', id, attribute],
-										value: address
-									})
-								}
-								else {
-									response.push({
-										path: ['critical', 'byId', id, attribute],
-										value: obj[attribute]
-									})
-								}
+								response.push({
+									path: ['ogs', 'byId', id, attribute],
+									value: COERCE[attribute](obj[attribute])
+								})
 							})
 						}
 						else {
 							response.push({
-								path: ['critical', 'byId', id],
+								path: ['ogs', 'byId', id],
 								value: null
 							})
 						}
@@ -98,5 +87,5 @@ module.exports = [
 				});
 		}
 	}
-
+	
 ]

@@ -65,10 +65,6 @@ describe('Critical Infrastructure', () => {
 			expect(data.byId[521].ftype).toBe(740);
 			expect(data.byId[-1]).toBe(null);
 
-console.log(data.byId[6364].address)
-console.log(data.byId[238].address)
-console.log(data.byId[521].address)
-
 			done();
 		});
 	})
