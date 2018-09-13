@@ -80,7 +80,7 @@ const GeoByGeoid = function GeoByGeoid( db_service, geoids ) {
         `
 
         // sql query for debugging
-        // console.log(sql)
+        console.log(sql)
         
         // run query resolve rows
         db_service.query(sql, [], (err, data) => {
