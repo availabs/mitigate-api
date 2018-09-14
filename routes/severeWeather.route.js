@@ -16,6 +16,38 @@ const getPathSetVariables = pathSet => ({
 })
 
 module.exports = [
+	{
+		route: 'severeWeather[{keys:geoids}][{keys:hazardids}].tract_totals.total_damage',
+		get: function(pathSet) {
+    		const {
+    			geoids,
+    			hazardids
+    		} = getPathSetVariables(pathSet);
+			return SevereWeatherService.tractTotals(this.db_service, geoids)
+				.then(rows => {
+					const response = [];
+					geoids.forEach(geoid => {
+						const row = rows.reduce((a, c) => c.geoid === geoid ? c : a, null)
+						if (row) {
+							hazardids.forEach(hazardid => {
+								response.push({
+									path: ['severeWeather', geoid, hazardid, 'tract_totals', 'total_damage'],
+									value: +row[hazardid]
+								})
+							})
+						}
+						else {
+							response.push({
+								path: ['severeWeather', geoid, hazardid, 'tract_totals'],
+								value: null
+							})
+						}
+					})
+					return response;
+				})
+		}
+	},
+
 	{ // severeWeatherAllTime
 		route: "severeWeather[{keys:geoids}][{keys:hazardids}].allTime"+
 			" ['num_events', 'num_episodes', 'num_severe_events', "+

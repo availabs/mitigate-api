@@ -14,6 +14,44 @@ module.exports = {
   YEARS_OF_DATA,
   NUM_YEARS,
 
+  tractTotals: (db_service, geoids) => {
+    const queries = getGeoidLengths(geoids).map(geoLen => {
+      const filteredGeoids = geoids.filter(d => d.length === geoLen),
+        sql = `
+          SELECT
+            ${ `substring(geoid, 1, ${ geoLen })` } AS geoid,
+            SUM(wind) AS wind,
+            SUM(wildfire) AS wildfire,
+            SUM(tsunami) AS tsunami,
+            SUM(tornado) AS tornado,
+            SUM(riverine) AS riverine,
+            SUM(lightning) AS lightning,
+            SUM(landslide) AS landslide,
+            SUM(icestorm) AS icestorm,
+            SUM(hurricane) AS hurricane,
+            SUM(heatwave) AS heatwave,
+            SUM(hail) AS hail,
+            SUM(earthquake) AS earthquake,
+            SUM(drought) AS drought,
+            SUM(avalanche) AS avalanche,
+            SUM(coldwave) AS coldwave,
+            SUM(winterweat) AS winterweat,
+            SUM(volcano) AS volcano,
+            SUM(coastal) AS coastal
+          FROM severe_weather.total_damage_by_tract
+          WHERE ${
+            `substring(geoid, 1, ${ geoLen })`
+          } IN ('${ filteredGeoids.join(`','`) }')
+          GROUP BY 1
+        `;
+// console.log("SQL:",sql);
+      return db_service.promise(sql);
+    })
+
+    return Promise.all(queries)
+      .then(data => [].concat(...data));
+  },
+
   // ['num_events', 'num_episodes', 'num_severe_events',
   //     'total_damage', 'property_damage', 'crop_damage',
   //     'injuries', 'fatalities', 'annualized_damage', 'annualized_num_events',
@@ -24,9 +62,9 @@ module.exports = {
       const filteredGeoids = geoids.filter(d => d.length === geoLen),
         sql = `
           SELECT
-            ${ geoLen <= 5 ?
+            ${ geoLen == 10 ?
+              `cousub_geoid`:
               `substring(geoid, 1, ${ geoLen })`
-              : `cousub_geoid`
             } AS geoid,
             event_type AS hazard,
             count(1) AS num_events,
@@ -43,10 +81,10 @@ module.exports = {
             count(1)::DOUBLE PRECISION / ${ NUM_YEARS }.0 / 365.0 AS daily_event_prob,
             sum(CASE WHEN property_damage > 1000000 THEN 1 ELSE 0 END)::DOUBLE PRECISION / ${ NUM_YEARS }.0 / 365.0 AS daily_severe_event_prob
           FROM severe_weather.details
-          WHERE ${ geoLen <= 5 ?
-            `substring(geoid, 1, ${ geoLen })`
-            : `cousub_geoid`
-          } IN ('${ filteredGeoids.join(`','`) }')
+          WHERE ${ geoLen == 10 ?
+              `cousub_geoid`:
+              `substring(geoid, 1, ${ geoLen })`
+            } IN ('${ filteredGeoids.join(`','`) }')
           AND year >= ${ EARLIEST_YEAR }
           AND event_type IN ('${ hazardTypes.join(`','`) }')
           GROUP BY 1, 2
@@ -66,10 +104,10 @@ module.exports = {
       let filteredGeoids = geoids.filter(d => d.length === geoLen);
       const sql = `
         SELECT
-          ${ geoLen <= 5 ?
-            `substring(geoid, 1, ${ geoLen })`
-            : `cousub_geoid`
-          } AS geoid,
+          ${ geoLen == 10 ?
+              `cousub_geoid`:
+              `substring(geoid, 1, ${ geoLen })`
+            } AS geoid,
           event_type AS hazard,
           year, 
           count(1) AS num_events,
@@ -81,10 +119,10 @@ module.exports = {
           sum(property_damage) AS property_damage,
           sum(crop_damage) AS crop_damage
         FROM severe_weather.details
-        WHERE ${ geoLen <= 5 ?
-          `substring(geoid, 1, ${ geoLen })`
-          : `cousub_geoid`
-        } IN ('${ filteredGeoids.join(`','`) }')
+        WHERE ${ geoLen == 10 ?
+              `cousub_geoid`:
+              `substring(geoid, 1, ${ geoLen })`
+            } IN ('${ filteredGeoids.join(`','`) }')
         AND year IN (${ years.join(',') })
         AND event_type IN ('${ hazardTypes.join(`','`) }')
         GROUP BY 1, 2, 3
@@ -105,18 +143,18 @@ module.exports = {
       let filteredGeoids = geoids.filter(d => d.length === geoLen);
       const sql = `
         SELECT
-          ${ geoLen <= 5 ?
-            `substring(geoid, 1, ${ geoLen })`
-            : `cousub_geoid`
-          } AS geoid,
+          ${ geoLen == 10 ?
+              `cousub_geoid`:
+              `substring(geoid, 1, ${ geoLen })`
+            } AS geoid,
           event_type AS hazard,
           year,
           count(1) AS length
         FROM severe_weather.details
-        WHERE ${ geoLen <= 5 ?
-          `substring(geoid, 1, ${ geoLen })`
-          : `cousub_geoid`
-        } IN ('${ filteredGeoids.join(`','`) }')
+        WHERE ${ geoLen == 10 ?
+              `cousub_geoid`:
+              `substring(geoid, 1, ${ geoLen })`
+            } IN ('${ filteredGeoids.join(`','`) }')
         AND year IN (${ years.join(',') })
         AND event_type IN ('${ hazardTypes.join(`','`) }')
         GROUP BY 1, 2, 3
@@ -136,20 +174,20 @@ module.exports = {
       let filteredGeoids = geoids.filter(d => d.length === geoLen);
       const sql = `
         SELECT
-          ${ geoLen <= 5 ?
-            `substring(geoid, 1, ${ geoLen })`
-            : `cousub_geoid`
-          } AS geoid,
+          ${ geoLen == 10 ?
+              `cousub_geoid`:
+              `substring(geoid, 1, ${ geoLen })`
+            } AS geoid,
           event_type AS hazard,
           year,
           property_damage,
           magnitude,
           ST_AsGeoJson(begin_coords_geom) AS geom
         FROM severe_weather.details
-        WHERE ${ geoLen <= 5 ?
-          `substring(geoid, 1, ${ geoLen })`
-          : `cousub_geoid`
-        } IN ('${ filteredGeoids.join(`','`) }')
+        WHERE ${ geoLen == 10 ?
+              `cousub_geoid`:
+              `substring(geoid, 1, ${ geoLen })`
+            } IN ('${ filteredGeoids.join(`','`) }')
         AND year IN (${ years.join(',') })
         AND event_type IN ('${ hazardTypes.join(`','`) }')
       `;
@@ -168,18 +206,18 @@ module.exports = {
       let filteredGeoids = geoids.filter(d => d.length === geoLen);
       const sql = `
         SELECT
-          ${ geoLen <= 5 ?
-            `substring(geoid, 1, ${ geoLen })`
-            : `cousub_geoid`
-          } AS geoid,
+          ${ geoLen == 10 ?
+              `cousub_geoid`:
+              `substring(geoid, 1, ${ geoLen })`
+            } AS geoid,
           event_type AS hazard,
           year,
           event_id
         FROM severe_weather.details
-        WHERE ${ geoLen <= 5 ?
-          `substring(geoid, 1, ${ geoLen })`
-          : `cousub_geoid`
-        } IN ('${ filteredGeoids.join(`','`) }')
+        WHERE ${ geoLen == 10 ?
+              `cousub_geoid`:
+              `substring(geoid, 1, ${ geoLen })`
+            } IN ('${ filteredGeoids.join(`','`) }')
         AND year IN (${ years.join(',') })
         AND event_type IN ('${ hazardTypes.join(`','`) }')
       `;
