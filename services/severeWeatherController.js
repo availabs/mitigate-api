@@ -14,6 +14,21 @@ module.exports = {
   YEARS_OF_DATA,
   NUM_YEARS,
 
+  highRisk: (db_service, hazardTypes) => {
+    const sql = `
+      SELECT
+        event_type AS hazard,
+        cousub_geoid AS geoid,
+        sum(property_damage + crop_damage) / ${ NUM_YEARS } AS annualized_damage
+      FROM severe_weather.details
+      WHERE event_type IN ('${ hazardTypes.join(`','`) }')
+      AND year >= ${ EARLIEST_YEAR }
+      AND cousub_geoid LIKE '36%'
+      GROUP BY 1, 2
+    `
+    return db_service.promise(sql);
+  },
+
   tractTotals: (db_service, geoids) => {
     const queries = getGeoidLengths(geoids).map(geoLen => {
       const filteredGeoids = geoids.filter(d => d.length === geoLen),
