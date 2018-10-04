@@ -38,7 +38,9 @@ const ATTRIBUTES = [
 	"capability_environmental",
 	"capability_risk_assessment",
 	"capability_administer_funding",
-	"capability_funding_amount",
+
+	"funding_amount",
+
 	"capability_tech_support",
 	"capability_construction",
 	"capability_outreach",
