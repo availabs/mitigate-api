@@ -107,7 +107,7 @@ module.exports = [//{
 	}, // END CousubsByGeoid
 
 	{ // CensusAcsByGeoidByYear
-		route: `geo[{keys:geoids}][{keys:years}]['${ CENSUS_API_VARIABLE_NAMES.join(`', '`)}']`,
+		route: `geo[{keys:geoids}][{keys:years}]['population', 'poverty', 'non_english_speaking', 'under_5', 'over_64', 'vulnerable', 'population_change', 'poverty_change', 'non_english_speaking_change', 'under_5_change', 'over_64_change', 'vulnerable_change']`,
 		get: function(pathSet) {
 			const geoids = pathSet.geoids.map(d => d.toString()),
 				years = pathSet.years.map(d => +d);

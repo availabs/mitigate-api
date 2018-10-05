@@ -1,3 +1,8 @@
+const {
+  EARLIEST_DATA_YEAR,
+  LATEST_DATA_YEAR
+} = require("./utils/censusApiUtils")
+
 const typeTables = {
    '2': 'us_state',
    '5': 'us_county',
@@ -80,7 +85,7 @@ const GeoByGeoid = function GeoByGeoid( db_service, geoids ) {
         `
 
         // sql query for debugging
-        console.log(sql)
+// console.log(sql)
         
         // run query resolve rows
         db_service.query(sql, [], (err, data) => {
@@ -97,10 +102,51 @@ const GeoByGeoid = function GeoByGeoid( db_service, geoids ) {
   });
 };
 
-const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
+const _CensusAcsByGeoidByYear = (db_service, geoids, years) => {
   const urls = fillCensusApiUrlArray(geoids, years);
   return Promise.all(generateCensusAcsByGeoidByYearFetches(urls))
     .then(data => [].concat(...data));
+}
+
+const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
+  const sql = `
+    WITH acs_latest_minus_5 AS (
+      SELECT geoid,
+      population,
+      poverty,
+      non_english_speaking,
+      under_5,
+      over_64,
+      non_english_speaking + under_5 + over_64 AS vulnerable
+      FROM public.acs_data
+      WHERE geoid in ('${ geoids.join("','") }')
+      AND year = ${ LATEST_DATA_YEAR - 5 }
+    )
+
+    SELECT acs_latest.geoid,
+      acs_latest.year,
+      acs_latest.population,
+      acs_latest.poverty,
+      acs_latest.non_english_speaking,
+      acs_latest.under_5,
+      acs_latest.over_64,
+      acs_latest.non_english_speaking + acs_latest.under_5 + acs_latest.over_64 AS vulnerable,
+
+      acs_latest.population - acs_latest_minus_5.population AS population_change,
+      acs_latest.poverty - acs_latest_minus_5.poverty AS poverty_change,
+      acs_latest.non_english_speaking - acs_latest_minus_5.non_english_speaking AS non_english_speaking_change,
+      acs_latest.under_5 - acs_latest_minus_5.under_5 AS under_5_change,
+      acs_latest.over_64 - acs_latest_minus_5.over_64 AS over_64_change,
+      acs_latest.non_english_speaking + acs_latest.under_5 + acs_latest.over_64 - acs_latest_minus_5.vulnerable AS vulnerable_change
+
+    FROM public.acs_data AS acs_latest
+    JOIN acs_latest_minus_5
+    ON acs_latest.geoid = acs_latest_minus_5.geoid
+    WHERE acs_latest.geoid in ('${ geoids.join("','") }')
+    AND acs_latest.year = ${ LATEST_DATA_YEAR }
+  `
+// console.log(sql);
+  return db_service.promise(sql);
 }
 
 module.exports = {
