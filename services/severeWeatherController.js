@@ -90,10 +90,10 @@ module.exports = {
             sum(property_damage + crop_damage) AS total_damage,
             sum(property_damage) AS property_damage,
             sum(crop_damage) AS crop_damage,
-            count(1) / ${ NUM_YEARS } AS annualized_num_events,
+            count(DISTINCT episode_id) / ${ NUM_YEARS } AS annualized_num_events,
             sum(property_damage + crop_damage) / ${ NUM_YEARS } AS annualized_damage,
             sum(CASE WHEN property_damage > 1000000 THEN 1 ELSE 0 END) / ${ NUM_YEARS } as annualized_num_severe_events,
-            count(1)::DOUBLE PRECISION / ${ NUM_YEARS }.0 / 365.0 AS daily_event_prob,
+            count(DISTINCT episode_id)::DOUBLE PRECISION / ${ NUM_YEARS }.0 / 365.0 AS daily_event_prob,
             sum(CASE WHEN property_damage > 1000000 THEN 1 ELSE 0 END)::DOUBLE PRECISION / ${ NUM_YEARS }.0 / 365.0 AS daily_severe_event_prob
           FROM severe_weather.details
           WHERE ${ geoLen == 10 ?
@@ -104,7 +104,7 @@ module.exports = {
           AND event_type IN ('${ hazardTypes.join(`','`) }')
           GROUP BY 1, 2
         `;
-      // console.log("SQL:",sql);
+      console.log("SQL:",sql);
       return db_service.promise(sql);
     })
 
