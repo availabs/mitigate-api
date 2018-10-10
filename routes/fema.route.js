@@ -87,10 +87,18 @@ module.exports = [
 						}
 						else {
 							pathSet[3].forEach(attribute => {
-								result.push({
-									path: ["femaDisaster", "byDisasterNumber", disasternumber, attribute],
-									value: row[attribute]
-								})
+								if (attribute === 'hazard') {
+									result.push({
+										path: ["femaDisaster", "byDisasterNumber", disasternumber, attribute],
+										value: femadisasters2hazards[row.disaster]
+									})
+								}
+								else {
+									result.push({
+										path: ["femaDisaster", "byDisasterNumber", disasternumber, attribute],
+										value: row[attribute]
+									})
+								}
 							})
 						}
 					})
