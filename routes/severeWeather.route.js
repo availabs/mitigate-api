@@ -9,13 +9,89 @@ const falcorJsonGraph = require('falcor-json-graph'),
 
 const getPathSetVariables = pathSet => ({
 	hazardTypes: pathSet.hazardids.reduce((a, c) => a.concat(hazards2severeWeather[c]), []),
-	geoids: pathSet.geoids.map(geoid => geoid.toString()),
+	geoids: pathSet.geoids && pathSet.geoids.map(geoid => geoid.toString()),
 	years: pathSet.years,
 	indices: pathSet.indices,
 	hazardids: pathSet.hazardids
 })
 
 module.exports = [
+	{
+		route: 'severeWeather[{keys:geoids}][{keys:hazardids}].tract_totals.total_damage',
+		get: function(pathSet) {
+    		const {
+    			geoids,
+    			hazardids
+    		} = getPathSetVariables(pathSet);
+			return SevereWeatherService.tractTotals(this.db_service, geoids)
+				.then(rows => {
+					const response = [];
+					geoids.forEach(geoid => {
+						const row = rows.reduce((a, c) => c.geoid === geoid ? c : a, null)
+						if (row) {
+							hazardids.forEach(hazardid => {
+								response.push({
+									path: ['severeWeather', geoid, hazardid, 'tract_totals', 'total_damage'],
+									value: +row[hazardid]
+								})
+							})
+						}
+						else {
+							response.push({
+								path: ['severeWeather', geoid, hazardid, 'tract_totals'],
+								value: null
+							})
+						}
+					})
+					return response;
+				})
+		}
+	},
+
+	{
+		route: "severeWeather.highRisk[{keys:hazardids}]",
+		get: function(pathSet) {
+			const {
+				hazardTypes,
+				hazardids
+			} = getPathSetVariables(pathSet);;
+			return SevereWeatherService.highRisk(this.db_service, hazardTypes)
+				.then(rows => {
+					const DATA_MAP = {};
+
+					rows.forEach(row => {
+						const hazardid = severeWeather2hazards[row.hazard],
+							geoid = row.geoid;
+						if (!(hazardid in DATA_MAP)) {
+							DATA_MAP[hazardid] = {};
+						}
+						if (!(geoid in DATA_MAP[hazardid])) {
+							DATA_MAP[hazardid][geoid] = 0;
+						}
+						let value = DATA_MAP[hazardid][geoid];
+						value += +row.annualized_damage;
+						DATA_MAP[hazardid][geoid] = value;
+					})
+
+					const response = [];
+
+					for (const hazardid in DATA_MAP) {
+						const hazardData = [];
+						for (const geoid in DATA_MAP[hazardid]) {
+							hazardData.push({ geoid, annualized_damage: DATA_MAP[hazardid][geoid] });
+						}
+						hazardData.sort((a, b) => b.annualized_damage - a.annualized_damage);
+						response.push({
+							path: ["severeWeather", "highRisk", hazardid],
+							value: $atom(hazardData.slice(0, 5))
+						})
+					}
+
+					return response;
+				})
+		}
+	},
+
 	{ // severeWeatherAllTime
 		route: "severeWeather[{keys:geoids}][{keys:hazardids}].allTime"+
 			" ['num_events', 'num_episodes', 'num_severe_events', "+

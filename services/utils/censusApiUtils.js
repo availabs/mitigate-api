@@ -163,5 +163,8 @@ module.exports = {
 			data[key] = sumSlices(row, ...CENSUS_API_SLICES[key]);
 		}
 	    return data;
-	}
+	},
+
+	EARLIEST_DATA_YEAR,
+	LATEST_DATA_YEAR
 }

@@ -6,7 +6,7 @@ let db_service = require('./db_service/index')
 var express = require('express');
 var app = express();
 app.use(express.json());       // to support JSON-encoded bodies
-app.use(express.urlencoded()); // to support URL-encoded bodies
+app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodies
 app.use('/graph', falcorExpress.dataSourceRoute(function (req, res) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

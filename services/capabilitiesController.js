@@ -38,7 +38,9 @@ const ATTRIBUTES = [
 	"capability_environmental",
 	"capability_risk_assessment",
 	"capability_administer_funding",
-	"capability_funding_amount",
+
+	"funding_amount",
+
 	"capability_tech_support",
 	"capability_construction",
 	"capability_outreach",
@@ -50,6 +52,24 @@ const ATTRIBUTES = [
 	"url",
 	"goal",
 	"objective",
+
+	"priority",
+	"priority_1",
+	"priority_2",
+	"priority_3",
+	"priority_4",
+	"priority_5",
+	"priority_6",
+	"priority_7",
+	"priority_total",
+	"benefit_cost_analysis",
+	"engineering_required",
+	"engineering_complete",
+	"type",
+	"municipality",
+	"county",
+	"capability_resiliency",
+	
 	"id",
 	"created_at",
 	"updated_at"
