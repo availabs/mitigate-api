@@ -17,7 +17,7 @@ let META_DATA = {
     'coldwave':{id:'coldwave', name:'Coldwave', description: ''},
     'winterweat':{id:'winterweat', name:'Snow Storm', description: '', sheldus: "Winter Weather"},
     'volcano':{id:'volcano', name:'Volcano', description: ''},
-    'coastal': {id:'coastal', name:'Coastal Erosion', description:'',sheldus: "Coastal Erosion"},
+    'coastal': {id:'coastal', name:'Coastal Hazards', description:'',sheldus: "Coastal Hazards"},
     
     // --------- No Data ---------------//
     // expansive_soil: {id: 'expansive_soil', name: 'Expansive Soil', sheldus: '' },
