@@ -32,7 +32,7 @@ const promise = (text, values=[]) => {
 	return new Promise((resolve, reject) => {
 		pool.query(text, values, (error, result) => {
 			if (error) {
-console.log("<db_service> ERROR:",error)
+			console.log("<db_service> ERROR:",error)
 				reject(error);
 			}
 			else {

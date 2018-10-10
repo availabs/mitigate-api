@@ -156,6 +156,9 @@ let META_DATA = {
         'Flash Flood',
         "THUNDERSTORM WINDS/FLASH FLOOD",
         "THUNDERSTORM WINDS/ FLOOD",
+        'Coastal Flood',
+        'Lakeshore Flood',
+        'Hurricane Flood'
         
     ],
     'lightning': [
@@ -173,7 +176,10 @@ let META_DATA = {
         'Hurricane (Typhoon)',
         "Marine Hurricane/Typhoon",
         "Marine Tropical Storm",
-        "Tropical Storm"
+        "Tropical Storm",
+        "Tropical Depression",
+        "Marine Tropical Depression",
+        
     ],
     'heatwave': [
         'Heat',
@@ -210,14 +216,9 @@ let META_DATA = {
     ],
     'coastal': [
         'High Surf',
-        "Marine Tropical Storm",
         "Sneakerwave",
         "Storm Surge/Tide",
-        "Tropical Depression",
-        "Marine Tropical Depression",
-        "Rip Current",
-        'Coastal Flood',
-        'Lakeshore Flood'
+        "Rip Current"
     ]
   }, // END hazards2severeWeather
 

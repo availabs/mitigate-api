@@ -108,8 +108,7 @@ module.exports = [
 
     		return SevereWeatherService.severeWeatherAllTime(this.db_service, geoids, hazardTypes)
     			.then(rows => {
-
-					let DATA_MAP = {};
+    				let DATA_MAP = {};
 					const valueNames = pathSet[4];
 
     				geoids.forEach(geoid => {
@@ -133,6 +132,7 @@ module.exports = [
 						valueNames.forEach(valueName => {
 							const path = ['severeWeather', row.geoid, hazardid, "allTime", valueName],
 								pathKey = path.join("-");
+							console.log(pathKey, DATA_MAP[pathKey])
 							let value = DATA_MAP[pathKey].value + (+row[valueName]);
 							DATA_MAP[pathKey].value = value;
 						})
