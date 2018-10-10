@@ -179,7 +179,7 @@ let META_DATA = {
         "Tropical Storm",
         "Tropical Depression",
         "Marine Tropical Depression",
-        
+        'Hurricane Flood'
     ],
     'heatwave': [
         'Heat',
