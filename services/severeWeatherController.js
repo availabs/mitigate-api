@@ -104,7 +104,7 @@ module.exports = {
           AND event_type IN ('${ hazardTypes.join(`','`) }')
           GROUP BY 1, 2
         `;
-// console.log("SQL:",sql);
+      // console.log("SQL:",sql);
       return db_service.promise(sql);
     })
 
