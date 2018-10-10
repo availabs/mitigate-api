@@ -11,5 +11,17 @@ module.exports = {
 		`
 // console.log(sql);
 		return db_service.promise(sql);
+	},
+
+	capabilities: (db_service, geoids, descriptions) => {
+		const sql = `
+			SELECT
+				geoid,
+				description
+			FROM public.county_capabilities
+			WHERE geoid IN ('${ geoids.join("','") }')
+			AND description IN ('${ descriptions.join("','") }')
+		`
+		return db_service.promise(sql);
 	}
 }

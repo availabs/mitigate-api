@@ -35,6 +35,28 @@ module.exports = [
 					return response;
 				});
 		}
+	},
+
+	{
+		route: `counties.capabilities[{keys:geoids}][{keys:descriptions}]`,
+		get: function(pathSet) {
+			const geoids = pathSet.geoids.map(geoid => geoid.toString()),
+				descriptions = pathSet.descriptions;
+			return countiesController.capabilities(this.db_service, geoids, descriptions)
+				.then(rows => {
+					const response = [];
+					geoids.forEach(geoid => {
+						descriptions.forEach(desc => {
+							const value = rows.reduce((a, c) => c.geoid === geoid && c.description === desc ? c.description : a, null);
+							response.push({
+								path: ['counties', 'capabilities', geoid, desc],
+								value
+							})
+						})
+					})
+					return response;
+				})
+		}
 	}
 	
 ]
