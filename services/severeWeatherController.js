@@ -1,4 +1,4 @@
-const { getGeoidLengths } = require("./utils");
+  const { getGeoidLengths } = require("./utils");
 
 const EARLIEST_YEAR = 1996,
   LATEST_YEAR = 2017,
