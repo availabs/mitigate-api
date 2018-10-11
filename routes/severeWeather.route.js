@@ -111,35 +111,34 @@ module.exports = [
     			.then(rows => {
     				let DATA_MAP = {};
 					const valueNames = pathSet[4];
+					let result = []
 
     				geoids.forEach(geoid => {
     					hazardids.forEach(hazardid => {
+    						let hazards = hazards2severeWeather[hazardid]
+							let hdata = rows.filter(row => (row.geoid == geoid) && hazards.includes(row.hazard));
     						valueNames.forEach(valueName => {
-								const path = ['severeWeather', geoid, hazardid, "allTime", valueName],
-									pathKey = path.join("-");
-
-								if (!(pathKey in DATA_MAP)) {
-									DATA_MAP[pathKey] = {
-										value: 0,
-										path
-									};
-								}
+								result.push({
+									path: ['severeWeather', geoid, hazardid, "allTime", valueName],
+									value: hdata.reduce((out, curr) => out += +curr[valueName], 0)
+								})
 							})
 	    				})
 	    			})
 
-					rows.forEach(row => {
-						const hazardid = severeWeather2hazards[row.hazard];
-						valueNames.forEach(valueName => {
-							const path = ['severeWeather', row.geoid, hazardid, "allTime", valueName],
-								pathKey = path.join("-");
-							console.log(pathKey, DATA_MAP[pathKey])
-							let value = DATA_MAP[pathKey].value + (+row[valueName]);
-							DATA_MAP[pathKey].value = value;
-						})
-					})
+					// rows.forEach(row => {
+					// 	console.log('row', row)
+					// 	const hazardid = severeWeather2hazards[row.hazard];
+					// 	console.log('hazardid', hazardid)
+					// 	valueNames.forEach(valueName => {
+					// 		const path = ['severeWeather', row.geoid, hazardid, "allTime", valueName],
+					// 			pathKey = path.join("-");
+					// 		let value = DATA_MAP[pathKey].value + (+row[valueName]);
+					// 		DATA_MAP[pathKey].value = value;
+					// 	})
+					// })
 
-					return Object.values(DATA_MAP);
+					return result;
     			})
     	}
 	}, // END severeWeatherAllTime
