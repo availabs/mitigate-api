@@ -16,6 +16,7 @@ const getPathSetVariables = pathSet => ({
 })
 
 module.exports = [
+
 	{
 		route: 'severeWeather[{keys:geoids}][{keys:hazardids}].tract_totals.total_damage',
 		get: function(pathSet) {
@@ -319,6 +320,31 @@ module.exports = [
 				})
 		}
 	}, // END SevereWeatherEventsById
+	{
+		route: `severeWeather.events[{keys:geoids}][{keys:hazardids}].top['property_damage', 'crop_damage', 'total_damage']`,
+		get: function(pathSet) {
+    		const {
+    			geoids,
+    			hazardids
+    		} = getPathSetVariables(pathSet),
+    		attributes = pathSet[5];
+			return SevereWeatherService.top(this.db_service, geoids, hazardids, attributes)
+				.then(rows => {
+					const response = [];
+					geoids.forEach(geoid => {
+						hazardids.forEach(hazardid => {
+							attributes.forEach(att => {
+								response.push({
+									path: ['severeWeather', 'events', geoid, hazardid, 'top', att],
+									value: $atom(rows.reduce((a, c) => c.geoid === geoid && c.hazardid === hazardid && c.att === att ? c.rows : a, []))
+								})
+							})
+						})
+					})
+					return response;
+				})
+		}
+	},
 
 	{ // SevereWeatherEventsByGeoByYear
 		route: `severeWeather.events.borked[{keys:geoids}][{keys:hazardids}][{integers:years}].property_damage`,

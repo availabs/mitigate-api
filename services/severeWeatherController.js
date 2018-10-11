@@ -1,5 +1,8 @@
   const { getGeoidLengths } = require("./utils");
 
+const metadata = require('../routes/metadata'),
+    hazards2severeWeather = metadata.hazards2severeWeather
+
 const EARLIEST_YEAR = 1996,
   LATEST_YEAR = 2017,
   YEARS_OF_DATA = [];
@@ -277,6 +280,45 @@ module.exports = {
     `;
 // console.log("SQL:",sql)
     return db_service.promise(sql);
+  },
+
+  top: (db_service, geoids, hazardids, attributes) => {
+    const queries = [];
+    geoids.forEach(geoid => {
+      hazardids.forEach(hazardid => {
+        const hazardTypes = hazards2severeWeather[hazardid];
+        attributes.forEach(att => {
+          const sql = `
+            SELECT
+              property_damage,
+              crop_damage,
+              property_damage + crop_damage AS total_damage,
+
+              event_id
+
+            FROM severe_weather.details AS swd
+              LEFT OUTER JOIN geo.tl_2017_36_cousub AS geotl
+              ON cousub_geoid = geotl.geoid
+            WHERE year >= ${ EARLIEST_YEAR }
+            AND event_type IN ('${ hazardTypes.join(`','`) }')
+            AND ${ geoid.length == 10 ?
+                    `cousub_geoid`:
+                    `substring(swd.geoid, 1, ${ geoid.length })`
+                  } = '${ geoid }'
+            ORDER BY ${ att } DESC
+            LIMIT 50
+          `
+console.log(sql)
+          queries.push(
+            db_service.promise(sql)
+              .then(d => (console.log(d),d))
+              .then(rows => ({ geoid, hazardid, att, rows: rows.map(r => r.event_id) }))
+          );
+        })
+      })
+    })
+    return Promise.all(queries)
+      .then(data => [].concat(...data))
   }
 
 };
