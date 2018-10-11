@@ -9,9 +9,8 @@ const getGeoids = pathSet => pathSet.geoids.map(geoid => geoid.toString());
 
 module.exports = [
 	{
-		route: `nfip.byGeoid[{keys:geoids}].allTime['num_losses', 'total_loss', 'building_loss', 'contents_loss']`,
+		route: `nfip.byGeoid[{keys:geoids}].allTime['num_losses', 'num_properties', 'num_mitigated', 'total_loss', 'building_loss', 'contents_loss']`,
 		get: function(pathSet) {
-console.log("????????????")
 			const geoids = getGeoids(pathSet),
 				attributes = pathSet[4];
 			return nfipController.byGeoidAllTime(this.db_service, geoids)

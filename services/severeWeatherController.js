@@ -308,10 +308,10 @@ module.exports = {
             ORDER BY ${ att } DESC
             LIMIT 50
           `
-console.log(sql)
+// console.log(sql)
           queries.push(
             db_service.promise(sql)
-              .then(d => (console.log(d),d))
+              // .then(d => (console.log(d),d))
               .then(rows => ({ geoid, hazardid, att, rows: rows.map(r => r.event_id) }))
           );
         })
