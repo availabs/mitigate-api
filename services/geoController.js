@@ -90,7 +90,7 @@ const GeoByGeoid = function GeoByGeoid( db_service, geoids ) {
         // run query resolve rows
         db_service.query(sql, [], (err, data) => {
           if (err) reject(err);
-          resolve(data.rows)
+          resolve(data ? data.rows : [])
         });
       })
     })
