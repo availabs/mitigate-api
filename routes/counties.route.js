@@ -9,7 +9,7 @@ const getFips = pathSet => pathSet.fips.map(fip => fip.toString());
 
 module.exports = [
 	{
-		route: `counties.byFips[{keys:fips}]['plan_expiration', 'plan_consultant', 'plan_url']`,
+		route: `counties.byFips[{keys:fips}]['plan_expiration', 'plan_consultant', 'plan_url', 'plan_status']`,
 		get: function(pathSet) {
 			const fips = getFips(pathSet);
 			return countiesController.byFips(this.db_service, fips)
