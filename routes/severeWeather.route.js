@@ -50,13 +50,13 @@ module.exports = [
 	},
 
 	{
-		route: "severeWeather.highRisk[{keys:hazardids}]",
+		route: "severeWeather.highRisk.cousubs[{keys:hazardids}]",
 		get: function(pathSet) {
 			const {
 				hazardTypes,
 				hazardids
 			} = getPathSetVariables(pathSet);;
-			return SevereWeatherService.highRisk(this.db_service, hazardTypes)
+			return SevereWeatherService.highRiskCousubs(this.db_service, hazardTypes)
 				.then(rows => {
 					const DATA_MAP = {};
 
@@ -83,7 +83,51 @@ module.exports = [
 						}
 						hazardData.sort((a, b) => b.annualized_damage - a.annualized_damage);
 						response.push({
-							path: ["severeWeather", "highRisk", hazardid],
+							path: ["severeWeather", "highRisk", 'cousubs', hazardid],
+							value: $atom(hazardData.slice(0, 5))
+						})
+					}
+
+					return response;
+				})
+		}
+	},
+
+	{
+		route: "severeWeather.highRisk.counties[{keys:hazardids}]",
+		get: function(pathSet) {
+			const {
+				hazardTypes,
+				hazardids
+			} = getPathSetVariables(pathSet);;
+			return SevereWeatherService.highRiskCounties(this.db_service, hazardTypes)
+				.then(rows => {
+					const DATA_MAP = {};
+
+					rows.forEach(row => {
+						const hazardid = severeWeather2hazards[row.hazard],
+							geoid = row.geoid;
+						if (!(hazardid in DATA_MAP)) {
+							DATA_MAP[hazardid] = {};
+						}
+						if (!(geoid in DATA_MAP[hazardid])) {
+							DATA_MAP[hazardid][geoid] = 0;
+						}
+						let value = DATA_MAP[hazardid][geoid];
+						value += +row.annualized_damage;
+						DATA_MAP[hazardid][geoid] = value;
+					})
+
+					const response = [];
+
+					for (const hazardid in DATA_MAP) {
+						const hazardData = [];
+						for (const geoid in DATA_MAP[hazardid]) {
+							hazardData.push({ geoid, annualized_damage: DATA_MAP[hazardid][geoid] });
+						}
+						hazardData.sort((a, b) => b.annualized_damage - a.annualized_damage);
+						response.push({
+							path: ["severeWeather", "highRisk", 'counties', hazardid],
 							value: $atom(hazardData.slice(0, 5))
 						})
 					}

@@ -17,7 +17,7 @@ module.exports = {
   YEARS_OF_DATA,
   NUM_YEARS,
 
-  highRisk: (db_service, hazardTypes) => {
+  highRiskCousubs: (db_service, hazardTypes) => {
     const sql = `
       SELECT
         event_type AS hazard,
@@ -27,6 +27,20 @@ module.exports = {
       WHERE event_type IN ('${ hazardTypes.join(`','`) }')
       AND year >= ${ EARLIEST_YEAR }
       AND cousub_geoid LIKE '36%'
+      GROUP BY 1, 2
+    `
+    return db_service.promise(sql);
+  },
+  highRiskCounties: (db_service, hazardTypes) => {
+    const sql = `
+      SELECT
+        event_type AS hazard,
+        ${ `substring(geoid, 1, 5)` } AS geoid,
+        sum(property_damage + crop_damage) / ${ NUM_YEARS } AS annualized_damage
+      FROM severe_weather.details
+      WHERE event_type IN ('${ hazardTypes.join(`','`) }')
+      AND year >= ${ EARLIEST_YEAR }
+      AND geoid LIKE '36___%'
       GROUP BY 1, 2
     `
     return db_service.promise(sql);
