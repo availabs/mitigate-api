@@ -14,10 +14,89 @@ const getPathSetVariables = pathSet => ({
 	years: pathSet.years,
 	indices: pathSet.indices,
 	hazardids: pathSet.hazardids,
-	incidentTypes: pathSet.hazardids.reduce((a, c) => a.concat(hazards2femadisasters[c]), [])
+	incidentTypes: pathSet.hazardids && pathSet.hazardids.reduce((a, c) => a.concat(hazards2femadisasters[c]), [])
 })
 
 module.exports = [
+	{
+		route: `hmap[{keys:geoids}].none[{integers:years}].length`,
+	    get: function (pathSet) {
+	    	const {
+	    		geoids,
+	    		years
+	    	} = getPathSetVariables(pathSet);
+
+    		return hmapController.hmapLengthsNone(this.db_service, geoids, years)
+    			.then(rows => {
+
+					const DATA_MAP = {};
+
+					geoids.forEach(geoid => {
+						years.forEach(year => {
+
+								const path = ['hmap', geoid, 'none', year, 'length'],
+									pathKey = path.join("-");
+
+								if (!(pathKey in DATA_MAP)) {
+									DATA_MAP[pathKey] = {
+										value: 0,
+										path
+									};
+								}
+
+	    			})
+					})
+
+					rows.forEach(row => {
+						const path = ['hmap', row.geoid, 'none', row.year, 'length'],
+							pathKey = path.join("-");
+						DATA_MAP[pathKey].value += +row.length;
+					})
+
+					return Object.values(DATA_MAP);
+	    		})
+	    } // END get
+	},
+	{
+		route: `hmap[{keys:geoids}].none[{integers:years}].byIndex[{integers:indices}].project_id`,
+		get: function(pathSet) {
+    		const {
+    			geoids,
+    			years,
+    			indices
+    		} = getPathSetVariables(pathSet);
+
+    		return hmapController.hmapIndicesNone(this.db_service, geoids, years)
+    			.then(rows => {
+    				const result = [];
+
+    				geoids.forEach(geoid => {
+    						years.forEach(year => {
+    							const filtered = rows.filter(row => (row.geoid == geoid) && (row.year == year));
+								indices.forEach(index => {
+									const row = filtered[index];
+									if (!row) {
+										result.push({
+											path: ["hmap", geoid, 'none', year, "byIndex", index],
+											value: null
+										})
+									}
+									else {
+										result.push({
+											path: ["hmap", geoid, 'none', year, "byIndex", index, "project_id"],
+											value: row.project_id
+										})
+									}
+								})
+    						})
+
+    				})
+
+    				return result;
+    			})
+		}
+	},
+
 	{ // hmapLengths
 		route: `hmap[{keys:geoids}][{keys:hazardids}][{integers:years}].length`,
 	    get: function (pathSet) {

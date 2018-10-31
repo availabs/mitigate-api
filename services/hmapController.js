@@ -5,6 +5,50 @@ const toNum = d => d && +d;
 
 module.exports = {
 
+  hmapLengthsNone: (db_service, geoids,  years) => {
+    const queries = getGeoidLengths(geoids).map(geoLen => {
+      let filteredGeoids = geoids.filter(d => d.length === geoLen);
+      const sql = `
+        SELECT
+          substring(geoid, 1, ${ geoLen }) AS geoid,
+          incidenttype,
+          extract(year FROM COALESCE(dateapproved, dateinitiallyapproved)) AS year,
+          count(1) AS length
+        FROM public.hazard_mitigation_assistance_projects
+        WHERE substring(geoid, 1, ${ geoLen }) IN ('${ filteredGeoids.join(`','`) }')
+        AND extract(year FROM COALESCE(dateapproved, dateinitiallyapproved)) IN (${ years.join(',') })
+        GROUP BY 1, 2, 3
+      `;
+// console.log("SQL:",sql);
+      return db_service.promise(sql);
+    })
+
+    return Promise.all(queries)
+      .then(data => [].concat(...data));
+  }, // END hmapLengthsNone
+
+  hmapIndicesNone: (db_service, geoids,  years) => {
+    // create query promises for all geography types
+    const queries = getGeoidLengths(geoids).map(geoLen => {
+      let filteredGeoids = geoids.filter(d => d.length === geoLen);
+      const sql = `
+        SELECT
+          substring(geoid, 1, ${ geoLen }) AS geoid,
+          incidenttype,
+          extract(year FROM COALESCE(dateapproved, dateinitiallyapproved)) AS year,
+          projectidentifier AS project_id
+        FROM public.hazard_mitigation_assistance_projects
+        WHERE substring(geoid, 1, ${ geoLen }) IN ('${ filteredGeoids.join(`','`) }')
+        AND extract(year FROM COALESCE(dateapproved, dateinitiallyapproved)) IN (${ years.join(',') })
+      `;
+// console.log("SQL:",sql);
+      return db_service.promise(sql)
+    })
+
+    return Promise.all(queries)
+      .then(data => [].concat(...data));
+  },
+
   hmapLengths: (db_service, geoids, incidentTypes, years) => {
     const queries = getGeoidLengths(geoids).map(geoLen => {
       let filteredGeoids = geoids.filter(d => d.length === geoLen);
