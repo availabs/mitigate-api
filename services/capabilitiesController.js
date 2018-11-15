@@ -136,7 +136,7 @@ module.exports = {
 				RETURNING *;
 		`
 		args = args.map(arg => arg === null ? null : arg.value || arg)
-// console.log("<capabilitiesController.insert> SQL:",sql,args);
+
 		return db_service.promise(sql, args)
 			.then(rows => {
 				return length(db_service)
