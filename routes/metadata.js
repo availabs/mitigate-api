@@ -157,8 +157,7 @@ let META_DATA = {
         "THUNDERSTORM WINDS/FLASH FLOOD",
         "THUNDERSTORM WINDS/ FLOOD",
         'Coastal Flood',
-        'Lakeshore Flood',
-        'Hurricane Flood'
+        'Lakeshore Flood'
         
     ],
     'lightning': [
