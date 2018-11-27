@@ -2,7 +2,7 @@ let META_DATA = {
   HAZARD_META :{
     'wind':{id:'wind', name:'Wind', description: '', sheldus: "Wind"},
     'wildfire':{id:'wildfire', name:'Wildfire', description: '', sheldus: "Wildfire"},
-    'tsunami':{id:'tsunami', name:'Tsunami', description: '', sheldus: "Tsunami/Seiche"},
+    'tsunami':{id:'tsunami', name:'Tsunami/Seiche', description: '', sheldus: "Tsunami/Seiche"},
     'tornado':{id:'tornado', name:'Tornado', description: '', sheldus: "Tornado"},
     'riverine':{id:'riverine', name:'Flooding', description: '', sheldus: "Flooding"},
     'lightning':{id:'lightning', name:'Lightning', description: '', sheldus: "Lightning"},
