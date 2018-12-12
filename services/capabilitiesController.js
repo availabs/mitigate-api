@@ -62,13 +62,35 @@ const ATTRIBUTES = [
 	"priority_6",
 	"priority_7",
 	"priority_total",
+
 	"benefit_cost_analysis",
+
 	"engineering_required",
 	"engineering_complete",
+
 	"type",
+
 	"municipality",
 	"county",
+
 	"capability_resiliency",
+
+	"repetitive_loss",
+
+	"origin_plan_name",
+	"origin_plan_year",
+
+	"funding_received",
+
+	"design_percent_complete",
+	"scope_percent_complete",
+
+	"status_proposed",
+
+	"start_date",
+	"completed_date",
+
+	"justification",
 	
 	"id",
 	"created_at",
