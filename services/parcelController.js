@@ -95,7 +95,7 @@ module.exports = {
 			FROM parcel.parcel_2017_36
 			WHERE objectid IN (${ parcelids });
 		`
-console.log('SQL:',sql)
+// console.log('SQL:',sql)
 		return db_service.promise(sql);
 	}
 }
