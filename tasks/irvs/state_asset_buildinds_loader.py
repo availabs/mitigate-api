@@ -1,35 +1,11 @@
-import argparse, csv, os, psycopg2, re
+import psycopg2
 
 from config import host
-
-def createTable(cursor):
-	print "CREATING TABLE..."
-	sql = '''
-		DROP TABLE IF EXISTS irvs.buildings;
-		CREATE TABLE irvs.buildings(
-			building_id BIGSERIAL PRIMARY KEY,
-			footprint GEOMETRY,
-			footprint_source TEXT,
-			footprint_id TEXT,
-			owner_type TEXT,
-			owner TEXT,
-			geoid TEXT,
-			cousub_geoid TEXT,
-			name TEXT,
-			data_source TEXT,
-			data_source_id TEXT,
-			parcel_id TEXT
-		)
-	'''
-	cursor.execute(sql)
-	print "TABLE CREATED."
-# END createTable
 
 def loadStateAssests(cursor):
 	print "LOADING STATE ASSETS..."
 	sql = '''
 		INSERT INTO irvs.buildings(
-			owner_type,
 			owner,
 			geoid,
 			cousub_geoid,
@@ -38,7 +14,6 @@ def loadStateAssests(cursor):
 			data_source_id
 		)
 		SELECT
-			'state',
 			'NY State ' || agency,
 			geoid,
 			cousub_geo,
@@ -96,7 +71,6 @@ def main():
 	connection = psycopg2.connect(host)
 	cursor = connection.cursor()
 
-	createTable(cursor)
 	loadStateAssests(cursor)
 	loadFootprints(cursor)
 	loadParcels(cursor)

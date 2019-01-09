@@ -33,7 +33,8 @@ const ATTRIBUTES = [
 	"used_as_de",
 	"ag_dist_co",
 	"ag_dist_na",
-	"primary_ow"
+	"primary_ow",
+	"owner_type"
 ]
 
 module.exports = {
