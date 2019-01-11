@@ -6,22 +6,23 @@ def loadData(cursor):
 	sql = '''
 		PREPARE stmt AS
 		UPDATE irvs.enhanced_building_risk
-		SET floodplain = $1
-		WHERE building_id = $2
+		SET critical = $1,
+			landmark = $2
+		WHERE building_id = $3
 	'''
 	cursor.execute(sql)
 
 	sql = '''
-		SELECT string_agg("FLD_ZONE", '|'), building_id
+		SELECT "FCode", "IsLandmark", building_id
 		FROM irvs.buildings
-		INNER JOIN "flood_DFIRM"."nys_flood_DFIRM"
-		ON ST_Intersects(ST_Transform(geom, 4326), footprint)
+		INNER JOIN public."STRUCT_New_York_State_GDB Struct_Point"
+		ON ST_Contains(footprint, ST_Transform(geom, 4326))
 		WHERE footprint IS NOT NULL
+		AND geom IS NOT NULL
 		AND building_id IN (
 			SELECT building_id
 			FROM irvs.enhanced_building_risk
 		)
-		GROUP BY building_id
 	'''
 	cursor.execute(sql)
 	for row in [r for r in cursor]:

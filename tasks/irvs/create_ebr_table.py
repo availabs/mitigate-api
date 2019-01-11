@@ -10,7 +10,8 @@ def createTable(cursor):
 			building_id BIGINT PRIMARY KEY,
 			replacement_value BIGINT,
 			floodplain TEXT,
-			critical TEXT
+			critical TEXT,
+			landmark INTEGER
 		)
 	'''
 	cursor.execute(sql)
