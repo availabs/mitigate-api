@@ -27,7 +27,6 @@ def loadData(cursor):
 			FROM irvs.enhanced_building_risk
 		)
 		GROUP BY building_id 
-		limit 100
 	'''
 	cursor.execute(sql)
 	for row in [r for r in cursor]:
