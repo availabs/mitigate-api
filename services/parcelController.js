@@ -33,7 +33,8 @@ const ATTRIBUTES = [
 	"used_as_de",
 	"ag_dist_co",
 	"ag_dist_na",
-	"primary_ow"
+	"primary_ow",
+	"owner_type"
 ]
 
 module.exports = {
@@ -104,6 +105,7 @@ module.exports = {
 			WHERE objectid IN (${ parcelids });
 		`
 		//console.log('SQL:',sql)
+
 		return db_service.promise(sql);
 	}
 }
