@@ -15,7 +15,9 @@ describe('Parcel', () => {
 	  		],
 	  		'method': 'get'
 	  	}
+	  	console.time('byGeoid')
 		falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+			console.timeEnd('byGeoid')
 			let data = get(response, 'jsonGraph.parcel', null);
 
 			expect(+data.byGeoid['36'].length).toBe(4734020)
@@ -38,7 +40,9 @@ describe('Parcel', () => {
 	  		],
 	  		'method': 'get'
 	  	}
+	  	console.time('byGeoidByIndex')
 		falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+			console.timeEnd('byGeoidByIndex')	
 			let data = get(response, 'jsonGraph.parcel', null);
 
 			expect(+data.byGeoid['36001'].byIndex[0].id).toBe(97247)
@@ -58,7 +62,9 @@ describe('Parcel', () => {
 	  		],
 	  		'method': 'get'
 	  	}
+	  	console.time('byIdSmall')
 		falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+			console.timeEnd('byIdSmall')
 			let data = get(response, 'jsonGraph.parcel', null);
 
 			expect(data.byId[97247].prop_class).toBe("240");

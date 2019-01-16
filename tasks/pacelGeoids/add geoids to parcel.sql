@@ -10,7 +10,8 @@ SELECT id, b.geoid as cousub_geoid, c.geoid as tract_geoid, objectid, county_nam
        add_mail_s, add_mail_z, book, page, grid_east, grid_north, muni_parce, 
        swis_sbl_i, swis_print, roll_yr, spatial_yr, owner_type, nys_name, 
        nys_name_s, dup_geo, calc_acres, shape_leng, shape_area
-  into parcel.parcel_2017_36
+  into parcel.parcel_2017_36_temp
   FROM public."nys_2017_tax_parcels_agencies_4326_WGS_84" as a
-  join geo.tl_2017_cousub as b on ST_CONTAINS(ST_Transform(b.geom,4326), a.geom)
-  join geo.tl_2017_tract as c on ST_CONTAINS(ST_Transform(c.geom,4326), a.geom);
+  join geo.tl_2017_cousub as b on ST_CONTAINS(ST_Transform(b.geom,4326), ST_MakeValid(a.geom))
+  join geo.tl_2017_tract as c on ST_CONTAINS(ST_Transform(c.geom,4326), ST_MakeValid(a.geom));
+
