@@ -58,13 +58,11 @@ module.exports = {
             } IN ('${ filteredGeoids.join(`','`) }')
 	        GROUP BY 1
       	`;
-	console.log("SQL:",sql);
+// console.log("SQL:",sql);
     	return db_service.promise(sql);
     })
-    console.time('lengthSQL')
     return Promise.all(queries)
     	.then(data => {
-    		console.timeEnd('length')
     		return [].concat(...data)
     	});
 	},
@@ -86,13 +84,11 @@ module.exports = {
             	: `substring(tract_geoid, 1, ${ geoLen })`
             } IN ('${ filteredGeoids.join(`','`) }')
       	`;
-	console.log("SQL:",sql);
+// console.log("SQL:",sql);
     	return db_service.promise(sql);
     })
-    console.time('byIndexSql')
     return Promise.all(queries)
     	.then(data => {
-    		console.timeEnd('length')
     		return [].concat(...data)
     	});
 	},
