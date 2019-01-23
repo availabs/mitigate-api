@@ -68,29 +68,28 @@ module.exports = {
 	},
 
 	byIndex: (db_service, geoids) => {
-    const queries = getGeoidLengths(geoids).map(geoLen => {
-    	const filteredGeoids = geoids.filter(d => d.length === geoLen),
-    		sql = `
-        	SELECT
+		const queries = getGeoidLengths(geoids).map(geoLen => {
+			const filteredGeoids = geoids.filter(d => d.length === geoLen),
+				sql = `
+					SELECT
         		${ geoLen === 10 ?
             	`cousub_geoid`
             	: `substring(tract_geoid, 1, ${ geoLen })`
             } AS geoid,
-            objectid AS id
-        	FROM parcel.parcel_2017_36
-        	WHERE
+            ARRAY_AGG(objectid) AS ids
+          FROM parcel.parcel_2017_36
+          WHERE
         		${ geoLen === 10 ?
             	`cousub_geoid`
             	: `substring(tract_geoid, 1, ${ geoLen })`
             } IN ('${ filteredGeoids.join(`','`) }')
-      	`;
-// console.log("SQL:",sql);
-    	return db_service.promise(sql);
-    })
-    return Promise.all(queries)
-    	.then(data => {
-    		return [].concat(...data)
-    	});
+           GROUP BY 1
+				`
+// console.log("SQL:",sql)
+			return db_service.promise(sql);
+		})
+		return Promise.all(queries)
+			.then(data => [].concat(...data));
 	},
 
 	byId: (db_service, parcelids) => {

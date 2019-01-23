@@ -78,13 +78,14 @@ module.exports = {
 							`cousub_geoid` :
 							`substring(geoid, 1, ${ geoLen })`
 						} AS geoid,
-						building_id AS buildingid
+						ARRAY_AGG(building_id) AS buildingids
 					FROM irvs.buildings
 					WHERE ${
 						geoLen === 10 ?
 						`cousub_geoid` :
 						`substring(geoid, 1, ${ geoLen })`
-					} IN ('${ filteredGeoids.join(`','`) }');
+					} IN ('${ filteredGeoids.join(`','`) }')
+					GROUP BY 1
 				`
 				return db_service.promise(sql)
 		})

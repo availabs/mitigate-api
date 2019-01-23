@@ -34,13 +34,13 @@ module.exports = [
 				.then(rows => {
 					const response = [];
 					geoids.forEach(geoid => {
-						const filtered = rows.filter(row => row.geoid === geoid);
+						const reduced = rows.reduce((a, c) => c.geoid === geoid ? c : a, null);
 						indices.forEach(index => {
-							const row = filtered[index];
-							if (row) {
+							const value = reduced.ids[index];
+							if (value) {
 								response.push({
 									path: ['parcel', 'byGeoid', geoid, 'byIndex', index, 'id'],
-									value: row.id
+									value
 								})
 							}
 							else {

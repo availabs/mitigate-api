@@ -112,13 +112,13 @@ module.exports = [
 				.then(rows => {
 					const response = [];
 					geoids.forEach(geoid => {
-						const filtered = rows.filter(row => row.geoid === geoid);
+						const reduced = rows.reduce((a, c) => c.geoid === geoid ? c : a, null);
 						indices.forEach(index => {
-							const row = filtered[index];
-							if (row) {
+							const value = reduced.buildingids[index];
+							if (value) {
 								response.push({
 									path: ['irvs', 'byGeoid', geoid, 'byIndex', index, 'buildingid'],
-									value: row.buildingid
+									value
 								})
 							}
 							else {
