@@ -1,3 +1,4 @@
+const CENSUS_KEY_CONFIG = require('./censusConfig')
 const CENSUS_DATA_API_KEY = require("./censusDataApiKey");
 
 const EARLIEST_DATA_YEAR = 2009;
@@ -66,14 +67,17 @@ CENSUS_API_VARIABLES_BY_GROUP.forEach(group => {
 	count += length
 })
 
-const makeBaseCensusApiUrl = year => {
+const makeBaseCensusApiUrl = (year, censusKeys) => {
 	if (!AVAILABLE_DATA_YEARS[year]) return null;
+	let CENSUS_VARIABLES = censusKeys.map(key => {
+		CENSUS_KEY_CONFIG[key].subvariables.map(v => v.key)
+	})
 	return "https://api.census.gov/data/" +
 		`${ year }/` +
 		`${ (year > 2014) ? 'acs/' : '' }` +
 		`acs5?` + 
 		`key=${ CENSUS_DATA_API_KEY }` +
-		`&get=${ CENSUS_API_VARIABLES }`
+		`&get=${ CENSUS_VARIABLES }`
 }
 
 class Geoid {
@@ -102,8 +106,8 @@ class Geoid {
 				break;
 		}
 	}
-	makeUrlAndKey(year) {
-		let url = makeBaseCensusApiUrl(year), key;
+	makeUrlAndKey(year, censusKeys) {
+		let url = makeBaseCensusApiUrl(year,censusKeys), key;
 		if (url !== null) {
 			switch (this.length) {
 				case 2:
@@ -140,12 +144,12 @@ const makeGeoid = row =>
 		.join("")
 
 module.exports = {
-	fillCensusApiUrlArray: (geoids, years) => {
+	fillCensusApiUrlArray: (geoids, years, censusKeys) => {
 		let urlMap = {};
 		geoids.forEach(geoid => {
 			years.forEach(year => {
 				const geoidObj = new Geoid(geoid),
-					{ url, key } = geoidObj.makeUrlAndKey(year);
+					{ url, key } = geoidObj.makeUrlAndKey(year, censusKeys);
 				urlMap[key] = [year, url];
 			})
 		})
