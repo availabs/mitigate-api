@@ -41,7 +41,7 @@ const ChildrenByGeoid = function ChildrenByGeoid(db_service, geoids, type) {
         db_service.query(sql, [], (err, data) => {
           if (err) reject(err);
           resolve([
-            geoid, 
+            geoid``,
             data.rows.map(d => d.geoid)
           ])
         });
@@ -108,6 +108,13 @@ const _CensusAcsByGeoidByYear = (db_service, geoids, years) => {
     .then(data => [].concat(...data));
 }
 
+const CensusAcsByGeoidByYearByKey = (db_service, geoids, years, censusKeys) => {
+    const urls = fillCensusApiUrlArray(geoids, years, censusKeys);
+    console.log('urls', urls)
+    return Promise.all(generateCensusAcsByGeoidByYearFetches(urls))
+        .then(data => [].concat(...data));
+}
+
 const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
   const queries = years.map(year => {
     const sql = `
@@ -156,7 +163,8 @@ const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
 module.exports = {
   GeoByGeoid,
   ChildrenByGeoid,
-  CensusAcsByGeoidByYear
+  CensusAcsByGeoidByYear,
+  CensusAcsByGeoidByYearByKey
 }
 
 const generateCensusAcsByGeoidByYearFetches = urls =>
