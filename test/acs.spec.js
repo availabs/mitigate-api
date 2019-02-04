@@ -4,24 +4,39 @@ var get = require('lodash.get');
 
 describe('Geography tools', () => {
 
-
-
+/*
 test('CensusAcsByGeoidByYearByKey', done => {
     const getEvent = {
         paths: `[
-				['geo', ['36001'], [2014], 'acs',['B01003]]
+				['geo', ['36001'], [2014],['B01003','B02001','B01002']]
 			]`,
         method: 'get'
     }
     falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
-        console.log('ran hte test', error, response)
+        //console.log('ran hte test', error, response);
+        console.log('response',JSON.stringify(response));
         expect(get(response, 'jsonGraph.geo.36.2018.population', null)).toBe(null);
+        //expect(data['36001'].url).toBe('jsonGraph.geo.36.2018.population')
 
-
-        done();
-        })
+        done()
+        });
     })
+ */
 
+test('censusConfig',done => {
+    const getEvent ={
+        paths : `[
+                ['acs','config']
+        ]`,
+        method: 'get'
+    }
+    falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+        //expect(get(response, 'jsonGraph.geo.36.2018.population', null)).toBe(null);
+        //expect(data['B01003'].url).toBe('jsonGraph.geo.36.2018.population')
+        console.log('response',JSON.stringify(response));
+        done()
+        });
+})
 })
 
 afterAll(() => {
