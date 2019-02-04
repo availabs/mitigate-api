@@ -1,3 +1,5 @@
+const CENSUS_CONFIG = require('../services/utils/censusConfig.js')
+
 const GeoService = require("../services/geoController"),
     jsonGraph = require('falcor-json-graph'),
     $ref = jsonGraph.ref,
@@ -106,6 +108,7 @@ module.exports = [//{
 	    }
 	}, // END CousubsByGeoid
 
+
 	{ // CensusAcsByGeoidByYear
 		route: `geo[{keys:geoids}][{keys:years}]['population', 'poverty', 'non_english_speaking', 'under_5', 'over_64', 'vulnerable', 'population_change', 'poverty_change', 'non_english_speaking_change', 'under_5_change', 'over_64_change', 'vulnerable_change']`,
 		get: function(pathSet) {
@@ -133,4 +136,56 @@ module.exports = [//{
 				})
 		}
 	} // END CensusAcsByGeoidByYear
+	,
+    { // CensusAcsByGeoidBykeys
+        route: `geo[{keys:geoids}][{keys:years}][{keys:acsSources}]`,
+
+        get: function(pathSet) {
+            const geoids = pathSet.geoids.map(d => d.toString()),
+            years = pathSet.years.map(d => +d);
+			censusKeys = pathSet.acsSources;
+			//console.log('pathkeys', geoids, years, censusKeys)
+            return GeoService.CensusAcsByGeoidByYearByKey(this.db_service, geoids, years, censusKeys)
+                .then(results => {
+					let returnData  =[]
+					//console.log('acs results', results)
+
+					 pathSet.geoids.forEach(geoid => {
+					     pathSet.years.forEach(year => {
+					     	censusKeys.forEach(key => {
+									 const path = ['geo', geoid, year,key],
+									 result = results
+										 .reduce((a, c) => (c.geoid == geoid) && (c.year == year) ? c : a, null);
+									 returnData.push({
+										 value: result ? $atom(result[key]) : 0,
+										 path
+						})
+
+
+					 		})
+
+					 	})
+					 })
+
+					return returnData;
+
+				})
+        }
+    } // END CensusAcsByGeoidByKeys
+	,
+    { // CensusAcsByGeoidBykeys census config
+        route: `acs.config`,
+
+        get: function(pathSet) {
+        	console.log('in route');
+                return[
+					{
+						path: ['acs','config'],
+						value: $atom(Object.keys(CENSUS_CONFIG))
+					}
+				]
+
+        }
+    } // END CensusAcsByGeoidByKeys
+
 ]//}
