@@ -2,56 +2,56 @@ module.exports = {
     B01003: {
         name: 'Overall Population',
         variables: [
-            'B01003_001E'
-        ]
-    },
-    B02001: {
-        name: 'Racial Population',
-        variables: [
-            'B02001_001E',
-            'B02001_002E',
-            'B02001_003E',
-            'B02001_004E',
-            'B02001_005E',
-            'B02001_006E',
-            'B02001_007E',
-            'B02001_008E',
-            'B02001_009E',
-            'B02001_010E'
+            {name:'A',value:'B01003_001E'}
         ]
     },
     B01002: {
         name: 'Median Age by Sex',
         variables: [
-            'B01002_001E',
-            'B01002_002E',
-            'B01002_003E'
+            {name:'B',value:'B01002_001E'},
+            {name:'C',value:'B01002_002E'},
+            {name:'D',value:'B01002_003E'}
         ]
     },
-
-}
-
-/*
+    B02001: {
+        name: 'Racial Population',
+        variables: [
+            {name:'E',value:'B02001_001E'},
+            {name:'F',value:'B02001_002E'},
+            {name:'D',value:'B02001_003E'},
+            {name:'G',value:'B02001_004E'},
+            {name:'H',value:'B02001_005E'},
+            {name:'I',value:'B02001_006E'},
+            {name:'J',value:'B02001_007E'},
+            {name:'K',value:'B02001_008E'},
+            {name:'L',value:'B02001_009E'},
+            {name:'M',value:'B02001_010E'}
+        ]
+    },
     B19057:{
         name: 'Public Assistance Income for Households',
         variables:[
-            'B19057_001E',
-            'B19057_002E',
-            'B19057_003E'
+            {name:'N',value:'B19057_001E'},
+            {name:'O',value:'B19057_002E'},
+            {name:'P',value:'B19057_003E'}
         ]
     },
     B23025: {
         name: 'Employment Status',
         variables:[
-            'B23025_001E',
-            'B23025_002E',
-            'B23025_003E',
-            'B23025_004E',
-            'B23025_005E',
-            'B23025_006E',
-            'B23025_007E'
+            {name:'Q',value:'B23025_001E'},
+            {name:'R',value:'B23025_002E'},
+            {name:'S',value:'B23025_003E'},
+            {name:'T',value:'B23025_004E'},
+            {name:'U',value:'B23025_005E'},
+            {name:'V',value:'B23025_006E'},
+            {name:'W',value:'B23025_007E'}
         ]
-    },
+    }
+
+}
+/*
+    ,
     C02003:{
         name: 'Ethinic Population by Race',
         variables:[
@@ -68,7 +68,7 @@ module.exports = {
             'C02003_011E',
             'C02003_012E'
         ]
-    },
+    }
     B19083:{
         name:'Gini Index of Income Inequality',
         variables:[
