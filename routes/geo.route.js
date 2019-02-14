@@ -103,6 +103,7 @@ module.exports = [//{
     					})
 	    			})
 		    		resolve(response);
+
 		    	})
 		    })
 	    }
@@ -132,35 +133,36 @@ module.exports = [//{
 							})
 						})
 					})
+					console.log(returnData)
 					return returnData;
 				})
 		}
 	} // END CensusAcsByGeoidByYear
 	,
     { // CensusAcsByGeoidBykeys
-        route: `geo[{keys:geoids}][{keys:years}][{keys:acsSources}]`,
+        route: `acs[{keys:geoids}][{keys:years}][{keys:acsSources}]`,
 
         get: function(pathSet) {
-            const geoids = pathSet.geoids.map(d => d.toString()),
+        	//console.log('in geoid by key')
+            const geoids = pathSet.geoids.map(d => +d),
             years = pathSet.years.map(d => +d);
 			censusKeys = pathSet.acsSources;
 			//console.log('pathkeys', geoids, years, censusKeys)
             return GeoService.CensusAcsByGeoidByYearByKey(this.db_service, geoids, years, censusKeys)
                 .then(results => {
 					let returnData  =[]
-					//console.log('acs results', results)
-
+                	//console.log('acs results', results)
 					 pathSet.geoids.forEach(geoid => {
 					     pathSet.years.forEach(year => {
 					     	censusKeys.forEach(key => {
-									 const path = ['geo', geoid, year,key],
+									 const path = ['acs', geoid, year,key],
 									 result = results
 										 .reduce((a, c) => (c.geoid == geoid) && (c.year == year) ? c : a, null);
+									 //console.log('acs results', results)
 									 returnData.push({
 										 value: result ? $atom(result[key]) : 0,
 										 path
 						})
-
 
 					 		})
 
@@ -181,7 +183,7 @@ module.exports = [//{
                 return[
 					{
 						path: ['acs','config'],
-						value: $atom(Object.keys(CENSUS_CONFIG))
+						value: $atom(CENSUS_CONFIG)
 					}
 				]
 
