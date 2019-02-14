@@ -41,7 +41,7 @@ const ChildrenByGeoid = function ChildrenByGeoid(db_service, geoids, type) {
         db_service.query(sql, [], (err, data) => {
           if (err) reject(err);
           resolve([
-            geoid``,
+              geoid,
             data.rows.map(d => d.geoid)
           ])
         });
@@ -108,11 +108,11 @@ const _CensusAcsByGeoidByYear = (db_service, geoids, years) => {
     .then(data => [].concat(...data));
 }
 
-const CensusAcsByGeoidByYearByKey = (db_service, geoids, years, censusKeys) => {
+const  CensusAcsByGeoidByYearByKey = (db_service, geoids, years, censusKeys) => {
     const urls = fillCensusApiUrlArray(geoids, years, censusKeys);
-    console.log('urls', urls)
-    return Promise.all(generateCensusAcsByGeoidByYearFetches(urls))
-        .then(data => [].concat(...data));
+    return Promise.all(generateCensusAcsByGeoidByKeyFetches(urls))
+        .then(data =>
+        [].concat(...data));
 }
 
 const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
@@ -160,6 +160,7 @@ const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
     .then(data => [].concat(...data));
 }
 
+
 module.exports = {
   GeoByGeoid,
   ChildrenByGeoid,
@@ -167,11 +168,39 @@ module.exports = {
   CensusAcsByGeoidByYearByKey
 }
 
-const generateCensusAcsByGeoidByYearFetches = urls =>
-  urls.map(([year, url]) =>
-    fetch(url)
-      .then(data =>
-        data.slice(1) // ignore description row
-          .map(d => processCensusApiRow(d, year))
-      )
-  )
+const generateCensusAcsByGeoidByYearFetches = urls => {
+    return urls.map(([year, url]) =>
+        fetch(url)
+            .then(data => {
+                console.log(data)
+                return data.slice(1)// ignore description row
+                .map(d => {
+                    return processCensusApiRow(d, year)
+                })
+            })
+    )
+
+}
+
+const generateCensusAcsByGeoidByKeyFetches = urls => {
+    return urls.map(([year, url]) =>
+        fetch(url)
+            .then(data => {
+                return data.slice(1)// ignore description row
+            .map(d => {
+                if (d[d.length-1].length >= 5){
+                    let arrSlice = d.slice(1).slice(-3);
+                    let county = arrSlice[0]+arrSlice[1]+arrSlice[2]
+                    return processCensusApiRow(d,county,year, censusKeys)
+                }
+                else{
+                    let arrSlice = d.slice(1).slice(-2);
+                    let county = arrSlice[0]+arrSlice[1]
+                    return processCensusApiRow(d,county,year, censusKeys)
+                }
+
+    })
+})
+)
+
+}
