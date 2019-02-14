@@ -1,9 +1,8 @@
 const CENSUS_KEY_CONFIG = require('./censusConfig')
 const CENSUS_DATA_API_KEY = require("./censusDataApiKey");
-
 const EARLIEST_DATA_YEAR = 2009;
 const LATEST_DATA_YEAR = 2016;
-
+let subvariables =[]
 let AVAILABLE_DATA_YEARS = {};
 for (let i = EARLIEST_DATA_YEAR; i <= LATEST_DATA_YEAR; ++i) {
 	AVAILABLE_DATA_YEARS[i] = true;
@@ -16,6 +15,7 @@ const CENSUS_API_VARIABLES_BY_GROUP = [
 		]
 	},
 
+	/*
 	{ name: "poverty",
 		variables: [
 			'B16009_001E'	// total population at poverty level
@@ -34,7 +34,7 @@ const CENSUS_API_VARIABLES_BY_GROUP = [
 			'B01001_027E'	// females under 5
 		]
 	},
-
+    */
 	{ name: "65_and_over",
 		variables: [
 			'B01001_020E',	// males 65 & 66
@@ -51,34 +51,96 @@ const CENSUS_API_VARIABLES_BY_GROUP = [
 			'B01001_049E'	// females 85+
 		]
 	}
+
 ]
+
 const CENSUS_API_VARIABLE_NAMES = [];
 const CENSUS_API_VARIABLES = [];
+const CENSUS_API_COUNTIES =['36001','36083','36093','36091','36039','360021','36115','36113']
 // used to slice API response row and sum required variables
 const CENSUS_API_SLICES = {};
 // EXAMPLE SLICE: { "under_5": [3, 5] }
 
 let count = 0;
-CENSUS_API_VARIABLES_BY_GROUP.forEach(group => {
-	CENSUS_API_VARIABLE_NAMES.push(group.name);
-	CENSUS_API_VARIABLES.push(...group.variables);
-	const length = group.variables.length;
-	CENSUS_API_SLICES[group.name] = [count, count + length];
+
+
+Object.values(CENSUS_KEY_CONFIG).forEach(censusKey => {
+    CENSUS_API_VARIABLE_NAMES.push(censusKey.name);
+	CENSUS_API_VARIABLES.push(...censusKey.variables);
+	const length = censusKey.variables.length;
+	CENSUS_API_SLICES[censusKey.variables.map(d => d.value)] = [count,count + length];// changed here
 	count += length
 })
 
-const makeBaseCensusApiUrl = (year, censusKeys) => {
+/*
+ CENSUS_API_VARIABLES_BY_GROUP.forEach(group => {
+ 	CENSUS_API_VARIABLE_NAMES.push(group.name);
+ 	CENSUS_API_VARIABLES.push(...group.variables);
+	const length = group.variables.length;
+	CENSUS_API_SLICES[group.variables] = [count, count + length];//changed here
+	count += length
+
+
+ })
+console.log('CENSUS_API_VARIABLES',CENSUS_API_VARIABLES)
+console.log('CENSUS_API_SLICES',CENSUS_API_SLICES)
+ */
+
+
+const makeBaseCensusApiUrl = (year, censusKeys) =>
+{
+
+    if (!AVAILABLE_DATA_YEARS[year]) return null;
+    let CENSUS_VARIABLES = censusKeys.map(key => {
+    return [].concat(...CENSUS_KEY_CONFIG[key].variables.map(d => d.value)) //Should be B001003_001E
+
+})
+
+    let url = "https://api.census.gov/data/" +
+        `${ year }` +
+        `${(year >= 2014) ? '/acs/' : ''}`+
+        `acs5?` +
+        `&get=${CENSUS_VARIABLES}`+
+        `&key=${CENSUS_DATA_API_KEY}`
+
+    return url
+}
+	/* correct code
 	if (!AVAILABLE_DATA_YEARS[year]) return null;
 	let CENSUS_VARIABLES = censusKeys.map(key => {
-		CENSUS_KEY_CONFIG[key].subvariables.map(v => v.key)
+		console.log('CENSUS KEY CONFIG',CENSUS_KEY_CONFIG[key].variables)
+	    return CENSUS_KEY_CONFIG[key].variables //Should be B001003_001E
+
 	})
-	return "https://api.census.gov/data/" +
-		`${ year }/` +
-		`${ (year > 2014) ? 'acs/' : '' }` +
-		`acs5?` + 
-		`key=${ CENSUS_DATA_API_KEY }` +
-		`&get=${ CENSUS_VARIABLES }`
-}
+	let url = "https://api.census.gov/data/" +
+		`${ year }` +
+		`${(year >= 2014) ? '/acs/' : ''}`+
+        `acs5?` +
+        `&get=${CENSUS_VARIABLES}`+
+		`&key=${CENSUS_DATA_API_KEY}`
+
+    return url
+
+    working code -----
+    if (!AVAILABLE_DATA_YEARS[year]) return null;
+    console.log(censusKeys)
+    let CENSUS_VARIABLES = censusKeys.map(key => {
+        CENSUS_KEY_CONFIG[key].variables.forEach(function(item,index){
+        	console.log('checking in loop',CENSUS_KEY_CONFIG[key].variables[index].value)
+            return CENSUS_KEY_CONFIG[key].variables[index].value
+        })
+    })
+    console.log('CENSUS_VARIABLES',CENSUS_VARIABLES)
+    let url = "https://api.census.gov/data/" +
+        `${ year }` +
+        `${(year >= 2014) ? '/acs/' : ''}` +
+        `acs5?` +
+        `&get=${CENSUS_VARIABLES}` +
+        `&key=${CENSUS_DATA_API_KEY}`
+
+    return url
+	 */
+
 
 class Geoid {
 	constructor(geoid) {
@@ -107,7 +169,7 @@ class Geoid {
 		}
 	}
 	makeUrlAndKey(year, censusKeys) {
-		let url = makeBaseCensusApiUrl(year,censusKeys), key;
+		let url = makeBaseCensusApiUrl(year,censusKeys), key
 		if (url !== null) {
 			switch (this.length) {
 				case 2:
@@ -139,10 +201,10 @@ const sumSlices = (row, i, j) =>
 	row.slice(i, j)
 		.reduce((a, c) => a + +c, 0)
 const makeGeoid = row =>
-	row.slice(CENSUS_API_VARIABLES.length)
-		.sort((a, b) => a.length - b.length)
-		.join("")
-
+	console.log('row',row)
+	//row.slice(CENSUS_API_COUNTIES.length)
+		//.sort((a, b) => a.length - b.length)
+		//.join("")
 module.exports = {
 	fillCensusApiUrlArray: (geoids, years, censusKeys) => {
 		let urlMap = {};
@@ -150,25 +212,65 @@ module.exports = {
 			years.forEach(year => {
 				const geoidObj = new Geoid(geoid),
 					{ url, key } = geoidObj.makeUrlAndKey(year, censusKeys);
-				urlMap[key] = [year, url];
+				urlMap[url] = [year, url];
 			})
 		})
 		return Object.values(urlMap).filter(([year, url]) => Boolean(url));
 	},
 
 	CENSUS_API_VARIABLE_NAMES,
-
-	processCensusApiRow: (row, year) => {
+	processCensusApiRow: (row,county, year,censusKeys) => {
 		const data = {
-		    geoid: makeGeoid(row),
+            //geoid: '36001',
+		    geoid: county,
 		    year
 		};
-		for (const key in CENSUS_API_SLICES) {
-			data[key] = sumSlices(row, ...CENSUS_API_SLICES[key]);
-		}
-	    return data;
-	},
+        for (const key in CENSUS_API_SLICES)
+		{
+			var multi_key = key.split(',');
+			multi_key.forEach(function(i,index){
+				let censusCat = i.split('_')[0];
+				if (Object.keys(censusKeys).length != 1){ // if you call only one census key
+                    censusKeys.forEach(function(item){
+                        let cenKey = item;
+                        if(censusCat === cenKey){
+                            if (!data[censusCat]) {
+                                data[censusCat] = {}
 
+                            }
+
+                            let dataLocation = CENSUS_API_SLICES[key][0] + index
+                            data[censusCat][i] = row[dataLocation]
+                        }
+
+                    })
+				}
+				else{
+                    censusKeys.forEach(function(item){ // if you call multiple census keys
+                        let cenKey = item;
+                        if(censusCat === cenKey){
+                            if (!data[censusCat]) {
+                                data[censusCat] = {}
+
+                            }
+                            let dataLocation = CENSUS_API_SLICES[key][0] + (index - CENSUS_API_SLICES[key][0])
+                            data[censusCat][i] = row[dataLocation]
+                        }
+
+                    })
+				}
+
+
+
+			})
+
+
+			}
+
+    		return data;
+            }
+
+                //console.log(...CENSUS_API_SLICES[key]
+},
 	EARLIEST_DATA_YEAR,
 	LATEST_DATA_YEAR
-}
