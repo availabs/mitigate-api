@@ -105,41 +105,7 @@ const makeBaseCensusApiUrl = (year, censusKeys) =>
 
     return url
 }
-	/* correct code
-	if (!AVAILABLE_DATA_YEARS[year]) return null;
-	let CENSUS_VARIABLES = censusKeys.map(key => {
-		console.log('CENSUS KEY CONFIG',CENSUS_KEY_CONFIG[key].variables)
-	    return CENSUS_KEY_CONFIG[key].variables //Should be B001003_001E
 
-	})
-	let url = "https://api.census.gov/data/" +
-		`${ year }` +
-		`${(year >= 2014) ? '/acs/' : ''}`+
-        `acs5?` +
-        `&get=${CENSUS_VARIABLES}`+
-		`&key=${CENSUS_DATA_API_KEY}`
-
-    return url
-
-    working code -----
-    if (!AVAILABLE_DATA_YEARS[year]) return null;
-    console.log(censusKeys)
-    let CENSUS_VARIABLES = censusKeys.map(key => {
-        CENSUS_KEY_CONFIG[key].variables.forEach(function(item,index){
-        	console.log('checking in loop',CENSUS_KEY_CONFIG[key].variables[index].value)
-            return CENSUS_KEY_CONFIG[key].variables[index].value
-        })
-    })
-    console.log('CENSUS_VARIABLES',CENSUS_VARIABLES)
-    let url = "https://api.census.gov/data/" +
-        `${ year }` +
-        `${(year >= 2014) ? '/acs/' : ''}` +
-        `acs5?` +
-        `&get=${CENSUS_VARIABLES}` +
-        `&key=${CENSUS_DATA_API_KEY}`
-
-    return url
-	 */
 
 
 class Geoid {
@@ -153,6 +119,7 @@ class Geoid {
 		this.county = null;
 		this.cousub = null;
 		this.tract = null;
+		this.blockgroup = null;
 
 		switch (geoid.length) {
 			case 5:
@@ -166,10 +133,15 @@ class Geoid {
 				this.county = geoid.slice(2, 5);
 				this.tract = geoid.slice(5);
 				break;
+			case 12:
+				this.county = geoid.slice(2,5);
+				this.blockgroup = geoid.slice(5);
+
 		}
 	}
 	makeUrlAndKey(year, censusKeys) {
 		let url = makeBaseCensusApiUrl(year,censusKeys), key
+
 		if (url !== null) {
 			switch (this.length) {
 				case 2:
@@ -191,6 +163,10 @@ class Geoid {
 					url += `&in=state:${ this.state }+county:${ this.county }`
 					key = `${ year }-tracts-${ this.state }-${ this.county }`;
 					break;
+				case 12:
+					url += `&for=block+group:*`
+					url += `&in=state:${ this.state }+county:${ this.county }`;
+					key =  `${ year }-blockgroup-${ this.state }-${ this.county }`;
 			}
 		}
 		return { url, key };
