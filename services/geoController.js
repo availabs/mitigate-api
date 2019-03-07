@@ -8,9 +8,11 @@ const typeTables = {
    '5': 'us_county',
    '10': 'cousub',
    '11': 'tract',
+   '12' : 'blockgroup',
    'county': 'us_county',
    'tract': 'tract',
-   'cousub': 'cousub'
+   'cousub': 'cousub',
+    'blockgroup' : 'blockgroup'
 }
 
 const {
@@ -108,10 +110,11 @@ const _CensusAcsByGeoidByYear = (db_service, geoids, years) => {
     .then(data => [].concat(...data));
 }
 
+
 const  CensusAcsByGeoidByYearByKey = (db_service, geoids, years, censusKeys) => {
     const urls = fillCensusApiUrlArray(geoids, years, censusKeys);
     return Promise.all(generateCensusAcsByGeoidByKeyFetches(urls))
-        .then(data =>
+            .then(data =>
         [].concat(...data));
 }
 
@@ -191,6 +194,11 @@ const generateCensusAcsByGeoidByKeyFetches = urls => {
                 if (d[d.length-1].length >= 5){
                     let arrSlice = d.slice(1).slice(-3);
                     let county = arrSlice[0]+arrSlice[1]+arrSlice[2]
+                    return processCensusApiRow(d,county,year, censusKeys)
+                }
+                else if (d[d.length-1].length === 1){
+                    let arrSlice = d.slice(1).slice(-4);
+                    let county = arrSlice[0]+arrSlice[1]+arrSlice[2]+arrSlice[3]
                     return processCensusApiRow(d,county,year, censusKeys)
                 }
                 else{
