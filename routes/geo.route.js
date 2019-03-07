@@ -17,7 +17,8 @@ const typeByGeoidLength =  {
 	'2': 'state',
 	'5': 'county',
 	'10': 'cousub',
-	'11': 'tract'
+	'11': 'tract',
+	'14': 'blockgroup'
 }
 
 module.exports = [//{
@@ -110,6 +111,30 @@ module.exports = [//{
 	}, // END CousubsByGeoid
 
 
+    { // BlockGroupsByGeoid
+        route: `geo[{keys:geoids}].blockgroup`,
+        get: function (pathSet) {
+            let response = [];
+            var pathKeys = pathSet[2]; // why? look into this
+            return new Promise((resolve, reject) => {
+                let geoids = pathSet.geoids.map(d => d.toString()) // for keys to string
+            GeoService.ChildrenByGeoid(this.db_service, geoids, 'blockgroup').then(geodata => {
+                geoids.forEach(geoid => {
+                response.push({
+                path: ['geo', geoid, 'blockgroup'],
+                value: $atom(geodata[geoid])
+            })
+        })
+            resolve(response);
+
+        })
+        })
+        }
+    },
+
+
+     // END BlockGroupsByGeoid
+
 	{ // CensusAcsByGeoidByYear
 		route: `geo[{keys:geoids}][{keys:years}]['population', 'poverty', 'non_english_speaking', 'under_5', 'over_64', 'vulnerable', 'population_change', 'poverty_change', 'non_english_speaking_change', 'under_5_change', 'over_64_change', 'vulnerable_change']`,
 		get: function(pathSet) {
@@ -179,7 +204,6 @@ module.exports = [//{
         route: `acs.config`,
 
         get: function(pathSet) {
-        	console.log('in route');
                 return[
 					{
 						path: ['acs','config'],
