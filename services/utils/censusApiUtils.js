@@ -244,9 +244,10 @@ module.exports = {
 			}
 
     		return data;
-            }
-
-                //console.log(...CENSUS_API_SLICES[key]
-},
+    },    
 	EARLIEST_DATA_YEAR,
 	LATEST_DATA_YEAR
+
+
+                //console.log(...CENSUS_API_SLICES[key]
+}
