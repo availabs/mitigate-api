@@ -41,7 +41,113 @@ describe('Geography tools', () => {
     test('CensusAcsByGeoidByYearByKey', done => {
     const getEvent = {
         paths: [
-        ['acs', blockgroups,[2014],['B01003']]
+            ['acs', ['36001'], [2014], ['B23008']]
+        ],
+        method: 'get'
+    }
+    falcorGraph.respond({queryStringParameters: getEvent}, (error, response) => {
+    console.log('response by cenkey', JSON.stringify(response));
+expect(get(response, 'jsonGraph.geo.36.2018.population', null)).toBe(null);
+
+done()
+})
+;
+})
+
+test('CensusAcsByGeoidByYearByKey', done => {
+    const getEvent = {
+        paths: [
+            ['acs', ['36','36001'], [2014], ['B23008']]
+        ],
+        method: 'get'
+    }
+    falcorGraph.respond({queryStringParameters: getEvent}, (error, response) => {
+    console.log('response by state and cenkey', JSON.stringify(response));
+expect(get(response, 'jsonGraph.geo.36.2018.population', null)).toBe(null);
+
+done()
+})
+;
+})
+
+afterAll(() => {
+    return falcorGraph.close();
+})
+;
+
+})
+
+/*
+
+test('CensusAcsByGeoidByYearByKey', done => {
+    const getEvent = {
+        paths: [
+            ['acs', ['360010003003'], [2014], ['B01003']]
+        ],
+        method: 'get'
+    }
+    falcorGraph.respond({queryStringParameters: getEvent}, (error, response) => {
+    console.log('response by blockgroup', JSON.stringify(response));
+expect(get(response, 'jsonGraph.geo.36.2018.population', null)).toBe(null);
+
+done()
+})
+;
+})
+
+test('CensusAcsByGeoidByYearByKey', done => {
+    const getEvent = {
+        paths: `[
+				['acs', ['36001014802'],[2014],['B01003']]
+			]`,
+        method: 'get'
+    }
+    falcorGraph.respond({queryStringParameters: getEvent}, (error, response) => {
+    //console.log('ran hte test', error, response);
+    console.log('response by tract', JSON.stringify(response));
+//expect(get(response, 'jsonGraph.geo.36.2018.population', null)).toBe(null);
+//expect(data['36001'].url).toBe('jsonGraph.geo.36.2018.population')
+
+done()
+})
+;
+})
+
+test('CensusAcsByGeoidByYearByKey', done => {
+    const getEvent = {
+        paths: `[
+				['acs', ['3600161181'],[2014],['B01003']]
+			]`,
+        method: 'get'
+    }
+    falcorGraph.respond({queryStringParameters: getEvent}, (error, response) => {
+    //console.log('ran hte test', error, response);
+    console.log('response by cousub', JSON.stringify(response));
+//expect(get(response, 'jsonGraph.geo.36.2018.population', null)).toBe(null);
+//expect(data['36001'].url).toBe('jsonGraph.geo.36.2018.population')
+
+done()
+})
+;
+})
+
+test('censusConfig',done => {
+    const getEvent ={
+        paths : `[
+                ['acs','config']
+        ]`,
+        method: 'get'
+    }
+    falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+    console.log('response',JSON.stringify(response));
+    done()
+});
+})
+
+test('CensusAcsByGeoidByYearByKey', done => {
+    const getEvent = {
+        paths: [
+        ['acs', blockgroups,[2014],['B01003','B02001']]
     ],
         method: 'get'
     }
@@ -149,24 +255,7 @@ done()
 
 
 
-test('censusConfig',done => {
-    const getEvent ={
-        paths : `[
-                ['acs','config']
-        ]`,
-        method: 'get'
-    }
-    falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
-    //console.log('response',JSON.stringify(response));
-    done()
-});
-})
 
-})
-
-afterAll(() => {
-    return falcorGraph.close();
-});
-
+ */
 
 
