@@ -98,7 +98,7 @@ const makeBaseCensusApiUrl = (year, censusKeys) =>
 
     let url = "https://api.census.gov/data/" +
         `${ year }` +
-        `${(year >= 2014) ? '/acs/' : ''}`+
+        `${(year >= 2010) ? '/acs/' : ''}`+
         `acs5?` +
         `&get=${CENSUS_VARIABLES}`+
         `&key=${CENSUS_DATA_API_KEY}`
