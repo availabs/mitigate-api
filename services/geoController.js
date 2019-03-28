@@ -119,6 +119,7 @@ const  CensusAcsByGeoidByYearByKey = (db_service, geoids, years, censusKeys) => 
 }
 
 const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
+  console.log('testing years', years, EARLIEST_DATA_YEAR, LATEST_DATA_YEAR)
   const queries = years.map(year => {
     const sql = `
       WITH minus_5 AS (
@@ -156,7 +157,7 @@ const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
       WHERE acs.geoid in ('${ geoids.join("','") }')
       AND acs.year = ${ Math.min(Math.max(EARLIEST_DATA_YEAR, year), LATEST_DATA_YEAR) }
     `
-// console.log(sql);
+ console.log(sql);
     return db_service.promise(sql);
   })
   return Promise.all(queries)
