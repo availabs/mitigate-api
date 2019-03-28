@@ -191,19 +191,24 @@ const generateCensusAcsByGeoidByKeyFetches = urls => {
             .then(data => {
                 return data.slice(1)// ignore description row
             .map(d => {
-                if (d[d.length-1].length >= 5){
+                if (d[d.length-1].length >= 5){ //for cousub,tract
                     let arrSlice = d.slice(1).slice(-3);
                     let county = arrSlice[0]+arrSlice[1]+arrSlice[2]
                     return processCensusApiRow(d,county,year, censusKeys)
                 }
-                else if (d[d.length-1].length === 1){
+                else if (d[d.length-1].length === 1){ // for blockgroup
                     let arrSlice = d.slice(1).slice(-4);
                     let county = arrSlice[0]+arrSlice[1]+arrSlice[2]+arrSlice[3]
                     return processCensusApiRow(d,county,year, censusKeys)
                 }
-                else{
+                else if (d[d.length-1].length === 3){ // for county
                     let arrSlice = d.slice(1).slice(-2);
                     let county = arrSlice[0]+arrSlice[1]
+                    return processCensusApiRow(d,county,year, censusKeys)
+                }
+                else if(d[d.length-1].length === 2){ // for state
+                    let arrSlice = d.slice(1).slice(-1);
+                    let county = arrSlice[0]
                     return processCensusApiRow(d,county,year, censusKeys)
                 }
 
