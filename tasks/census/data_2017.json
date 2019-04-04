@@ -1,0 +1,5 @@
+{"census_var": "B19083_001E", "data": [{"geoid": "360010146091", "value": null}], "year": 2015},
+{"census_var": "B11001_001E", "data": [{"geoid": "360010146091", "value": "392"}], "year": 2015},
+{"census_var": "B11001_002E", "data": [{"geoid": "360010146091", "value": "194"}], "year": 2015},
+{"census_var": "B11001_003E", "data": [{"geoid": "360010146091", "value": "153"}], "year": 2015},
+{"census_var": "B11001_004E", "data": [{"geoid": "360010146091", "value": "41"}], "year": 2015},
