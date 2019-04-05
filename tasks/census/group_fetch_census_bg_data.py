@@ -59,7 +59,7 @@ columns_needed = []
 columns_not_needed = []
 print len(bgs_urls)
 
-for i in bgs_urls[0:5]: #start from here
+for i in bgs_urls[0:8]: #start from here
     print i
     req = requests.get(i)
     json_data.append(req.json())
@@ -115,7 +115,13 @@ for var in columns_needed:
     data[var] = []
 
 for row in final_result.iterrows():
+    print row
     for key in data.keys():
+        '''
+        To check till the length og bg_urls and iterarte over the string(.1)....
+        because the vars are created as many as the length of bg_urls and works fine for even number 
+        
+        '''
         if math.isnan(row[1][key]) == False:
             data[key] = [{'census_var':key[:-2],'geoid':row[1][0][9:],'value':row[1][key],'year':2017}]
         elif math.isnan(row[1][key + str('.1')]) == False:
