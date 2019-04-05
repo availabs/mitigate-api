@@ -6,6 +6,7 @@ from pandas.io.json import json_normalize
 import pandas as pd
 import numpy as np
 import re
+import math
 #url_blockgroup = '&for=block%20group:*&in=state:36&in=county:' need to add counties here
 url_1 = 'https://api.census.gov/data/2017/acs/acs5?get=' #group(B01003)
 url_county = '&for=county:*&in=state:36'
@@ -58,7 +59,7 @@ columns_needed = []
 columns_not_needed = []
 print len(bgs_urls)
 
-for i in bgs_urls[400:500]: #start from here
+for i in bgs_urls[0:5]: #start from here
     print i
     req = requests.get(i)
     json_data.append(req.json())
@@ -112,9 +113,13 @@ data = {}
 dict_flattened = []
 for var in columns_needed:
     data[var] = []
+
 for row in final_result.iterrows():
     for key in data.keys():
-        data[key] = [{'census_var':key[:-2],'geoid':row[1][0][9:],'value':row[1][key],'year':2017}]
+        if math.isnan(row[1][key]) == False:
+            data[key] = [{'census_var':key[:-2],'geoid':row[1][0][9:],'value':row[1][key],'year':2017}]
+        elif math.isnan(row[1][key + str('.1')]) == False:
+            data[key] = [{'census_var':key[:-2],'geoid':row[1][0][9:],'value':row[1][key+str('.1')],'year':2017}]
     for d in data.values():
         for i in d:
             print i
