@@ -2,8 +2,8 @@ import psycopg2
 import database_config
 
 def insertData(cursor):
-    with open('data.csv', 'r') as f:
-        cursor.copy_from(f, 'public.censusdata', sep= ',')
+    with open('data_test.csv', 'r') as f:
+        cursor.copy_from(f, 'census_data.censusdata', sep= ',')
     print('Data Inserted')
 def main():
     print('Connecting to the PostgreSQL database...')

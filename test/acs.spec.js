@@ -41,10 +41,11 @@ describe('Geography tools', () => {
     test('CensusAcsByGeoidByYearByKey', done => {
     const getEvent = {
         paths: [
-            ['acs', ['36001'], [2014], ['B23008']]
+            ['acs',['360010001001'], [2017], ['B01003_001E']]
         ],
         method: 'get'
     }
+    jest.setTimeout(30000)
     falcorGraph.respond({queryStringParameters: getEvent}, (error, response) => {
     console.log('response by cenkey', JSON.stringify(response));
 expect(get(response, 'jsonGraph.geo.36.2018.population', null)).toBe(null);
@@ -53,6 +54,32 @@ done()
 })
 ;
 })
+
+    test('censusGeoidBlockGroups',done => {
+        const getEvent ={
+            paths: [
+                ['geo',counties,'blockgroup']
+            ],
+            method: 'get'
+        }
+        falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+            console.log('response blockgroups',JSON.stringify(response));
+//expect(+data.byGeoid['36001'].cousub).toBe(01099)
+            done()
+        });
+    })
+
+
+
+
+afterAll(() => {
+    return falcorGraph.close();
+})
+;
+
+})
+
+/*
 
 test('CensusAcsByGeoidByYearByKey', done => {
     const getEvent = {
@@ -69,15 +96,6 @@ done()
 })
 ;
 })
-
-afterAll(() => {
-    return falcorGraph.close();
-})
-;
-
-})
-
-/*
 
 test('CensusAcsByGeoidByYearByKey', done => {
     const getEvent = {
@@ -177,19 +195,7 @@ done()
 })
 
 
-test('censusGeoidBlockGroups',done => {
-    const getEvent ={
-        paths: [
-            ['geo',counties,'blockgroup']
-        ],
-        method: 'get'
-    }
-    falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
-    console.log('response blockgroups',JSON.stringify(response));
-//expect(+data.byGeoid['36001'].cousub).toBe(01099)
-done()
-});
-})
+
 
 test('CensusAcsByGeoidByYearByKey', done => {
     const getEvent = {

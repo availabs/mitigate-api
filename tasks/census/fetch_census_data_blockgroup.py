@@ -6,9 +6,10 @@ from pandas.io.json import json_normalize
 import pandas as pd
 import numpy as np
 import itertools
-url_1 = 'https://api.census.gov/data/2015/acs/acs5?get='   #'B01003_001E'
+url_1 = 'https://api.census.gov/data/2016/acs/acs5?get='   #'B01003_001E'
 url_2 = '&for=block%20group:*&in=state:36&in=county:'
 url_3 = '&in=tract:*'
+url_key = '&key=963ed427a382c553e7068b1d2da58023f2330c29'
 counties = []
 urls_initial = []
 urls_middle = []
@@ -34,7 +35,7 @@ for i in range(len(counties)):
         third = str(urls_initial[j]) + second
         urls_middle.append(third)
 for i in range(len(urls_middle)):
-    fourth = urls_middle[i] + url_3
+    fourth = urls_middle[i] + url_3 + url_key
     urls_final.append(fourth)
 # ----- Creating final CSV to be inserted------
 
@@ -47,14 +48,14 @@ chunk_urls =[]
 outfile = open('data_2017.json', 'w')
 # ----- Writing in file------
 
-for i in range(len(urls_final))[0:5]: # change here fo every 100, start from the specified one here...
-    print i
+for i in range(len(urls_final)): # need to start from here
+    print urls_final[i],i
     req = requests.get(urls_final[i])
     json_data.append(req.json())
 #----- Flattening the data -------
 
 for data in json_data:
-    json_dict["year"] = 2015
+    json_dict["year"] = 2016
     json_dict["census_var"] = data[0][0]
     json_dict["data"] = [{
        "value" : data[1][0],
@@ -64,7 +65,6 @@ for data in json_data:
     outfile.write(',')
     outfile.write('\n')
     dict_flattened.append(flatten(json_dict))
-print dict_flattened
 
 #------- Creating CSV ------------
 

@@ -23,45 +23,44 @@ const {
 const fetch = require("./utils/fetch");
 
 const ChildrenByGeoid = function ChildrenByGeoid(db_service, geoids, type) {
-  return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
 // console.log(geoids)
-    let queries = geoids.map(geoid => {
-      return new Promise((resolve, reject) => {
-        
-        const sql = `
+        let queries = geoids.map(geoid => {
+            return new Promise((resolve, reject) => {
+
+                const sql = `
           SELECT 
             geoid
           FROM geo.tl_2017_${typeTables[type]}
             where geoid like '${geoid}%'
         `
 
-        // sql query for debugging
+                // sql query for debugging
 // console.log(sql,type, typeTables[type])
-        
-        // run query resolve rows
-        db_service.query(sql, [], (err, data) => {
-          if (err) reject(err);
-          resolve([
-              geoid,
-            data.rows.map(d => d.geoid)
-          ])
-        });
-      })
-    })
-    
-    Promise.all(queries).then(geoData => {
-      resolve(
-        geoData.reduce((out, curr) => {
-          //{36: [36001,...] }
-          out[curr[0]] = curr[1]
-          return out
-        }, {})
-      )
-    })
-  })
-}
 
+                // run query resolve rows
+                db_service.query(sql, [], (err, data) => {
+                    if (err) reject(err);
+                    resolve([
+                        geoid,
+                        data.rows.map(d => d.geoid)
+                    ])
+                });
+            })
+        })
+
+        Promise.all(queries).then(geoData => {
+            resolve(
+                geoData.reduce((out, curr) => {
+                    //{36: [36001,...] }
+                    out[curr[0]] = curr[1]
+                    return out
+                }, {})
+            )
+        })
+    })
+}
 
 const GeoByGeoid = function GeoByGeoid( db_service, geoids ) {
   return new Promise((resolve, reject) => {
@@ -111,15 +110,40 @@ const _CensusAcsByGeoidByYear = (db_service, geoids, years) => {
 }
 
 
+/*
 const  CensusAcsByGeoidByYearByKey = (db_service, geoids, years, censusKeys) => {
     const urls = fillCensusApiUrlArray(geoids, years, censusKeys);
     return Promise.all(generateCensusAcsByGeoidByKeyFetches(urls))
             .then(data =>
         [].concat(...data));
 }
+ */
+
+const  CensusAcsByGeoidByYearByKey = (db_service, geoids, years, censusKeys) => {
+    const queries = years.map(year => {
+        const sql =
+             `SELECT 
+                acs.geoid,
+                acs.year,
+                acs.censvar,
+                acs.value
+                
+              FROM census_data.censusdata AS acs
+              WHERE acs.geoid in ('${ geoids.join("','") }')
+              AND acs.censvar in ('${ censusKeys.join("','") }')
+              AND acs.year = ${ Math.min(Math.max(EARLIEST_DATA_YEAR, year), LATEST_DATA_YEAR) }
+            `
+        console.log('sql',sql)
+        return db_service.promise(sql);
+    })
+    return Promise.all(queries)
+        .then(data => [].concat(...data)
+        );
+
+}
 
 const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
-  console.log('testing years', years, EARLIEST_DATA_YEAR, LATEST_DATA_YEAR)
+    (console.log('testing years', years, EARLIEST_DATA_YEAR, LATEST_DATA_YEAR))
   const queries = years.map(year => {
     const sql = `
       WITH minus_5 AS (

@@ -1,7 +1,7 @@
 const CENSUS_KEY_CONFIG = require('./censusConfig')
 const CENSUS_DATA_API_KEY = require("./censusDataApiKey");
 const EARLIEST_DATA_YEAR = 2009;
-const LATEST_DATA_YEAR = 2016;
+const LATEST_DATA_YEAR = 2017;
 let subvariables =[]
 let AVAILABLE_DATA_YEARS = {};
 for (let i = EARLIEST_DATA_YEAR; i <= LATEST_DATA_YEAR; ++i) {

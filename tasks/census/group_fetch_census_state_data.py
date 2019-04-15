@@ -1,5 +1,6 @@
 import json
 import Config
+import remConfig
 import requests
 from flatten_json import flatten
 from pandas.io.json import json_normalize
@@ -7,16 +8,17 @@ import pandas as pd
 import numpy as np
 import re
 #url_blockgroup = '&for=block%20group:*&in=state:36&in=county:' need to add counties here
-url_1 = 'https://api.census.gov/data/2010/acs/acs5?get=' #group(B01003)
+url_1 = 'https://api.census.gov/data/2017/acs/acs5?get=' #group(B01003)
 url_state = '&for=state:36'
+url_key = '&key=963ed427a382c553e7068b1d2da58023f2330c29'
 counties = []
 county_state = []
 census_var = []
 
 #--------------------- for state------------------------
 
-for var_id,info in Config.census_config.items():
-    url = url_1 + 'group(' + str(var_id) + ')' + url_state
+for var_id,info in remConfig.census_config.items():
+    url = url_1 + 'group(' + str(var_id) + ')' + url_state + url_key
     county_state.append(url)
     for item in info['variables']:
         census_var.append(item['value'])
@@ -33,9 +35,10 @@ columns_not_needed = []
 fixed_columns = ['GEO_ID','NAME','state']
 
 for i in county_state:
-    print i
-    req = requests.get(i)
-    json_data.append(req.json())
+    if i == county_state[23]:
+        print i
+        req = requests.get(i)
+        json_data.append(req.json())
 
 result = pd.DataFrame()
 frames = []
@@ -64,8 +67,10 @@ re12='.*?'	# Non-greedy match on filler
 re13='(.)'	# Any Single Character 1
 re14='.*?'	# Non-greedy match on filler
 re15='(E)$'	# Any Single Character 2
+re16='(C)'
 
-rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15,re.IGNORECASE|re.DOTALL)
+#rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15,re.IGNORECASE|re.DOTALL)
+rg = re.compile(re16+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15,re.IGNORECASE|re.DOTALL)
 
 for col in df_merged:
     m = rg.search(col)
@@ -88,7 +93,7 @@ for var in columns_needed:
     data[var] = []
 for row in final_result.iterrows():
     for key in data.keys():
-        data[key] = [{'census_var':key,'geoid':row[1][0][9:],'value':row[1][key],'year':2010}]
+        data[key] = [{'census_var':key,'geoid':row[1][0][9:],'value':row[1][key],'year':2017}]
     for d in data.values():
         for i in d:
             print i

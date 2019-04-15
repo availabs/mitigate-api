@@ -182,10 +182,9 @@ module.exports = [//{
 					     	censusKeys.forEach(key => {
 									 const path = ['acs', geoid, year,key],
 									 result = results
-										 .reduce((a, c) => (c.geoid == geoid) && (c.year == year) ? c : a, null);
-									 //console.log('acs results', results)
+										 .reduce((a, c) => (c.geoid == geoid) && (c.year == year) && (c.censvar == key)? c : a, null);
 									 returnData.push({
-										 value: result ? $atom(result[key]) : 0,
+										 value: result ? $atom(result['value']) : 0,
 										 path
 						})
 

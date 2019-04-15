@@ -1,5 +1,6 @@
 import json
 import Config
+import remConfig
 import requests
 from flatten_json import flatten
 from pandas.io.json import json_normalize
@@ -11,6 +12,7 @@ url_1 = 'https://api.census.gov/data/2017/acs/acs5?get=' #group(B01003)
 url_county = '&for=county:*&in=state:36'
 url_cousub = '&for=county%20subdivision:*&in=state:36'
 url_tract = '&for=tract:*&in=state:36'
+url_key = '&key=963ed427a382c553e7068b1d2da58023f2330c29'
 counties = []
 county_urls = []
 county_cousubs = []
@@ -29,11 +31,11 @@ for i in range(124):
 #--------------------- for county,cousubs and tracts------------------------
 
 for var_id,info in Config.census_config.items():
-    url = url_1 + 'group(' + str(var_id) + ')' + url_state
-    county_state.append(url)
+    url = url_1 + 'group(' + str(var_id) + ')' + url_county + url_key
+    county_urls.append(url)
     for item in info['variables']:
         census_var.append(item['value'])
-print 'length of cousubs urls',len(county_state)
+print 'length of county urls',len(county_tracts)
 print 'number/length of counties',len(counties)
 
 
@@ -45,10 +47,11 @@ columns_needed = []
 columns_not_needed = []
 fixed_columns = ['GEO_ID','NAME','state','county']
 
-for i in county_tracts:
-    print i
-    req = requests.get(i)
-    json_data.append(req.json())
+for i in county_urls:
+    if i == county_urls:
+        print i
+        req = requests.get(i)
+        json_data.append(req.json())
 
 result = pd.DataFrame()
 frames = []
@@ -77,8 +80,10 @@ re12='.*?'	# Non-greedy match on filler
 re13='(.)'	# Any Single Character 1
 re14='.*?'	# Non-greedy match on filler
 re15='(E)$'	# Any Single Character 2
+re16 ='(C)'
 
-rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15,re.IGNORECASE|re.DOTALL)
+#rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15,re.IGNORECASE|re.DOTALL)
+rg = re.compile(re16+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15,re.IGNORECASE|re.DOTALL)
 
 for col in df_merged:
     m = rg.search(col)

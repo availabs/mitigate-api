@@ -11,6 +11,7 @@
     "falcor-json-graph": "^2.2.1",
     "falcor-path-utils": "^0.5.1",
     "falcor-router": "^0.8.3",
+    "jest": "^24.7.1",
     "lodash.get": "^4.4.2",
     "node-env-file": "^0.1.8",
     "pg": "^7.4.3"
