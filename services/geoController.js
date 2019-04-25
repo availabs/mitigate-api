@@ -133,9 +133,9 @@ const  CensusAcsByGeoidByYearByKey = (db_service, geoids, years, censusKeys) => 
               AND acs.censvar in ('${ censusKeys.join("','") }')
               AND acs.year = ${ Math.min(Math.max(EARLIEST_DATA_YEAR, year), LATEST_DATA_YEAR) }
             `
-        console.log('sql',sql)
         return db_service.promise(sql);
     })
+
     return Promise.all(queries)
         .then(data => [].concat(...data)
         );
@@ -181,11 +181,10 @@ const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
       WHERE acs.geoid in ('${ geoids.join("','") }')
       AND acs.year = ${ Math.min(Math.max(EARLIEST_DATA_YEAR, year), LATEST_DATA_YEAR) }
     `
- console.log(sql);
     return db_service.promise(sql);
   })
   return Promise.all(queries)
-    .then(data => [].concat(...data));
+    .then(data => [].concat(...data),console.log('data',data));
 }
 
 
