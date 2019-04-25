@@ -10,15 +10,15 @@ module.exports = {
         name: 'Racial Population',
         variables: [
             {name:'Total',value:'B02001_001E'},
-            {name:'White alone',value:'B02001_002E'},
-            {name:'Black or African American alone',value:'B02001_003E'},
-            {name:'American Indian and Alaska Native alone',value:'B02001_004E'},
-            {name:'Asian alone',value:'B02001_005E'},
-            {name:'Native Hawaiian and Other Pacific Islander alone',value:'B02001_006E'},
-            {name:'Some other race alone',value:'B02001_007E'},
+            {name:'White',value:'B02001_002E'},
+            {name:'Black or African American',value:'B02001_003E'},
+            {name:'American Indian and Alaska Native',value:'B02001_004E'},
+            {name:'Asian',value:'B02001_005E'},
+            {name:'Native Hawaiian and Other Pacific Islander',value:'B02001_006E'},
+            {name:'Other race ',value:'B02001_007E'},
             {name:'Two or more races',value:'B02001_008E'},
-            {name:'Two races including Some other race',value:'B02001_009E'},
-            {name:'Two races excluding Some other race, and three or more races',value:'B02001_010E'}
+            {name:'Two races including other race',value:'B02001_009E'},
+            {name:'Two races excluding other race and three or more races',value:'B02001_010E'}
         ]
     },
     B19057:{
@@ -263,7 +263,6 @@ B01001: { // Added a new one for graphs
 
 
 
-B23025: {
         name: 'Employment Status',
         variables:[
             {name:'R',value:'B23025_001E'},
