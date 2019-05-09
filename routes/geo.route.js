@@ -72,6 +72,7 @@ module.exports = [//{
 	{ // TractsByGeoid
 		route: `geo[{keys:geoids}].tracts`,
 	    get: function (pathSet) {
+			console.log('in func')
 	    	let response = [];
 	    	var pathKeys = pathSet[2]; // why? look into this
 	    	return new Promise((resolve, reject) => {
