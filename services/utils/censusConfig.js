@@ -6,6 +6,14 @@ module.exports = {
             {name:'Overall population',value:'B01003_001E'}
         ]
     },
+    B01002:{
+        name: 'Median Age By Sex',
+        variables:[
+            {name:'Median Age',value:'B01002_001E'},
+            {name:'Male',value:'B01002_002E'},
+            {name:'Female',value:'B01002_003E'}
+        ]
+    },
     B02001: {
         name: 'Racial Population',
         variables: [
@@ -153,7 +161,7 @@ module.exports = {
     B19013:{
         name:'Median Household Income',
         variables:[
-            {name:'Median household income in the past 12 months',value:'B19013_001E'}
+            {name:'Household income',value:'B19013_001E'}
         ]
     },
     B23008: {
@@ -193,21 +201,21 @@ module.exports = {
         name:'Occupancy Status',
         variables: [
             {name:'Total',value:'B25002_001E'},
-            {name:'Occupied',value:'B25002_002E'},
-            {name:'Vacant',value:'B25002_003E'}
+            {name:'Occupied Units',value:'B25002_002E'},
+            {name:'Vacant Units',value:'B25002_003E'}
         ]
     },
     B17001:{
         name:'Poverty Status by Sex by Age',
         variables:[
-            {name:'Income in the past 12 months below poverty level',value:'B17001_001E'}
+            {name:'Total',value:'B17001_001E'},
+            {name:'Population in Poverty',value:'B17001_002E'}
         ]
     },
     B15003:{
         name:'Educational Attainment',
         variables:[
             /*
-            {name:'Total',value:'B15003_001E'},
             {name:'No schooling completed',value:'B15003_002E'},
             {name:'Nursery School',value:'B15003_003E'},
             {name:'Kindergarten',value:'B15003_004E'},
@@ -224,7 +232,8 @@ module.exports = {
             {name:'11th grade',value:'B15003_015E'},
             {name:'12th grade or no diploma',value:'B15003_016E'},
              */
-            {name:'Regular High School diploma',value:'B15003_017E'},
+            {name:'Total',value:'B15003_001E'},
+            {name:'Regular High School diploma',value:'B15003_017E'}, // i =16
             {name:'GED or alternative credential',value:'B15003_018E'},
             {name:'Some college less than 1 year',value:'B15003_019E'},
             {name:'Some college,1 or more years,no degree',value:'B15003_020E'},
