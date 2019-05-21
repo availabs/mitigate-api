@@ -6,19 +6,27 @@ module.exports = {
             {name:'Overall population',value:'B01003_001E'}
         ]
     },
+    B01002:{
+        name: 'Median Age By Sex',
+        variables:[
+            {name:'Median Age',value:'B01002_001E'},
+            {name:'Male',value:'B01002_002E'},
+            {name:'Female',value:'B01002_003E'}
+        ]
+    },
     B02001: {
         name: 'Racial Population',
         variables: [
             {name:'Total',value:'B02001_001E'},
-            {name:'White alone',value:'B02001_002E'},
-            {name:'Black or African American alone',value:'B02001_003E'},
-            {name:'American Indian and Alaska Native alone',value:'B02001_004E'},
-            {name:'Asian alone',value:'B02001_005E'},
-            {name:'Native Hawaiian and Other Pacific Islander alone',value:'B02001_006E'},
-            {name:'Some other race alone',value:'B02001_007E'},
+            {name:'White',value:'B02001_002E'},
+            {name:'Black or African American',value:'B02001_003E'},
+            {name:'American Indian and Alaska Native',value:'B02001_004E'},
+            {name:'Asian',value:'B02001_005E'},
+            {name:'Native Hawaiian and Other Pacific Islander',value:'B02001_006E'},
+            {name:'Other race ',value:'B02001_007E'},
             {name:'Two or more races',value:'B02001_008E'},
-            {name:'Two races including Some other race',value:'B02001_009E'},
-            {name:'Two races excluding Some other race, and three or more races',value:'B02001_010E'}
+            {name:'Two races including other race',value:'B02001_009E'},
+            {name:'Two races excluding other race and three or more races',value:'B02001_010E'}
         ]
     },
     B19057:{
@@ -153,7 +161,7 @@ module.exports = {
     B19013:{
         name:'Median Household Income',
         variables:[
-            {name:'Median household income in the past 12 months',value:'B19013_001E'}
+            {name:'Household income',value:'B19013_001E'}
         ]
     },
     B23008: {
@@ -189,9 +197,53 @@ module.exports = {
 
         ]
     },
-
-
-
+    B25002:{
+        name:'Occupancy Status',
+        variables: [
+            {name:'Total',value:'B25002_001E'},
+            {name:'Occupied Units',value:'B25002_002E'},
+            {name:'Vacant Units',value:'B25002_003E'}
+        ]
+    },
+    B17001:{
+        name:'Poverty Status by Sex by Age',
+        variables:[
+            {name:'Total',value:'B17001_001E'},
+            {name:'Population in Poverty',value:'B17001_002E'}
+        ]
+    },
+    B15003:{
+        name:'Educational Attainment',
+        variables:[
+            /*
+            {name:'No schooling completed',value:'B15003_002E'},
+            {name:'Nursery School',value:'B15003_003E'},
+            {name:'Kindergarten',value:'B15003_004E'},
+            {name:'1st grade',value:'B15003_005E'},
+            {name:'2nd grade',value:'B15003_006E'},
+            {name:'3rd grade',value:'B15003_007E'},
+            {name:'4th grade',value:'B15003_008E'},
+            {name:'5th grade',value:'B15003_009E'},
+            {name:'6th grade',value:'B15003_010E'},
+            {name:'7th grade',value:'B15003_011E'},
+            {name:'8th grade',value:'B15003_012E'},
+            {name:'9th grade',value:'B15003_013E'},
+            {name:'10th grade',value:'B15003_014E'},
+            {name:'11th grade',value:'B15003_015E'},
+            {name:'12th grade or no diploma',value:'B15003_016E'},
+             */
+            {name:'Total',value:'B15003_001E'},
+            {name:'Regular High School diploma',value:'B15003_017E'}, // i =16
+            {name:'GED or alternative credential',value:'B15003_018E'},
+            {name:'Some college less than 1 year',value:'B15003_019E'},
+            {name:'Some college,1 or more years,no degree',value:'B15003_020E'},
+            {name:'Associate`s degree',value:'B15003_021E'},
+            {name:'Bachelor`s degree',value:'B15003_022E'},
+            {name:'Master`s degree',value:'B15003_023E'},
+            {name:'Professional School degree',value:'B15003_024E'},
+            {name:'Doctorate degree',value:'B15003_025E'}
+        ]
+    }
 }
 /*
 
@@ -263,7 +315,6 @@ B01001: { // Added a new one for graphs
 
 
 
-B23025: {
         name: 'Employment Status',
         variables:[
             {name:'R',value:'B23025_001E'},

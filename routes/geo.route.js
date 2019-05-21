@@ -72,6 +72,7 @@ module.exports = [//{
 	{ // TractsByGeoid
 		route: `geo[{keys:geoids}].tracts`,
 	    get: function (pathSet) {
+			console.log('in func')
 	    	let response = [];
 	    	var pathKeys = pathSet[2]; // why? look into this
 	    	return new Promise((resolve, reject) => {
@@ -176,23 +177,33 @@ module.exports = [//{
             return GeoService.CensusAcsByGeoidByYearByKey(this.db_service, geoids, years, censusKeys)
                 .then(results => {
 					let returnData  =[]
-                	//console.log('acs results', results)
 					 pathSet.geoids.forEach(geoid => {
 					     pathSet.years.forEach(year => {
 					     	censusKeys.forEach(key => {
-									 const path = ['acs', geoid, year,key],
+									 var path = ['acs', geoid, year,key]
+									 //results.forEach(function(result,i){
+									 	Object.values(results).forEach(function(value,i){
+									 		let path = ['acs',value.geoid,value.year,value.censvar]
+											returnData.push({
+												value: value.value,
+												path
+											})
+										})
+
+								 	//})
+									 /*
 									 result = results
 										 .reduce((a, c) => (c.geoid == geoid) && (c.year == year) && (c.censvar == key)? c : a, null);
 									 returnData.push({
-										 value: result ? $atom(result['value']) : 0,
+										 value: result ? result['value'] : 0,
 										 path
-						})
-
+									})
+									  */
 					 		})
 
 					 	})
-					 })
-
+					 });
+					console.log('returnData',returnData)
 					return returnData;
 
 				})
