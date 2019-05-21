@@ -1,0 +1,1000 @@
+  995  ll
+  996  git clone https://github.com/availabs/mitigate-api.git
+  997  ll
+  998  cd mitigate-api/
+  999  ll
+ 1000  cd tasks
+ 1001  ll
+ 1002  mkdir ebrExport
+ 1003  ll
+ 1004  cd ..
+ 1005  ll
+ 1006  npm install
+ 1007  ll
+ 1008  cd .git
+ 1009  ll
+ 1010  cd ..
+ 1011  ll
+ 1012  cd tasks
+ 1013  ll
+ 1014  cd ebrExport/
+ 1015  ll
+ 1016  history
+ 1017  ll
+ 1018  node readEbr.js > ebrSample
+ 1019  ll
+ 1020  less ebrSample
+ 1021  jq . ebrSample | less
+ 1022  node readEbr.js > ebrSample.json
+ 1023  ll
+ 1024  jq . ebrSample.json | less
+ 1025  less ebrSample.json
+ 1026  node readEbr.js > ebrSample.json
+ 1027  less
+ 1028  less ebrSample.json 
+ 1029  node readEbr.js > ebrSample.geojson
+ 1030  ll
+ 1031  less ebrSample.geojson
+ 1032  node readEbr.js > ebrSample.geojson
+ 1033  node readEbr.js > ebrSample.ndjson
+ 1034  node readEbr.js > ebrAlbanyCo.ndjson
+ 1035  node readEbr.js > ebrSample.ndjson
+ 1036  node readEbr.js > ebrAlbanyCo.ndjson
+ 1037  ll
+ 1038  rm ebrSample.ndjson
+ 1039  ll
+ 1040  ls -lah
+ 1041  less ebrAlbanyCo.ndjson 
+ 1042  node readEbr.js > ebrNyCo.ndjson
+ 1043  ls -lah
+ 1044  ll
+ 1045  tippecanoe -o ebrAlbCo.mbtiles -zg --drop-densest-as-needed ebrAlbanyCo.ndjson
+ 1046  tippecanoe -o ebrAlbnyCo.mbtiles -zg --drop-densest-as-needed ebrAlbanyCo.ndjson
+ 1047  tippecanoe -o ebrsample.mbtiles -zg --drop-densest-as-needed ebrSample.geojson
+ 1048  LL
+ 1049  ll
+ 1050  less ebrAlbanyCo.ndjson 
+ 1051  node readEbr.js > ebrAlbCo.ndjson
+ 1052  ll -lah
+ 1053  less ebrAlbCo.ndjson 
+ 1054  node readEbr.js > ebrManCo.ndjson
+ 1055  ls
+ 1056  ll
+ 1057  rm ebrAlbanyCo.ndjson 
+ 1058  rm ebrNyCo.ndjson 
+ 1059  ls
+ 1060  ll
+ 1061  rm ebrAlbCo.mbtiles 
+ 1062  rm ebrAlbnyCo.mbtiles 
+ 1063  ll
+ 1064  tippecanoe -o ebrAlbCo.mbtiles -zg --drop-densest-as-needed ebrAlbCo.ndjson
+ 1065  ll
+ 1066  tippecanoe -o ebrAlbCo_coalesce.mbtiles --coalesce-densest-as-needed ebrAlbCo.ndjson
+ 1067  ll
+ 1068  less ebrAlbCo.ndjson 
+ 1069  cp ebrAlbCo.ndjson ebrAlbCo_1.ndjson
+ 1070  ll
+ 1071  tippecanoe -o ebrAlbCo_coalesce_1.mbtiles --coalesce-densest-as-needed --extend-zooms-if-still-dropping ebrAlbCo_1.ndjson
+ 1072  ll
+ 1073  cp ebrAlbCo.ndjson ebrAlbCo_2.ndjson
+ 1074  ll
+ 1075  tippecanoe -o ebrAlbCo_dropdenset.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping ebrAlbCo_2.ndjson
+ 1076  ll
+ 1077  node readEbr.js > ebrNYS.ndjson
+ 1078  ll
+ 1079  ls -lah
+ 1080  tippecanoe -o ebrNYS_dropdenset.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping ebrNYS.ndjson
+ 1081  ll
+ 1082  cp ebrNYS.ndjson ebrNYS_1.ndjson
+ 1083  ll
+ 1084  tippecanoe -zg -o ebrNYS_coalesce.mbtiles --coalesce-densest-as-needed --extend-zooms-if-still-dropping ebrNYS_1.ndjson
+ 1085  ll
+ 1086  history > log
+ 1087  ll
+ 1088  cat log
+ 1089  ll
+ 1090  tippecanoe -zg -o ebrNYS_coalesce_1.mbtiles --coalesce-densest-as-needed --extend-zooms-if-still-dropping ebrNYS_1.ndjson
+ 1091  cd AVAIL/
+ 1092  ll
+ 1093  cd code
+ 1094  ll
+ 1095  cd osm_database/
+ 1096  ll
+ 1097  cd data
+ 1098  ll
+ 1099  less albany_highwayv1.geojson 
+ 1100  ll
+ 1101  cd ..
+ 1102  ll
+ 1103  cd HazardMitigation/
+ 1104  LL
+ 1105  ll
+ 1106  cd tasks
+ 1107  ll
+ 1108  cd command-line-catography/
+ 1109  ll
+ 1110  less ny-mercator-1.ndjson
+ 1111  less ny-mercator_1.ndjson
+ 1112  less ny-mercator.ndjson
+ 1113  htop
+ 1114  cd AVAIL/code/mitigate-api/tasks/ebrExport/
+ 1115  ll
+ 1116  cat log
+ 1117  history
+ 1118  htop
+ 1119  ll
+ 1120  htop
+ 1121  ll
+ 1122  htop
+ 1123  cd AVAIL/
+ 1124  ll
+ 1125  cd code
+ 1126  ll
+ 1127  cd mitigate-api/
+ 1128  ll
+ 1129  cd tasks
+ 1130  ll
+ 1131  cd ebrExport/
+ 1132  ll
+ 1133  ls -lah
+ 1134  rm ebrAlbCo_1.ndjson 
+ 1135  rm ebrAlbCo_2.ndjson 
+ 1136  ll
+ 1137  ls -lah
+ 1138  cd ..
+ 1139  ll
+ 1140  cd pacelGeoids/
+ 1141  LL
+ 1142  ll
+ 1143  cd ..
+ 1144  ll
+ 1145  cd ebr_building_to_parcel/
+ 1146  ll
+ 1147  node readBuildingFootprint.js > ebrTest.json
+ 1148  ll
+ 1149  less ebrTest.json 
+ 1150  ll
+ 1151  node readBuildingFootprint.js > ebrAlbany.json
+ 1152  ll
+ 1153  less ebrAlbany.json 
+ 1154  node readBuildingFootprint.js > ebrAlbany.ndjson
+ 1155  ll
+ 1156  tippecanoe -o ebrAlbany_dropdenset.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping ebrAlbany.ndjson
+ 1157  ll
+ 1158  less ebrAlbany.ndjson 
+ 1159  ll
+ 1160  cd ..
+ 1161  ll
+ 1162  ebrExport/
+ 1163  cd ebrExport/
+ 1164  ll
+ 1165  cd ..
+ 1166  ll
+ 1167  cd ebr_building_to_parcel/
+ 1168  ll
+ 1169  node readBuildingFootprint_nys.js > ebrNYS.ndjson
+ 1170  ll
+ 1171  node readBuildingFootprint_nys.js > ebrNYS.ndjson
+ 1172  ll
+ 1173  ls -lah
+ 1174  tippecanoe -o ebrNYS_dropdenset.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping ebrNYS.ndjson
+ 1175  ls -lah
+ 1176  node readBuildingFootprint_albany.js > ebrAlbany_1.ndjson
+ 1177  ll
+ 1178  less ebrAlbany_1.ndjson 
+ 1179  tippecanoe -o ebrAlbany_1_dropdenset.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping ebrAlbany_1.ndjson
+ 1180  ll
+ 1181  node readBuildingFootprint_albany.js > ebrAlbany_1.ndjson
+ 1182  ll
+ 1183  tippecanoe -o ebrAlbany_2_dropdenset.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping ebrAlbany_2.ndjson
+ 1184  ll
+ 1185  history
+ 1186  ll
+ 1187  cd AVAIL/
+ 1188  cd data
+ 1189  ll
+ 1190  cd code
+ 1191  ll
+ 1192  cd osm_database/
+ 1193  ll
+ 1194  cd data
+ 1195  ll
+ 1196  bunzip2 -k new-york-latest.osm.bz2 
+ 1197  ll
+ 1198  node readosm_ways_nys.js
+ 1199  npm install -g xml-stream
+ 1200  ll
+ 1201  node readosm_ways_nys.js
+ 1202  sudo npm install -g xml-stream
+ 1203  node readosm_ways_nys.js
+ 1204  ll
+ 1205  cd ..
+ 1206  mkdir osm_db
+ 1207  ll
+ 1208  cd osm_db
+ 1209  clone https://github.com/availabs/osm_database.git
+ 1210  git clone https://github.com/availabs/osm_database.git
+ 1211  sudo apt-get install osm2pgrouting
+ 1212  npm install
+ 1213  sudo npm install
+ 1214  ll
+ 1215  cd AVAIL/code/
+ 1216  LL
+ 1217  ll
+ 1218  cd osm_database/
+ 1219  ll
+ 1220  cd ..
+ 1221  ll
+ 1222  cd osm_database/
+ 1223  ll
+ 1224  cd data
+ 1225  ll
+ 1226  node readosm_nodes.js 
+ 1227  npm install -g xml-stream
+ 1228  sudo npm install -g xml-stream
+ 1229  ll
+ 1230  node readosm_ways_nys.js 
+ 1231  ls
+ 1232  less package.json 
+ 1233  npm install xml-stream
+ 1234  node readosm_ways_nys.js 
+ 1235  history
+ 1236  cd AVAIL/code/osm_database/data
+ 1237  ll
+ 1238  log.js
+ 1239  cat log.js
+ 1240  htop
+ 1241  cd AVAIL/code/osm_database/data
+ 1242  ll
+ 1243  history > log1
+ 1244  less log1
+ 1245  cd AVAIL/code/osm_database/data/
+ 1246  ll
+ 1247  node --max-old-space-size=8096 readosm_ways_nys_sqloutput.js | tee osm_ways_nl.sgl
+ 1248  node --max_old_space_size=8096 readosm_ways_nys_sqloutput.js | tee osm_ways_nl.sgl
+ 1249  ll
+ 1250  ls -lah
+ 1251  mv osm_ways_nl.sql osm_ways_nl_1.sql
+ 1252  ll
+ 1253  less osm_ways_nl_1.sql
+ 1254  ls -lah
+ 1255  rm osm_ways_nl_1.sql 
+ 1256  ll
+ 1257  less osm_ways.2.sql
+ 1258  less osm_ways_nl.sql
+ 1259  mv osm_ways_nl.sgl osm_ways_nl_new.sql
+ 1260  ll
+ 1261  ls -lah
+ 1262  less osm_ways_nl_new.sql 
+ 1263  psql "dbname='osm_dev' user='postgres' password='transit' host='lor.availabs.org'" -f osm_ways_nl_new.sql sslmode=require
+ 1264  scp osm_ways_nl_new.sql avail@lor.availabs.org:/home/code/test/osm_ways_nl_new.sql
+ 1265  scp osm_ways_nl_new.sql avail@lor.availabs.org:/home/avail/code/test/osm_ways_nl_new.sql
+ 1266  ll
+ 1267  cd AVAIL/code/osm_database/data
+ 1268  ll
+ 1269  history > log
+ 1270  cat log
+ 1271  htop
+ 1272  ssh avail@lor.availabs.org
+ 1273  ping lor.availabs.org
+ 1274  ssh lor.availabs.org
+ 1275  cd AVAIL/code/osm_database/
+ 1276  ll
+ 1277  cd data
+ 1278  ll
+ 1279  cd AVAIL/code/osm_database/data
+ 1280  ll
+ 1281  less new-york-latest.osm
+ 1282  less nys_building.geojson 
+ 1283  cd AVAIL/code/osm_database/data/test
+ 1284  ll
+ 1285  htop
+ 1286  htop
+ 1287  cd AVAIL/code/osm_database/data
+ 1288  ll
+ 1289  node osmGeojsonExport_buildings.js > nys_osm_building_1.geojson 
+ 1290  ll
+ 1291  history > log4
+ 1292  cd AVAIL/code/osm_database/data
+ 1293  ll
+ 1294  node --max_old_space_size=8192 osmGeojsonExport_buildings.js > nys_osm_building_2.geojson 
+ 1295  ll
+ 1296  rm nys_osm_building.geojson 
+ 1297  ll
+ 1298  mv nys_osm_building_1.geojson nys_osm_building_test.geojson
+ 1299  ll
+ 1300  mv nys_osm_building_2.geojson nys_osm_building.geojson 
+ 1301  ll
+ 1302  rm nys_osm_building.geojson 
+ 1303  rm nys_osm_building_test.geojson 
+ 1304  ll
+ 1305  history >log5
+ 1306  node --max_old_space_size=8192 osmGeojsonExport_buildings.js > nys_osm_building.geojson 
+ 1307  ls -lah
+ 1308  ls -la
+ 1309  ls -lah
+ 1310  ll
+ 1311  ls -la
+ 1312  ll
+ 1313  ls -la
+ 1314  ll
+ 1315  ls -lah
+ 1316  less nys_osm_building.geojson 
+ 1317  node --max_old_space_size=6144 osmGeojsonExport_buildings.js > nys_osm_building_2.geojson 
+ 1318  ls -lah
+ 1319  less nys_osm_building_2.geojson 
+ 1320  rm nys_osm_building_2.geojson 
+ 1321  ll
+ 1322  node readosm_nodes_limit1k.js 
+ 1323  ll 
+ 1324  node readosm_nodes_nys_counter.js 
+ 1325  ll
+ 1326  node readosm_nodes_nys_counter.js 
+ 1327  node --max_old_space_size=6144 osmGeojsonExport_buildings.js > nys_osm_building_2.geojson ll
+ 1328  history > log6
+ 1329  htop
+ 1330  cd AVAIL/code/osm_database/data/
+ 1331  ll
+ 1332  node --max_old_space_size=6144 osmGeojsonExport_buildings.js > nys_osm_building_new.geojson
+ 1333  ls -lah
+ 1334  rm nys_osm_building_2.geojson 
+ 1335  less nys_osm_building_new.geojson 
+ 1336  node --max_old_space_size=7168 osmGeojsonExport_buildings.js > nys_osm_building_1.geojson
+ 1337  ll
+ 1338  less nys_osm_building_1.geojson 
+ 1339  ll
+ 1340  node writestream_test.js >output
+ 1341  ll
+ 1342  less outout
+ 1343  less output 
+ 1344  rm output
+ 1345  less myOutput.txt 
+ 1346  ll
+ 1347  node osmGeojsonExport_buildings_test.js
+ 1348  ll
+ 1349  node osmGeojsonExport_buildings_test.js
+ 1350  ll
+ 1351  less test.geojson
+ 1352  rm test.geojson 
+ 1353  ll
+ 1354  history > log7
+ 1355  cd AVAIL/code/osm_database/data
+ 1356  ll
+ 1357  date writestream_test_2.js
+ 1358  date
+ 1359  date tail writestream_test_2.js
+ 1360  date tail -1  writestream_test_2.js
+ 1361  tail -1 writestream_test_2.js
+ 1362  date, tail -1 writestream_test_2.js
+ 1363  date | tail -1 writestream_test_2.js
+ 1364  date
+ 1365  tail -1 writestream_test_2.js
+ 1366  less nys_osm_building.ndjson 
+ 1367  tail -1 writestream_test_2.js
+ 1368  ifconfig
+ 1369  date
+ 1370  tail -2 writestream_test_2.js
+ 1371  ll
+ 1372  tail -2 writestream_test_2.js
+ 1373  date
+ 1374  time tail -2 writestream_test_2.js
+ 1375  date tail -2 writestream_test_2.js
+ 1376  date &&  tail -2 writestream_test_2.js
+ 1377  date &&  tail -1 writestream_test_2.js
+ 1378  cd AVAIL/code/osm_database/data/
+ 1379  ll
+ 1380  rm nys_osm_buildings.geojson 
+ 1381  ll
+ 1382  node ---max_old_space_size=7168 togeojson.js > nys_osm_buildings_final.geojson
+ 1383  node --max_old_space_size=7168 togeojson.js > nys_osm_buildings_final.geojson
+ 1384  ll
+ 1385  less nys_osm_buildings_final.geojson 
+ 1386  rm nys_osm_buildings_final.geojson 
+ 1387  ll
+ 1388  node --max_old_space_size=7168 togeojson.js > nys_osm_buildings_final.geojson
+ 1389  ll
+ 1390  rm nys_osm_buildings_final.geojson 
+ 1391  node --max_old_space_size=7168 togeojson.js > nys_osm_buildings_final.geojson
+ 1392  ll
+ 1393  rm nys_osm_buildings_final.geojson 
+ 1394  node --max_old_space_size=7168 togeojson.js > nys_osm_buildings_final.geojson
+ 1395  rm nys_osm_buildings_final.geojson 
+ 1396  node --max_old_space_size=7168 togeojson.js > nys_osm_buildings_final.geojson
+ 1397  less nys_osm_buildings_final.geojson 
+ 1398  rm nys_osm_buildings_final.geojson 
+ 1399  node --max_old_space_size=7168 togeojson.js > nys_osm_buildings_final.geojson
+ 1400  rm nys_osm_buildings_final.geojson 
+ 1401  node --max_old_space_size=7168 togeojson.js > nys_osm_buildings_final.geojson
+ 1402  tail nys_osm_building_3.ndjson 
+ 1403  ll
+ 1404  rm nys_osm_buildings_final.geojson 
+ 1405  node --max_old_space_size=7168 togeojson.js > nys_osm_buildings_final.geojson
+ 1406  ll
+ 1407  history > log9
+ 1408  ll
+ 1409  htop
+ 1410  cd AVAIL/code/osm_database/data/
+ 1411  ll
+ 1412  less nys_osm_buildings_final.geojson 
+ 1413  ogr2ogr -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" ~/AVAIL/code/osm_database/data/nys_osm_buildings_final.geojson -nln public.osm_buildings_nys 
+ 1414  ll
+ 1415  history >log9
+ 1416  ll
+ 1417  cd AVAIL/code/osm_database/data/
+ 1418  ll
+ 1419  org2org -f "ESRI shapefile" nys_osm_buildings_final.shp nys_osm_buildings_final.geojson 
+ 1420  ogr2ogr -f "ESRI shapefile" nys_osm_buildings_final.shp nys_osm_buildings_final.geojson 
+ 1421  vim nys_osm_buildings_final.geojson 
+ 1422  cd AVAIL/code/osm_database/data/
+ 1423  ll
+ 1424  ogr2ogr -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" ~/AVAIL/code/osm_database/data/nys_osm_buildings_final.geojson -nln public.osm_buildings_nys 
+ 1425  ll
+ 1426  node --max-old-space-size=8096 readosm_buildings_export.js 
+ 1427  scp osm_ways_nl_new.sql avail@lor.availabs.org:/home/avail/code/test/osm_ways_nl_new.sql
+ 1428  cd AVAIL/code/osm_database/data/
+ 1429  ll
+ 1430  scp osmGeojsonExport_buildings_final_2_copy.js avail@lor.availabs.org:/home/avail/code/test/osmGeojsonExport_buildings_final.js
+ 1431  ll
+ 1432  scp nys_osm_buildings_final.geojson avail@lor.availabs.org:/home/avail/code/test/nys_osm_buildings_final.geojson
+ 1433  node --max-old-space-size=8096 readosm_buildings_export.js 
+ 1434  cd ..
+ 1435  ll
+ 1436  ..
+ 1437  cd ..
+ 1438  ll
+ 1439  cd home
+ 1440  ll
+ 1441  cd media
+ 1442  cd ..
+ 1443  cd media
+ 1444  ll
+ 1445  cd..
+ 1446  cd ..
+ 1447  cd ~/AVAIL
+ 1448  ll
+ 1449  cd code/
+ 1450  ll
+ 1451  cd osm_database/
+ 1452  ll
+ 1453  cd data
+ 1454  ll
+ 1455  node --max-old-space-size=8096 readosm_buildings_export.js 
+ 1456  vim nys_osm_buildings_final_copy.geojson 
+ 1457  cd ~/AVAIL
+ 1458  cd code
+ 1459  cd osm_database/data
+ 1460  ll
+ 1461  ls -lh nys_osm_buildings_final_copy.geojson 
+ 1462  less nys_osm_buildings_final_copy.geojson 
+ 1463  vi  nys_osm_buildings_final_copy.geojson 
+ 1464  vi nys_osm_buildings_final_copy.geojson 
+ 1465  cd AVAIL/code/osm_database/data
+ 1466  ll
+ 1467  vi nys_osm_buildings_final_copy.geojson 
+ 1468  cd AVAIL/code/osm_database/data/
+ 1469  ll
+ 1470  vim -b nys_osm_buildings_final_copy.geojson 
+ 1471  rm nys_osm_building_3.ndjson 
+ 1472  ll
+ 1473  less nys_osm_building_2.ndjson 
+ 1474  ll
+ 1475  node --max-old-space-size=8096 readosm_buildings_export.js 
+ 1476  ll
+ 1477  less nys_osm_building_2.ndjson 
+ 1478  vim -b nys_osm_buildings_final_copy.geojson 
+ 1479  split -l 500000 NewYork.test_1.ndjson NewYork.buildingFootprint_
+ 1480  split -l 500000 nys_osm_building_2.ndjson nys_osm_buildings_seg__
+ 1481  ll
+ 1482  less nys_osm_buildings_seg__a
+ 1483  less nys_osm_buildings_seg__aa
+ 1484  rm nys_osm_buildings_rm nys_osm_buildings_seg__a*
+ 1485  rm nys_osm_buildings_seg__a*
+ 1486  rm nys_osm_buildings_seg__aa
+ 1487  rm nys_osm_buildings_snys_osm_buildings_seg__aa
+ 1488  rm nys_osm_buildings_seg__aa
+ 1489  rm nys_osm_buildings_seg_aa
+ 1490  ll
+ 1491  split -l 100000 nys_osm_building_2.ndjson nys_osm_buildings_ndjson_
+ 1492  ll
+ 1493  rm nys_osm_buildings_seg_a
+ 1494  rm nys_osm_buildings_seg_a*
+ 1495  rm nys_osm_buildings_ndjson_a
+ 1496  ll
+ 1497  cd AVAIL/code/osm_database/dat
+ 1498  cd AVAIL/code/osm_database/data/
+ 1499  ll
+ 1500  echo '{"type":"FeatureCollection","features":[' > head
+ 1501  ll
+ 1502  less head
+ 1503  less ']}' > tail
+ 1504  echo ']}' > tail
+ 1505  for f in nys_osm_buildings_ndjson_a* ; do cat head $f tail > $f.geojson && rm -f $f ; done
+ 1506  ll
+ 1507  less nys_osm_buildings_ndjson_aa.geojson 
+ 1508  history > log10
+ 1509  split -1 100000 nys_osm_building_2.ndjson nys_osm_building_ndjson_
+ 1510  split -l 100000 nys_osm_building_2.ndjson nys_osm_building_ndjson_
+ 1511  ll
+ 1512  less nys_osm_building_ndjson_aa
+ 1513  ndjson-reduce < nys_osm_building_ndjson_aa | ndjson-map '{"type":"FeatureCollection","features":d}' > nys_osm_building_aa.geojson
+ 1514  ll
+ 1515  ndjson-reduce < nys_osm_building_ndjson_aa | ndjson-map '{"type":"FeatureCollection","features":d}' > nys_osm_building_ndjson_aa.geojson
+ 1516  ll
+ 1517  less nys_osm_building_ndnys_osm_building_ndjson_aa.geojson
+ 1518  less nys_osm_building_ndjson_aa.geojson
+ 1519  cd AVAIL/code/osm_database/data
+ 1520  ll
+ 1521  cd osm_buildings/
+ 1522  ll
+ 1523  less nys_osm_building_ndjson_aa.geojson 
+ 1524  htop
+ 1525  cd AVAIL/code/
+ 1526  LL
+ 1527  ll
+ 1528  cd scrap_names-master/
+ 1529  ll
+ 1530  cd Craiglist/
+ 1531  ll
+ 1532  python scrap
+ 1533  ll
+ 1534  cd ..
+ 1535  ll
+ 1536  cd u
+ 1537  cd updated_craiglist/
+ 1538  ll
+ 1539  cd ..
+ 1540  ll
+ 1541  ll
+ 1542  cd updated_craiglist/
+ 1543  ll
+ 1544  cd Craiglist/
+ 1545  ll
+ 1546  cd ..
+ 1547  ll
+ 1548  python scrap
+ 1549  python --version
+ 1550  ll
+ 1551  python scrap.py
+ 1552  python3 scrap.py
+ 1553  ll
+ 1554  cd updated_craiglist/
+ 1555  ll
+ 1556  cd AVAIL/code/osm_database/data
+ 1557  cd osm_buildings/
+ 1558  ll
+ 1559  ogr2ogr -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" ~/AVAIL/code/osm_database/data/nys_osm_buildings_final.geojson -nln public.osm_buildings_nys 
+ 1560  ll
+ 1561  ogr2ogr -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" ~/AVAIL/code/osm_database/data/osm_buildings/nys_osm_building_ndjson_aa.geojson -nln public.osm_buildings_nys 
+ 1562  less nys_osm_building_ndjson_aa.geojson
+ 1563  ogr2ogr -append -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" ~/AVAIL/code/osm_database/data/osm_buildings/nys_osm_building_ndjson_ab.geojson  -nln public.osm_buildings_nys 
+ 1564  ogr2ogr -append -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" ~/AVAIL/code/osm_database/data/osm_buildings/nys_osm_building_ndjson_ac.geojson  -nln public.osm_buildings_nys 
+ 1565  ogr2ogr -append -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" ~/AVAIL/code/osm_database/data/osm_buildings/nys_osm_building_ndjson_ad.geojson  -nln public.osm_buildings_nys 
+ 1566  ogr2ogr -append -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" ~/AVAIL/code/osm_database/data/osm_buildings/nys_osm_building_ndjson_ae.geojson  -nln public.osm_buildings_nys 
+ 1567  for f in ~/AVAIL/code/osm_database/data/osm_buildings/nys_osm_building_ndjson_a*.geojson; do ogr2ogr -append -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" $f  -nln public.osm_buildings_nys ;  q
+ 1568  for f in nys_osm_building_ndjson_a*.geojson; do ogr2ogr -append -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" $f  -nln public.osm_buildings_nys ; done 
+ 1569  cd ..
+ 1570  cd .
+ 1571  cd ..
+ 1572  ll
+ 1573  cd ..
+ 1574  ll
+ 1575  cd avail/
+ 1576  ll
+ 1577  cd Documents/
+ 1578  ll
+ 1579  cd ..
+ 1580  ll
+ 1581  cd AVAIL/code
+ 1582  ll
+ 1583  cd criticality/
+ 1584  ll
+ 1585  less NYS_roads_criticality.geojson 
+ 1586  tail NYS_roads_criticality.geojson 
+ 1587  head NYS_roads_criticality.geojson 
+ 1588  head -1 NYS_roads_criticality.geojson 
+ 1589  head -10 NYS_roads_criticality.geojson 
+ 1590  head -3 NYS_roads_criticality.geojson 
+ 1591  head -5 NYS_roads_criticality.geojson 
+ 1592  head -7 NYS_roads_criticality.geojson 
+ 1593  head -6 NYS_roads_criticality.geojson 
+ 1594  ogr2ogr -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" ~/AVAIL/code/criticality/NYS_roads_criticality.geojson -nln public.nys_roads_criticality 
+ 1595  tippecanoe -o NYS_roads_criticality.mbtiles -y OBJECTID --drop-densest-as-needed NYS_roads_criticality.geojson
+ 1596  ll
+ 1597  cd ..
+ 1598  cd osm_database/
+ 1599  ll
+ 1600  cd data
+ 1601  ll
+ 1602  node readosm_ways_building_counts.js 
+ 1603  cd ..
+ 1604  curl 'http://download.geofabrik.de/north-america/us/new-york-latest.osm.bz2' > data/new-york-latest.osm.bz3
+ 1605  cd AVAIL/code
+ 1606  ll
+ 1607  cd scrap_names-master/
+ 1608  LL
+ 1609  ll
+ 1610  pip install pdfminer.six
+ 1611  pip3 install pdfminer.six
+ 1612  python --version
+ 1613  sudo apt install python3-pip
+ 1614  pip3 install pdfminer.six
+ 1615  python3 pdf2txt.py Craigslist/*/*.pdf
+ 1616  git clone https://github.com/pdfminer/pdfminer.six.git
+ 1617  ll
+ 1618  cd pdfminer.six/
+ 1619  ll
+ 1620  cd tools
+ 1621  ll
+ 1622  python3 pdf2txt.py Craigslist/*/*.pdf
+ 1623  cd ..
+ 1624  ll
+ 1625  python3 pdf2txt.py Craigslist/*/*.pdf
+ 1626  ll
+ 1627  cd Craigslist/
+ 1628  ll
+ 1629  python3 pdf2txt.py -oCraigslist/*/*.pdf .txt  Craigslist/*/*.pdf
+ 1630  cd ..
+ 1631  ll
+ 1632  python3 pdf2txt.py -o Craigslist/*/*.txt  Craigslist/*/*.pdf
+ 1633  ll
+ 1634  cd Craigslist/
+ 1635  ll
+ 1636  cd ..
+ 1637  ll
+ 1638  python pdf2txt.py -o Craigslist.txt  Craigslist/*/*.pdf
+ 1639  pdf2txt.py -o Craigslist.txt  Craigslist/*/*.pdf
+ 1640  python3 pdf2txt.py -o Craigslist.txt  ../Craigslist/*/*.pdf
+ 1641  ll
+ 1642  python3 pdf2txt.py -o ../Craigslist/*/*.txt  ../Craigslist/*/*.pdf
+ 1643  history > ../log
+ 1644  ll
+ 1645  cd ..
+ 1646  ll
+ 1647  less log
+ 1648  set -o vi
+ 1649  psql "dbname='hazard_mitigation' user='postgres' password='Jedi21funk' host='mars.availabs.org'" -c '\d'
+ 1650  pg_dump "dbname='hazard_mitigation' user='postgres' password='Jedi21funk' host='mars.availabs.org'" --table=irvs.buildings 
+ 1651  cd AVAIL/code/mitigate-api/
+ 1652  ll
+ 1653  mkdir database_backups
+ 1654  cd database_backups/
+ 1655  ll
+ 1656  pg_dump "dbname='hazard_mitigation' user='postgres' password='Jedi21funk' host='mars.availabs.org'" --table=irvs.buildings | gzip -9 > irvs.buildings.pg_dump.sql.gz
+ 1657  ll
+ 1658  ll -h
+ 1659  history > log
+ 1660  cd AVAIL/code
+ 1661  cd osm_database/
+ 1662  ll
+ 1663  cd ..
+ 1664  cd temp
+ 1665  ll
+ 1666  bunzip2 -k new-york-latest.osm.bz2 
+ 1667  ll
+ 1668  bunzip2 -k new-york-latest.osm.bz2 
+ 1669  ll
+ 1670  cd ..
+ 1671  ll
+ 1672  cd osm_database/
+ 1673  cd data
+ 1674  ll
+ 1675  cd ..
+ 1676  ll
+ 1677  cd ..
+ 1678  ll
+ 1679  cd temp
+ 1680  ll
+ 1681  cd osm\ file..
+ 1682  cd updated_craiglist/
+ 1683  cd ..
+ 1684  cd temp
+ 1685  ll
+ 1686  cd osm\ file\ /
+ 1687  ll
+ 1688  cd ..
+ 1689  ll
+ 1690  cd osm_file/
+ 1691  ll
+ 1692  node readosm_ways_building_counts.js 
+ 1693  cd ..
+ 1694  ll
+ 1695  node readosm_ways_building_counts.js 
+ 1696  npm -g install geojsplit
+ 1697  sudo npm -g install geojsplit
+ 1698  gejsplit --help
+ 1699  geojsplit --help
+ 1700  smb://169.226.117.65
+ 1701  ll
+ 1702  cd osm_file/
+ 1703  ll
+ 1704  geojsplit -l 100000 nys_osm_buildings_fromshp.geojson 
+ 1705  ll
+ 1706  less nys_osm_buildings_fromshp_xaaaa.geojson
+ 1707  for f in ~/AVAIL/code/osm_database/data/osm_buildings/nys_osm_building_ndjson_a*.geojson ; do ogr2ogr -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" $f -nln public.osm_buildings_nys  ; done
+ 1708  for f in ~/AVAIL/code/osm_database/data/osm_file/nys_osm_buildings_fromshp_x*.geojson ; do ogr2ogr -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" $f -nln public.nys_osm_buildings; done
+ 1709  for f in ~/AVAIL/code/osm_database/data/osm_buildings/nys_osm_building_ndjson_a*.geojson ; do ogr2ogr -append -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" $f -nln public.osm_buildings_nys; done
+ 1710  ll
+ 1711  for f in ~/AVAIL/code/osm_database/data/osm_file/nys_osm_buildings_fromshp_x*.geojson ; do ogr2ogr -append -f "PostgreSQL" PG:"host=mars.availabs.org user=postgres dbname=hazard_mitigation password=Jedi21funk" $f -nln public.nys_osm_buildings; done
+ 1712  ll
+ 1713  tippecanoe -o nysOsmBuilding_dropdenset.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping nys_osm_building.ndjson
+ 1714  tippecanoe -o nysOsmBuildingNew_dropdenset.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping nys_osm_buildings_fromshp.geojson
+ 1715  cd ..
+ 1716  ll
+ 1717  cd mitigate-api/
+ 1718  ll
+ 1719  cd tasks/
+ 1720  ll
+ 1721  cd ebr_building_to_parcel/
+ 1722  ll
+ 1723  node readOsmBuilding_albany.js >osmtoparcel_1.ndjson
+ 1724  ll
+ 1725  tippecanoe -o osmBuildingToParcel.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping osmtoparcel_1.ndjson
+ 1726  ll
+ 1727  ls -lah
+ 1728  ll
+ 1729  node readOsmBuilding_albany.js > osmParcel_albany.ndjson
+ 1730  less osmParcel_albany.ndjson 
+ 1731  tippecanoe -o osmBuildingParcel_albany.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping osmParcel_albany.ndjson
+ 1732  ll
+ 1733  node readOsmBuilding_albany.js > osmParcel_albany_1.ndjson
+ 1734  tippecanoe -o osmBuildingParcel_albany_1.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping osmParcel_albany_1.ndjson
+ 1735  ll
+ 1736  node readOsmBuilding_albany.js > osmParcel_albany_2.ndjson
+ 1737  ll
+ 1738  tippecanoe -o osmBuildingParcel_albany_2.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping osmParcel_albany_2.ndjson
+ 1739  ll
+ 1740  node readOsmBuilding_nys.js > osmParcel_nys.ndjson
+ 1741  ll
+ 1742  tippecanoe -o osmBuildingParcel_nys.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping osmParcel_nys.ndjson
+ 1743  ll
+ 1744  node insertIntoEbrBuilding.js > sqltest
+ 1745  ll
+ 1746  less sqltest 
+ 1747  ll
+ 1748  node insertIntoEbrBuilding.js 
+ 1749  ll 
+ 1750  node insertIntoEbrBuilding_albany.js 
+ 1751  node createOsmBuildingTable_albany.js 
+ 1752  node createOsmBuildingTable_nys.js 
+ 1753  cd AVAIL/code/
+ 1754  ll
+ 1755  cd scrap_names-master/
+ 1756  ll
+ 1757  git pull
+ 1758  git https://github.com/shaunaksangdod/scrap_names.git
+ 1759  git clone https://github.com/shaunaksangdod/scrap_names.git
+ 1760  ll
+ 1761  cd scrap_names/
+ 1762  ll
+ 1763  python3 scrap.py
+ 1764  ll
+ 1765  python scrap.py 
+ 1766  python3 scrap.py
+ 1767  htop
+ 1768  cd AVAIL/code
+ 1769  ll
+ 1770  cd mitigate-api/
+ 1771  ll
+ 1772  cd tasks/
+ 1773  ll
+ 1774  cd ebr_building_to_parcel/
+ 1775  ll
+ 1776  sudo apt -get update
+ 1777  sudo apt-get update
+ 1778  node createOsmBuildingTable_nys.js 
+ 1779  ll
+ 1780  sudo apt-get upgrade
+ 1781  ll
+ 1782  node createMsBuildingTable_albany.js 
+ 1783  node createMsBuildingTable_nys.js 
+ 1784  node createMsBuildingTable_albany.js 
+ 1785  node createMsBuildingTable_nys.js 
+ 1786  node createMsBuildingTable_nys_1.js 
+ 1787  ll
+ 1788  htop
+ 1789  cd AVAIL/code/ll
+ 1790  cd AVAIL/code/
+ 1791  ll
+ 1792  cd mitigate-api/
+ 1793  ll
+ 1794  cd task
+ 1795  cd tasks
+ 1796  ll
+ 1797  cd ebr_building_to_parcel/
+ 1798  ll
+ 1799  node createMsBuildingTable_nys_1.js 
+ 1800  ll
+ 1801  node createMsBuildingTable_nys_1.js
+ 1802  ll
+ 1803  node createMsBuildingTable_bronx.js 
+ 1804  node createMsBuildingTable_albany.js 
+ 1805  node createMsBuildingTable_bronx.js 
+ 1806  node createMsBuildingTable_albany.js 
+ 1807  node createMsBuildingTable_nys.js 
+ 1808  ssh jin@169.226.117.65
+ 1809  cd AVAIL/
+ 1810  LL
+ 1811  cd code/tasks
+ 1812  cd code
+ 1813  ll
+ 1814  cd mitigate-api/
+ 1815  ll
+ 1816  cd tasks/
+ 1817  ll
+ 1818  cd ebr_building_to_parcel/
+ 1819  ll
+ 1820  cd ..
+ 1821  ll
+ 1822  cd irvs
+ 1823  ll
+ 1824  cd ..
+ 1825  ping 169.226.117.65
+ 1826  cd AVAIL/code
+ 1827  ll
+ 1828  cd mitigate-api/
+ 1829  ll
+ 1830  cd task
+ 1831  ll
+ 1832  cd tasks
+ 1833  ll
+ 1834  cd ebr_building_to_parcel/
+ 1835  ll
+ 1836  geojsplit -a 2 -l 200000 -o parcels NYS_2017_Tax_Parcels_1811_Agencies.geojson 
+ 1837  ll
+ 1838  geojsplit -a 2 -l 200000  NYS_2017_Tax_Parcels_1811_Agencies.geojson 
+ 1839  history > log
+ 1840  ll
+ 1841  less log
+ 1842  ll
+ 1843  cd AVAIL/code/mitigate-api/
+ 1844  ll
+ 1845  cd tasks
+ 1846  ll
+ 1847  cd ebr_building_to_parcel/
+ 1848  ll
+ 1849  geojsplit -a 2 -l 2000000  NYS_2017_Tax_Parcels_1811_Agencies.geojson 
+ 1850  geojsplit --version
+ 1851  geojsplit -l 100000 -o split_by_num  NYS_2017_Tax_Parcels_1811_Agencies.geojson 
+ 1852  geojsplit -l 10000 -o split_by_num  NYS_2017_Tax_Parcels_1811_Agencies.geojson 
+ 1853  cd AVAIL/code/
+ 1854  ll
+ 1855  git clone https://github.com/shaunaksangdod/scrap_names.git
+ 1856  ll
+ 1857  cd sc
+ 1858  cd scrap_names
+ 1859  ll
+ 1860  python3 scrap.py
+ 1861  python -version
+ 1862  python --version
+ 1863  python -v
+ 1864  exit
+ 1865  cd AVAIL/code/
+ 1866  ll
+ 1867  cd scrap_names
+ 1868  ll
+ 1869  python3 scrap.py
+ 1870  pip install sortedcontainers
+ 1871  sudo apt install python-pip
+ 1872  pip install sortedcontainers
+ 1873  python3 scrap.py
+ 1874  python -V
+ 1875  python3 -V
+ 1876  python3 scrap.py
+ 1877  ssh mars.availabs.org
+ 1878  exit
+ 1879  cd AVAIL/code/
+ 1880  ll
+ 1881  cd scrap_names
+ 1882  ll
+ 1883  python3 scrap.py 
+ 1884  python -V
+ 1885  python3 -V
+ 1886  python3 scrap.py 
+ 1887  sudo pip2.7 install pdfminer
+ 1888  pip -v
+ 1889  sudo pip install pdfminer
+ 1890  python3 scrap.py 
+ 1891  python2.7 -v
+ 1892  python2.7 -V
+ 1893  python2.7
+ 1894  clear
+ 1895  python3 scrap.py 
+ 1896  python2.7 pdf_to_text.py Craiglist/2gxqw-6254973506/Tester1.pdf
+ 1897  pwd
+ 1898  git status
+ 1899  cd ..
+ 1900  ls
+ 1901  cd scrap_names
+ 1902  ls -l
+ 1903  rm * -r
+ 1904  ls
+ 1905  git init
+ 1906  git pull https://github.com/shaunaksangdod/scrap_names.git
+ 1907  ls
+ 1908  ls -lh
+ 1909  cd ..
+ 1910  rm scrap_names
+ 1911  mkdir tmp
+ 1912  cd tmp
+ 1913  git init
+ 1914  ls
+ 1915  git pull <pre> https://github.com/shaunaksangdod/scrap_names.git
+ 1916  git pull https://github.com/shaunaksangdod/scrap_names.git
+ 1917  clear
+ 1918  ls
+ 1919  python3 scrap.py 
+ 1920  cd updated_craiglist/
+ 1921  ls
+ 1922  cat 2gxqw-6254973506/
+ 1923  rm * -r
+ 1924  cd ..
+ 1925  ls
+ 1926  python3 scrap.py 
+ 1927  cd updated_craiglist/
+ 1928  ls
+ 1929  cd 2gxqw-6254973506/
+ 1930  ls
+ 1931  cat Tester1.txt 
+ 1932  cd ..
+ 1933  ll
+ 1934  history >log
+ 1935  less log
+ 1936  cd AVAIL/code/
+ 1937  ll
+ 1938  cd osm_database/
+ 1939  cd ..
+ 1940  ll
+ 1941  cd mitigate-api/
+ 1942  ll
+ 1943  cd tasks
+ 1944  ll
+ 1945  cd ebr_building_to_parcel/
+ 1946  ll
+ 1947  tippecanoe -o nys_building_footprints_pk.mbtiless --drop-densest-as-needed --extend-zooms-if-still-dropping nys_buildings_osm_ms_parcelid_pk.geojson
+ 1948  ll
+ 1949  cd ..
+ 1950  ls
+ 1951  ll
+ 1952  cd irvs/
+ 1953  ll
+ 1954  node insertIntoBuildings.js 
+ 1955  ll
+ 1956  node insertIntoBuildings.js 
+ 1957  cd ..
+ 1958  ll
+ 1959  cd ebr_building_to_parcel/
+ 1960  ll
+ 1961  node insertIntoBuildings.js 
+ 1962  cd ..
+ 1963  ll
+ 1964  cd irvs
+ 1965  ll
+ 1966  less insertIntoBuildings.js 
+ 1967  ll
+ 1968  node insertIntoBuildings.js 
+ 1969  sudo install fcitx-hangul
+ 1970  sudo apt-get fcitx-hangul
+ 1971  sudo apt-get install fcitx-hangul
+ 1972  cd AVAIL/code/
+ 1973  ll
+ 1974  cd mitigate-api/
+ 1975  ll
+ 1976  cd tasks
+ 1977  ll
+ 1978  cd irvs/
+ 1979  ll
+ 1980  ll 
+ 1981  node insertIntoBuildings_1.js 
+ 1982  ssh mars.availabs.org
+ 1983  cd AVAIL/code/mitigate-api/tasks/irvs/
+ 1984  ll
+ 1985  vi insertIntoBuildings_1.js 
+ 1986  ssh mars
+ 1987  ssh mars.availabs.org
+ 1988  exit
+ 1989  ssh mars.availabs.org
+ 1990  cd AVAIL/code/mitigate-api/tasks/irvs/
+ 1991  ll
+ 1992  node insertIntoBuildings_2.js 
+ 1993  history log1
+ 1994  history >log_1
