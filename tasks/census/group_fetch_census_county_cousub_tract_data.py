@@ -30,12 +30,12 @@ for i in range(124):
 
 #--------------------- for county,cousubs and tracts------------------------
 
-for var_id,info in Config.census_config.items():
-    url = url_1 + 'group(' + str(var_id) + ')' + url_county + url_key
-    county_urls.append(url)
+for var_id,info in remConfig.census_config.items():
+    url = url_1 + 'group(' + str(var_id) + ')' + url_cousub + url_key
+    county_cousubs.append(url)
     for item in info['variables']:
         census_var.append(item['value'])
-print 'length of county urls',len(county_tracts)
+#print 'length of county urls',len(county_tracts)
 print 'number/length of counties',len(counties)
 
 
@@ -47,11 +47,11 @@ columns_needed = []
 columns_not_needed = []
 fixed_columns = ['GEO_ID','NAME','state','county']
 
-for i in county_urls:
-    if i == county_urls:
-        print i
-        req = requests.get(i)
-        json_data.append(req.json())
+for i in county_cousubs:
+    #if i == county_urls:
+    print i
+    req = requests.get(i)
+    json_data.append(req.json())
 
 result = pd.DataFrame()
 frames = []
@@ -63,8 +63,8 @@ for sublist in json_data:
             df_list.append(subsublist)
     df = pd.DataFrame(columns=sublist[0],data=df_list)
     frames.append(df)
-df_merged = reduce(lambda left, right: pd.merge(left, right, on=['GEO_ID', 'NAME', 'state', 'county'], how='outer'), frames)
 
+df_merged = reduce(lambda left, right: pd.merge(left, right, on=['GEO_ID', 'NAME', 'state', 'county'], how='outer'), frames)
 re1='(B)'	# Any Single Word Character (Not Whitespace) 1
 re2='.*?'	# Non-greedy match on filler
 re3='.'	# Uninteresting: c
@@ -82,8 +82,8 @@ re14='.*?'	# Non-greedy match on filler
 re15='(E)$'	# Any Single Character 2
 re16 ='(C)'
 
-#rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15,re.IGNORECASE|re.DOTALL)
-rg = re.compile(re16+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15,re.IGNORECASE|re.DOTALL)
+rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15,re.IGNORECASE|re.DOTALL)
+#rg = re.compile(re16+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15,re.IGNORECASE|re.DOTALL)
 
 for col in df_merged:
     m = rg.search(col)
@@ -92,6 +92,7 @@ for col in df_merged:
     else:
         if col not in fixed_columns:
             columns_not_needed.append(col)
+print columns_needed
 df_merged.drop(columns_not_needed,inplace=True, axis=1)
 
 df_merged.to_csv('data.csv',index=False, na_rep='NaN')
@@ -99,7 +100,6 @@ df_merged.to_csv('data.csv',index=False, na_rep='NaN')
 result = pd.read_csv('data.csv')
 final_result = pd.DataFrame()
 final_result = result.drop(['NAME','state','county'],axis=1)
-
 data = {}
 dict_flattened = []
 for var in columns_needed:
