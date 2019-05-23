@@ -208,8 +208,69 @@ module.exports = {
     B17001:{
         name:'Poverty Status by Sex by Age',
         variables:[
+            {name:'Income in the past 12 months below poverty level',value:'B17001_002E'},
             {name:'Total',value:'B17001_001E'},
-            {name:'Population in Poverty',value:'B17001_002E'}
+            {name:'Total Male', value:'B17001_003E'},
+            {name:'Male Under 5',value:'B17001_004E'},
+            {name:'Male 5 years',value:'B17001_005E'},
+            {name:'Male 6-11 years',value:'B17001_006E'},
+            {name:'Male 12-14 years',value:'B17001_007E'},
+            {name:'Male 15 years',value:'B17001_008E'},
+            {name:'Male 16-17 years',value:'B17001_009E'},
+            {name:'Male 18-24 years',value:'B17001_010E'},
+            {name:'Male 25-34 years',value:'B17001_011E'},
+            {name:'Male 35-44 years',value:'B17001_012E'},
+            {name:'Male 45-54 years',value:'B17001_013E'},
+            {name:'Male 55-64 years',value:'B17001_014E'},
+            {name:'Male 65-74 years',value:'B17001_015E'},
+            {name:'Male 75 years over',value:'B17001_016E'},
+            {name:'Total Female', value:'B17001_017E'},
+            {name:'Female Under 5',value:'B17001_018E'},
+            {name:'Female 5 years',value:'B17001_019E'},
+            {name:'Female 6-11 years',value:'B17001_020E'},
+            {name:'Female 12-14 years',value:'B17001_021E'},
+            {name:'Female 15 years',value:'B17001_022E'},
+            {name:'Female 16-17 years',value:'B17001_023E'},
+            {name:'Female 18-24 years',value:'B17001_024E'},
+            {name:'Female 25-34 years',value:'B17001_025E'},
+            {name:'Female 35-44 years',value:'B17001_026E'},
+            {name:'Female 45-54 years',value:'B17001_027E'},
+            {name:'Female 55-64 years',value:'B17001_028E'},
+            {name:'Female 65-74 years',value:'B17001_029E'},
+            {name:'Female 75 years over',value:'B17001_030E'},
+            //--------------------------------------------------------------------------------------
+            {name:'Income in the past months above or at Poverty level',value:'B17001_31E'},
+            {name:'Total Male', value:'B17001_032E'},
+            {name:'Male Under 5',value:'B17001_033E'},
+            {name:'Male 5 years',value:'B17001_034E'},
+            {name:'Male 6-11 years',value:'B17001_035E'},
+            {name:'Male 12-14 years',value:'B17001_036E'},
+            {name:'Male 15 years',value:'B17001_037E'},
+            {name:'Male 16-17 years',value:'B17001_038E'},
+            {name:'Male 18-24 years',value:'B17001_039E'},
+            {name:'Male 25-34 years',value:'B17001_040E'},
+            {name:'Male 35-44 years',value:'B17001_041E'},
+            {name:'Male 45-54 years',value:'B17001_042E'},
+            {name:'Male 55-64 years',value:'B17001_043E'},
+            {name:'Male 65-74 years',value:'B17001_044E'},
+            {name:'Male 75 years over',value:'B17001_045E'},
+            {name:'Total Female', value:'B17001_046E'},
+            {name:'Female Under 5',value:'B17001_047E'},
+            {name:'Female 5 years',value:'B17001_048E'},
+            {name:'Female 6-11 years',value:'B17001_049E'},
+            {name:'Female 12-14 years',value:'B17001_050E'},
+            {name:'Female 15 years',value:'B17001_051E'},
+            {name:'Female 16-17 years',value:'B17001_052E'},
+            {name:'Female 18-24 years',value:'B17001_053E'},
+            {name:'Female 25-34 years',value:'B17001_054E'},
+            {name:'Female 35-44 years',value:'B17001_055E'},
+            {name:'Female 45-54 years',value:'B17001_056E'},
+            {name:'Female 55-64 years',value:'B17001_057E'},
+            {name:'Female 65-74 years',value:'B17001_058E'},
+            {name:'Female 75 years over',value:'B17001_059E'},
+
+            
+            
         ]
     },
     B15003:{
@@ -243,9 +304,171 @@ module.exports = {
             {name:'Professional School degree',value:'B15003_024E'},
             {name:'Doctorate degree',value:'B15003_025E'}
         ]
+    },
+    B19119: {
+        name: 'Median Family Income by Family Size',
+        variables: [
+            {name: 'Total', value: 'B19119_001E'},
+            {name: '2-person families', value: 'B19119_002E'},
+            {name: '3-person families', value: 'B19119_003E'},
+            {name: '4-person families', value: 'B19119_004E'},
+            {name: '5-person families', value: 'B19119_005E'},
+            {name: '6-person families', value: 'B19119_006E'},
+            {name: '7-person families', value: 'B19119_007E'}
+
+        ]
+    },
+    B19013A:{
+        name: 'Median household income ',
+        variables :[
+            {name: ' White Alone ', value:'B19013A_001E'}
+        ]
+    },
+    B19013B:{
+        name: 'Median household income ',
+        variables :[
+            {name: ' Black or African American alone ', value:'B19013B_001E'}
+        ]
+
+    },
+    B19013C: {
+        name: 'Median household income ',
+        variables :[
+            {name: ' American Indian or Alaska Native alone ', value:'B19013C_001E'}
+        ]
+    },
+    B19013D: {
+        name: 'Median household income ',
+        variables : [
+            {name: ' Asian alone ', value:'B19013D_001E'}
+        ]
+    },
+    B19013E: {
+        name: 'Median household income ',
+        variables :[
+            {name:' Native Hawaiian and Other Pacific Islander Alone ',value:'B19013E_001E'}
+        ]
+    },
+    B19013F: {
+        name: 'Median household income ',
+        variables :[
+            {name:' Some Other Race Alone ',value:'B19013F_001E'}
+        ]
+    },
+    B19013G: {
+        name: 'Median household income ',
+        variables : [
+            {name:' Two or more races ',value:'B19013G_001E'}
+        ]
+    },
+    B19013H: {
+        name: 'Median household income ',
+        variables :[
+            {name:' White Alone, Not Hispanic or Latino ',value:'B19013H_001E'}
+        ]
+    },
+    B19013I: {
+        name: 'Median household income ',
+        variables :[
+            {name:' Hispanic or Latino ',value:'B19013I_001E'}
+        ]
+    },
+    B21001 : {
+        name: 'Civilian Population 18 Years and Over',
+        variables :[
+            {name:'Total',value:'B21001_001E'},
+            {name:'Total veteran',value:'B21001_002E'},
+            {name:'Total non veteran',value:'B21001_003E'},
+            {name:'Total Male',value:'B21001_004E'},
+            {name:'Total Male veteran',value:'B21001_005E'},
+            {name:'Total Male non veteran',value:'B21001_006E'},
+            {name:'Total Male 18-34 years',value:'B21001_007E'},
+            {name:'Male 18-34 years veteran',value:'B21001_008E'},
+            {name:'Male 18-34 years non veteran',value:'B21001_009E'},
+            {name:'Total Male 35-54 years',value:'B21001_010E'},
+            {name:'Male 35-54 years veteran',value:'B21001_011E'},
+            {name:'Male 35-54 years non veteran',value:'B21001_012E'},
+            {name:'Total Male 55-64 years',value:'B21001_013E'},
+            {name:'Male 55-64 years veteran',value:'B21001_014E'},
+            {name:'Male 55-64 years non veteran',value:'B21001_015E'},
+            {name:'Total Male 65-74 years',value:'B21001_016E'},
+            {name:'Male 65-74 years veteran',value:'B21001_017E'},
+            {name:'Male 65-74 years non veteran',value:'B21001_018E'},
+            {name:'Total Male 75 years over',value:'B21001_019E'},
+            {name:'Male 75 years over veteran',value:'B21001_020E'},
+            {name:'Male 75 years over non veteran',value:'B21001_021E'},
+            {name:'Total Female',value:'B21001_022E'},
+            {name:'Total Female veteran',value:'B21001_023E'},
+            {name:'Total Female non veteran',value:'B21001_024E'},
+            {name:'Total Female 18-34 years',value:'B21001_025E'},
+            {name:'Female 18-34 years veteran',value:'B21001_026E'},
+            {name:'Female 18-34 years non veteran',value:'B21001_027E'},
+            {name:'Total Female 35-54 years',value:'B21001_028E'},
+            {name:'Female 35-54 years veteran',value:'B21001_029E'},
+            {name:'Female 35-54 years non veteran',value:'B21001_030E'},
+            {name:'Total Female 55-64 years',value:'B21001_031E'},
+            {name:'Female 55-64 years veteran',value:'B21001_032E'},
+            {name:'Female 55-64 years non veteran',value:'B21001_033E'},
+            {name:'Total Female 65-74 years',value:'B21001_034E'},
+            {name:'Female 65-74 years veteran',value:'B21001_035E'},
+            {name:'Female 65-74 years non veteran',value:'B21001_036E'},
+            {name:'Total Female 75 years over',value:'B21001_037E'},
+            {name:'Female 75 years over veteran',value:'B21001_038E'},
+            {name:'Female 75 years over non veteran',value:'B21001_039E'}
+
+        ]
     }
+
+
 }
 /*
+
+
+B21001 : {
+        name: 'Civilian Population 18 Years and Over',
+        variables :[
+            {name:'Total',value:'B21001_001E'},
+            {name:'Total veteran',value:'B21001_002E'},
+            {name:'Total non veteran',value:'B21001_003E'},
+            {name:'Total Male',value:'B21001_004E'},
+            {name:'Total Male veteran',value:'B21001_005E'},
+            {name:'Total Male non veteran',value:'B21001_006E'},
+            {name:'Total Male 18-34 years',value:'B21001_007E'},
+            {name:'Male 18-34 years veteran',value:'B21001_008E'},
+            {name:'Male 18-34 years non veteran',value:'B21001_009E'},
+            {name:'Total Male 35-54 years',value:'B21001_010E'},
+            {name:'Male 35-54 years veteran',value:'B21001_011E'},
+            {name:'Male 35-54 years non veteran',value:'B21001_012E'},
+            {name:'Total Male 55 to 64 years',value:'B21001_013E'},
+            {name:'Male 55 to 64 years veteran',value:'B21001_014E'},
+            {name:'Male 55 to 64 years non veteran',value:'B21001_015E'},
+            {name:'Total Male 65 to 74 years',value:'B21001_016E'},
+            {name:'Male 65 to 74 years veteran',value:'B21001_017E'},
+            {name:'Male 65 to 74 years non veteran',value:'B21001_018E'},
+            {name:'Total Male 75 years and over',value:'B21001_019E'},
+            {name:'Male 75 years and over veteran',value:'B21001_020E'},
+            {name:'Male 75 years and over non veteran',value:'B21001_021E'},
+            {name:'Total Female',value:'B21001_022E'},
+            {name:'Total Female veteran',value:'B21001_023E'},
+            {name:'Total Female non veteran',value:'B21001_024E'},
+            {name:'Total Female 18-34 years',value:'B21001_025E'},
+            {name:'Female 18-34 years veteran',value:'B21001_026E'},
+            {name:'Female 18-34 years non veteran',value:'B21001_027E'},
+            {name:'Total Female 35-54 years',value:'B21001_028E'},
+            {name:'Female 35-54 years veteran',value:'B21001_029E'},
+            {name:'Female 35-54 years non veteran',value:'B21001_030E'},
+            {name:'Total Female 55 to 64 years',value:'B21001_031E'},
+            {name:'Female 55 to 64 years veteran',value:'B21001_032E'},
+            {name:'Female 55 to 64 years non veteran',value:'B21001_033E'},
+            {name:'Total Female 65 to 74 years',value:'B21001_034E'},
+            {name:'Female 65 to 74 years veteran',value:'B21001_035E'},
+            {name:'Female 65 to 74 years non veteran',value:'B21001_036E'},
+            {name:'Total Female 75 years and over',value:'B21001_037E'},
+            {name:'Female 75 years and over veteran',value:'B21001_038E'},
+            {name:'Female 75 years and over non veteran',value:'B21001_039E'}
+
+        ]
+    }
 
 
 B01001: { // Added a new one for graphs
