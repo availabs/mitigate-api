@@ -2,7 +2,7 @@ import psycopg2
 import database_config
 
 def insertData(cursor):
-    with open('data_test.csv', 'r') as f:
+    with open('data_county.csv', 'r') as f:
         cursor.copy_from(f, 'census_data.censusdata', sep= ',')
     print('Data Inserted')
 def main():

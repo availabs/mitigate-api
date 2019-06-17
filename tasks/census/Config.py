@@ -167,7 +167,7 @@ census_config = {
     'B01003': {
         'name': 'Overall Population',
         'variables': [
-            {'name':'Total','value':'B01003_001E'}
+            {'name':'Population','value':'B01003_001E'}
         ]
     },
     'B19013':{
@@ -485,7 +485,19 @@ census_config = {
             {'name':'Occupied','value':'B25002_002E'},
             {'name':'Vacant','value':'B25002_003E'}
         ]
-    }
+    },
+    'B23025': {
+        'name': 'Employment Status',
+        'variables':[
+            {'name':'Total','value':'B23025_001E'},
+            {'name':'In labor force','value':'B23025_002E'},
+            {'name':'Civilian labor force','value':'B23025_003E'},
+            {'name':'Civilian labor force Employed','value':'B23025_004E'},
+            {'name':'Civilian labor force Unemployed','value':'B23025_005E'},
+            {'name':'Armed forces','value':'B23025_006E'},
+            {'name':'Not in labor force','value':'B23025_007E'}
+        ]
+    },
 
 
 }

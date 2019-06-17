@@ -41,13 +41,13 @@ for var_id,info in remConfig.census_config.items():
 
 
 #---------------------for data gathering of counties ----------------------------------
-
 '''
+
 json_data = []
 json_dict = {}
 
 
-for i in county_cousubs:
+for i in county_urls:
     #if i == county_urls:
     print i
     req = requests.get(i)
@@ -99,7 +99,9 @@ dict_flattened = []
 for var in columns_needed[2:]:
     data[var] = []
 for row in result.iterrows():
+
     county = str(int(row[1][-1]))
+
     if len(county) == 1:
         county = '00' + county
     elif len(county) == 2:
@@ -117,6 +119,8 @@ df_insert = pd.DataFrame(json_normalize(dict_flattened))
 df_insert.fillna(np.nan, inplace=True)
 pd.DataFrame.to_csv(df_insert, 'data3.csv', header=None, index=False, na_rep='NaN')
 '''
+
+
 
 #---------------------for data gathering of cousubs ----------------------------------
 
