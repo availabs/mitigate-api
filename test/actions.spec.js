@@ -6,6 +6,7 @@ describe('actions', () => {
     const content_id = `my-special-content-id`
 
 
+    /*
     test('actions.worksheet.insert', (done) => {
         const getEvent = {
             'callPath': ['actions','worksheet','insert'],
@@ -19,10 +20,37 @@ describe('actions', () => {
             done();
         });
     })
+     */
 
 
+    /*
+    test('actions.worksheet.length', (done) => {
+        const getEvent = {
+            'paths': [
+                ['actions','worksheet','length']
+            ],
+            'method': 'get'
+        }
+        falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+            console.log('response',JSON.stringify(response))
+            //expect(typeof get(response, 'jsonGraph.capabilities.length.value', null)).toBe("number");
+            done();
+        });
+    })
+     */
 
-
+    test('actions.worksheet.remove', (done) => {
+        const callEvent = {
+            'method': 'call',
+            'callPath': ['actions','worksheet','remove'],
+            'args': ['12']
+        }
+        falcorGraph.respond({ queryStringParameters: callEvent }, (error, response) => {
+            console.log('response',JSON.stringify(response))
+            //expect(typeof get(response, 'jsonGraph.content.byIndex.length.value', null)).toBe("number");
+            done();
+        });
+    })
     /*
     test('actions.worksheet.byId', (done) => {
         const getEvent = {
@@ -39,18 +67,20 @@ describe('actions', () => {
     })
      */
 
+
     /*
     test('actions.worksheet.byId::set', (done) => {
         const setEvent = {
             'method': 'set',
             'jsonGraph': {
-                'paths': [['actions','worksheet','byId',[1], 'project_number',]],
+                'paths': [['actions','worksheet','byId',[12], ['project_name','project_number']]],
                 'jsonGraph': {
                     'actions': {
                         'worksheet':{
                             'byId': {
-                                [1]: {
-                                    'project_number': '3456'
+                                [12]: {
+                                    'project_name': 'new_12',
+                                    'project_number':5678
                                 }
                             }
                         }
@@ -66,6 +96,7 @@ describe('actions', () => {
         });
     })
      */
+
 
     /*
     test('actions.worksheet.byIndex', (done) => {
