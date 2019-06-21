@@ -36,10 +36,11 @@ const length = db_service => {
     const sql = `
 		SELECT count(1) AS length
 		FROM actions.actions_worksheet
-	`
+	    `
     return db_service.promise(sql)
         .then(rows => rows.pop().length)
 }
+
 
 module.exports = {
     ATTRIBUTES,
@@ -81,6 +82,7 @@ module.exports = {
                             ...keys.map(key => updates[id][key] === null ? null : updates[id][key].value || updates[id][key]),
                             id
                         ]
+                    console.log('sql',sql)
                     return db_service.promise(sql, args);
                 })
         )
@@ -102,5 +104,15 @@ module.exports = {
                     .then(length => [length, rows.pop()])
             })
     },
+
+    remove: (db_service, ids) => {
+        const sql = `
+			DELETE FROM actions.actions_worksheet
+			WHERE id IN (${ ids });
+		`;
+        console.log('sql',sql)
+        return db_service.promise(sql)
+            .then(() => length(db_service))
+    }
 
 }
