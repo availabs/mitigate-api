@@ -33,6 +33,22 @@ module.exports = [
     },
 
     {
+        route: 'actions.worksheet.length',
+        get: function(pathSet) {
+            return actionsController.length(this.db_service)
+                .then(length => {
+                    console.log('length',length)
+                    return [
+                        {
+                            path: ['actions','worksheet','length'],
+                            value: $atom(+length)
+                        }
+                    ]
+                });
+        }
+    },
+
+    {
         route: 'actions.worksheet.insert',
         call: function(callPath, args, refPaths, thisPaths) {
             return actionsController.insert(this.db_service, args)
@@ -71,7 +87,6 @@ module.exports = [
                         }
                         else {
                             pathSet[4].forEach(attribute => {
-                                console.log('attribute',row[attribute])
                                 result.push({
                                     path: ['actions','worksheet','byId', id, attribute],
                                     value: $atom(row[attribute])
@@ -98,6 +113,7 @@ module.exports = [
                         }
                         else {
                             for (const key in row) {
+                                //console.log('key',key)
                                 result.push({
                                     path: ['actions','worksheet','byId', id, key],
                                     value: $atom(row[key])
@@ -109,6 +125,29 @@ module.exports = [
                 });
         }
     },
+    {
+        route: 'actions.worksheet.remove',
+        call: function(callPath, args, refPaths, thisPaths) {
+            return actionsController.remove(this.db_service, args)
+                .then(length => {
+                    const result = args.map(id => ({
+                        path: ['actions','worksheet','byId', id],
+                        invalidated: true
+                    }))
+                    return [
+                        {
+                            path: ['actions','worksheet','byIndex'],
+                            invalidated: true,
+                        },
+                        {
+                            path: ['actions','worksheet','length'],
+                            value: length
+                        },
+                        ...result
+                    ]
+                })
+        }
+    }
 
 
 ]
