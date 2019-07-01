@@ -27,6 +27,7 @@ module.exports = [
                             })
                         }
                     })
+
                     return result;
                 });
         }
@@ -147,8 +148,29 @@ module.exports = [
                     ]
                 })
         }
-    }
+    },
+    {
+        route: 'plans.authGroups[{keys:groups}].plans',
+        get: function (callPath, args, refPaths, thisPaths) {
+            const groups = callPath.groups
+            let result = []
+            return plansController.getGroups(this.db_service, groups)
+                .then(rows => {
+                    groups.forEach(group => {
+                        //let group =[]
+                        let ids = rows
+                            .filter(row => row.groups.includes( group))//
+                            .map(row => row.id)
 
+                        result.push({
+                            path: ['plans', 'authGroups', group, 'plans'],
+                            value: $atom(ids)
+                        })
+                    })
+                    return result
+                })
+        }
+    }
 
 ]
 

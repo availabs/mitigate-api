@@ -7,7 +7,7 @@ const ATTRIBUTES = [
     "plan_status",
     "groups",
     "id",
-
+    "county"
 ]
 
 const length = db_service => {
@@ -70,7 +70,7 @@ module.exports = {
     insert: (db_service, args) => {
         const sql = `
 			INSERT INTO plans.county(${ ATTRIBUTES.slice(0,ATTRIBUTES.length -1) })
-				VALUES (${ ATTRIBUTES.slice(0,ATTRIBUTES.length -1).map((attr, i) => `$${ i + 1 }`) })
+				VALUES (${ ATTRIBUTES.slice(0,ATTRIBUTES.length -2).map((attr, i) => `$${ i + 1 }`) })
 				RETURNING *;
 		`
         args = args.map(arg => arg === null ? null : arg.value || arg)
@@ -89,6 +89,18 @@ module.exports = {
 		`;
         return db_service.promise(sql)
             .then(() => length(db_service))
+    },
+
+    getGroups: (db_service,groups) => {
+        let queries = groups.map(group => {
+            const sql =`
+                    SELECT id,groups FROM plans.county
+                    WHERE  '${group}' = any(groups)
+                `
+
+                return db_service.promise(sql)
+        })
+       return Promise.all(queries).then(results => [].concat(...results));
     }
 
 }
