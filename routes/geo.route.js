@@ -174,36 +174,42 @@ module.exports = [//{
             years = pathSet.years.map(d => +d);
 			censusKeys = pathSet.acsSources;
 			//console.log('pathkeys', geoids, years, censusKeys)
+			console.time('census Query')
             return GeoService.CensusAcsByGeoidByYearByKey(this.db_service, geoids, years, censusKeys)
                 .then(results => {
+                	console.timeEnd('census Query')
+                	console.time('census prepare')
 					let returnData  =[]
+					console.log(results.length)
 					 pathSet.geoids.forEach(geoid => {
 					     pathSet.years.forEach(year => {
 					     	censusKeys.forEach(key => {
 									 var path = ['acs', geoid, year,key]
 									 //results.forEach(function(result,i){
-									 	Object.values(results).forEach(function(value,i){
-									 		let path = ['acs',value.geoid,value.year,value.censvar]
-											returnData.push({
-												value: value.value,
-												path
-											})
-										})
+									 // 	Object.values(results).forEach(function(value,i){
+									 // 		let path = ['acs',value.geoid,value.year,value.censvar]
+										// 	returnData.push({
+										// 		value: value.value,
+										// 		path
+										// 	})
+										// })
 
 								 	//})
-									 /*
+									 
 									 result = results
 										 .reduce((a, c) => (c.geoid == geoid) && (c.year == year) && (c.censvar == key)? c : a, null);
+										 //console.log('result', result)
 									 returnData.push({
 										 value: result ? result['value'] : 0,
 										 path
 									})
-									  */
+									  
 					 		})
 
 					 	})
 					 });
-					console.log('returnData',returnData)
+					//console.log('returnData',results.length)
+					console.timeEnd('census prepare')
 					return returnData;
 
 				})

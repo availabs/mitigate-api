@@ -33,7 +33,7 @@ module.exports = {
             	: `substring(geoid, 1, ${ geoLen })`
             } AS geoid,
         		count(1) AS length
-        	FROM irvs.buildings_2018_new
+        	FROM irvs.buildings_2018
         	WHERE
         		${ geoLen === 10 ?
             	`cousub_geoid`
@@ -60,7 +60,7 @@ module.exports = {
             	: `substring(geoid, 1, ${ geoLen })`
             } AS geoid,
             ARRAY_AGG(id) AS ids
-          FROM irvs.buildings_2018_new
+          FROM irvs.buildings_2018
           WHERE
         		${ geoLen === 10 ?
             	`cousub_geoid`
@@ -79,7 +79,7 @@ module.exports = {
 		const sql = `
 			SELECT id AS id,
 				${ cols.join() }
-			FROM irvs.buildings_2018_new as a
+			FROM irvs.buildings_2018 as a
 			join irvs.enhanced_building_risk as b on a.id = b.building_id 
 			WHERE id IN (${ buildingids });
 		`
