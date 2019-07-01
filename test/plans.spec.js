@@ -6,12 +6,14 @@ describe('actions', () => {
     const content_id = `my-special-content-id`
 
 
+
+
     /*
     test('plans.county.insert', (done) => {
         const getEvent = {
             'callPath': ['plans','county','insert'],
             'method': 'call',
-            'args': ["36","abc","12/01/2019","grant","url","status",'{Hamilton,Fulton}']
+            'args': ["36041","abc","12/01/2019","grant_fulton","url_fulton","status",'{Fulton_County_HMP}']
         }
         falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
             console.log('response',response)
@@ -39,6 +41,7 @@ describe('actions', () => {
      */
 
 
+
     /*
     test('actions.worksheet.remove', (done) => {
         const callEvent = {
@@ -53,6 +56,7 @@ describe('actions', () => {
         });
     })
      */
+
 
     /*
     test('plans.county.byId', (done) => {
@@ -76,13 +80,13 @@ describe('actions', () => {
         const setEvent = {
             'method': 'set',
             'jsonGraph': {
-                'paths': [['plans','county','byId',[3], ['plan_grant']]],
+                'paths': [['plans','county','byId',[4], ['groups']]],
                 'jsonGraph': {
                     'plans': {
                         'county':{
                             'byId': {
-                                [3]: {
-                                    'plan_grant': 'granted'
+                                [4]: {
+                                    'groups': '{Hamilton County HMP}'
                                 }
                             }
                         }
@@ -99,10 +103,15 @@ describe('actions', () => {
     })
      */
 
+
+
+
+
+    /*
     test('plans.county.byIndex', (done) => {
         const getEvent = {
             'paths': [
-                ['plans','county','byIndex', [0],"id"]
+                ['plans','county','byIndex', [1],"id"]
             ],
             'method': 'get'
         }
@@ -112,6 +121,24 @@ describe('actions', () => {
             done();
         });
     })
+     */
+
+
+    test('plans.county.authGroups.plans', (done) =>{
+        const getEvent ={
+            'paths' :[
+                ['plans','authGroups','AVAIL','plans']
+            ],
+            'method':'get'
+        }
+        falcorGraph.respond({queryStringParameters: getEvent},(error,response)=>{
+            console.log('response',JSON.stringify(response))
+            done();
+        });
+    })
+
+
+
 
 
 
