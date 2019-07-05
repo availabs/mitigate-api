@@ -33,7 +33,7 @@ module.exports = {
             	: `substring(geoid, 1, ${ geoLen })`
             } AS geoid,
         		count(1) AS length
-        	FROM irvs.buildings_2018_new
+        	FROM irvs.buildings_2018
         	WHERE
         		${ geoLen === 10 ?
             	`cousub_geoid`
@@ -60,7 +60,7 @@ module.exports = {
             	: `substring(geoid, 1, ${ geoLen })`
             } AS geoid,
             ARRAY_AGG(id) AS ids
-          FROM irvs.buildings_2018_new
+          FROM irvs.buildings_2018
           WHERE
         		${ geoLen === 10 ?
             	`cousub_geoid`
@@ -76,15 +76,29 @@ module.exports = {
 	},
 
 	byId: (db_service, buildingids, cols) => {
+		var result = cols.map(col => 'a.'+col)
 		const sql = `
-			SELECT id AS id,
-				${ cols.join() }
-			FROM irvs.buildings_2018_new as a
+			SELECT ${ result.join() }
+			FROM irvs.buildings_2018 as a
 			join irvs.enhanced_building_risk as b on a.id = b.building_id 
+			WHERE id IN (${ buildingids });
+		`;
+		return db_service.promise(sql);
+	}
+}
+
+/*
+yId: (db_service, buildingids, cols) => {
+		console.log('cols',cols)
+		const sql = `
+			SELECT a.id AS id,
+				${ cols.join() }
+			FROM irvs.buildings_2018 as a
+			join irvs.enhanced_building_risk as b on a.id = b.building_id
 			WHERE id IN (${ buildingids });
 		`
 		// console.log('SQL:',sql)
 
 		return db_service.promise(sql);
 	}
-}
+ */
