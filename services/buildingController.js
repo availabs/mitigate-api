@@ -78,7 +78,8 @@ module.exports = {
 	byId: (db_service, buildingids, cols) => {
 		var result = cols.map(col => 'a.'+col)
 		const sql = `
-			SELECT ${ result.join() }
+			SELECT id AS id,
+				${ cols.join() }
 			FROM irvs.buildings_2018 as a
 			join irvs.enhanced_building_risk as b on a.id = b.building_id 
 			WHERE id IN (${ buildingids });
