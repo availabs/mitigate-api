@@ -23,26 +23,28 @@ const ATTRIBUTES = [
 module.exports = {
 	ATTRIBUTES,
 
-	length: (db_service, geoids) => {
+	length: (db_service, geoids,buildingOwners) => {
     const queries = getGeoidLengths(geoids).map(geoLen => {
-    	const filteredGeoids = geoids.filter(d => d.length === geoLen),
-    		sql = `
+			const filteredGeoids = geoids.filter(d => d.length === geoLen),
+				sql = `
         	SELECT
         		${ geoLen === 10 ?
-            	`cousub_geoid`
-            	: `substring(geoid, 1, ${ geoLen })`
-            } AS geoid,
+					`cousub_geoid`
+					: `substring(a.geoid, 1, ${ geoLen })`
+					} AS geoid,c.owner_type,
         		count(1) AS length
-        	FROM irvs.buildings_2018
+        	FROM irvs.buildings_2018 as a 
+        	JOIN parcel.parcel_2017_36 as c on a.parcel_id = c.objectid
         	WHERE
         		${ geoLen === 10 ?
-            	`cousub_geoid`
-            	: `substring(geoid, 1, ${ geoLen })`
-            } IN ('${ filteredGeoids.join(`','`) }')
-	        GROUP BY 1
+					`cousub_geoid`
+					: `substring(a.geoid, 1, ${ geoLen })`
+					} IN ('${ filteredGeoids.join(`','`) }') AND c.owner_type IN  ('${buildingOwners.join(`','`)}')
+	        GROUP BY 1,2
       	`;
-        // console.log("SQL:",sql);
-    	return db_service.promise(sql);
+			//console.log("SQL:",sql);
+			return db_service.promise(sql);
+
     })
     return Promise.all(queries)
     	.then(data => {
@@ -83,22 +85,34 @@ module.exports = {
 			join irvs.enhanced_building_risk as b on a.id = b.building_id 
 			WHERE id IN (${ buildingids });
 		`;
+
 		return db_service.promise(sql);
+	},
+
+	buildingOwnerByTypeByValue : (db_service,geoids,buildingOwners) =>{
+		const queries = getGeoidLengths(geoids).map(geoLen => {
+			const filteredGeoids = geoids.filter(d => d.length === geoLen),
+				sql = `
+					SELECT
+        		${ geoLen === 10 ?
+					`cousub_geoid`
+					: `substring(a.geoid, 1, ${ geoLen })`
+					} AS geoid,c.owner_type,
+        		count(b.building_type) as count,
+        		sum(b.replacement_value) as replacement_value
+          FROM irvs.buildings_2018 AS a
+          join irvs.enhanced_building_risk as b on a.id = b.building_id 
+		  join parcel.parcel_2017_36 as c on a.parcel_id = c.objectid
+          WHERE
+        		${ geoLen === 10 ?
+					`cousub_geoid`
+					: `substring(a.geoid, 1, ${ geoLen })`
+					} IN ('${ filteredGeoids.join(`','`) }') AND c.owner_type IN  ('${buildingOwners.join(`','`)}')
+                   GROUP BY 1,2`
+			return db_service.promise(sql);
+		});
+		return Promise.all(queries)
+			.then(data => [].concat(...data));
 	}
 }
 
-/*
-yId: (db_service, buildingids, cols) => {
-		console.log('cols',cols)
-		const sql = `
-			SELECT a.id AS id,
-				${ cols.join() }
-			FROM irvs.buildings_2018 as a
-			join irvs.enhanced_building_risk as b on a.id = b.building_id
-			WHERE id IN (${ buildingids });
-		`
-		// console.log('SQL:',sql)
-
-		return db_service.promise(sql);
-	}
- */

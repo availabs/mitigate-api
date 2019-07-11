@@ -4,7 +4,8 @@ const falcorGraph = require('./graph'),
 describe('building', () => {
 
     const content_id = `my-special-content-id`
-
+    const buildingOwners = [1,2,3,4,5,6,7,8,9,10,-999]
+    /*
     test('building.byId', (done) => {
         const getEvent = {
             'paths': [
@@ -16,6 +17,37 @@ describe('building', () => {
             console.log('response',JSON.stringify(response))
             //expect(get(response, 'jsonGraph.capabilities.byId.1.name.value', null)).toBe("Notify NYC");
             done();
+        });
+    })
+     */
+
+    /*
+    test('building.byGeoid', (done) => {
+        const getEvent = {
+            'paths': [
+                ['building','byGeoid', [36001],'owner',[1],'length']
+            ],
+            'method': 'get'
+        }
+        falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+            console.log('response',JSON.stringify(response))
+            //expect(get(response, 'jsonGraph.capabilities.byId.1.name.value', null)).toBe("Notify NYC");
+            done();
+        });
+    })
+     */
+
+    test('building.byGeoid.owner', (done) => {
+        const getEvent = {
+            'paths': [
+                ['building','byGeoid', [36001],'owner',buildingOwners,'sum',['count']]
+            ],
+            'method': 'get'
+        }
+        falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+            console.log('response',JSON.stringify(response))
+            //expect(get(response, 'jsonGraph.capabilities.byId.1.name.value', null)).toBe("Notify NYC");
+            done()
         });
     })
 
