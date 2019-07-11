@@ -87,30 +87,6 @@ module.exports = [
 		}
 	},
 
-	/*
-	//console.log('reduced',reduced)
-						/*
-						buildingOwners.forEach(owner => {
-							pathKeys.forEach(key =>{
-								const value = reduced.total_buildings;
-								if (value) {
-									if(key === 'count')
-									response.push({
-										path: ['building', 'byGeoid', geoid, 'owner',owner,'sum',['count']],
-										value : value
-									})
-								}
-								else {
-									response.push({
-										path: ['building', 'byGeoid', geoid, 'owner',owner,'sum'],
-										value: null
-									})
-								}
-							})
-
-						})
-
-	 */
 /*
 
 	{
