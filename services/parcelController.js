@@ -2,39 +2,40 @@ const { getGeoidLengths } = require("./utils");
 
 const ATTRIBUTES = [
 	"prop_class",
-	"roll_secti",
+	"roll_section",
 	"land_av",
 	"total_av",
-	"full_marke",
+	"full_market_val",
 	"yr_blt",
 	"front",
 	"depth",
 	"sq_ft",
 	"acres",
-	"school_cod",
-	"school_nam",
+	"school_code",
+	"school_name",
 	"sewer_type",
 	"sewer_desc",
-	"water_supp",
+	"water_supply",
 	"water_desc",
 	"utilities",
-	"utilities_",
+	"utilities_desc",
 	"bldg_style",
-	"bldg_sty_1",
+	"bldg_style_desc",
 	"heat_type",
-	"heat_type_",
+	"heat_type_desc",
 	"fuel_type",
-	"fuel_type_",
-	"sqft_livin",
-	"nbr_kitche",
-	"nbr_full_b",
-	"nbr_bedroo",
-	"used_as_co",
-	"used_as_de",
-	"ag_dist_co",
-	"ag_dist_na",
-	"primary_ow",
+	"fuel_type_desc",
+	"sqft_living",
+	"nbr_kitchens",
+	"nbr_full_baths",
+	"nbr_bedrooms",
+	"used_as_code",
+	"used_as_desc",
+	"ag_dist_code",
+	"ag_dist_name",
+	"primary_owner",
 	"owner_type"
+
 ]
 
 module.exports = {
@@ -58,7 +59,7 @@ module.exports = {
             } IN ('${ filteredGeoids.join(`','`) }')
 	        GROUP BY 1
       	`;
-// console.log("SQL:",sql);
+        // console.log("SQL:",sql);
     	return db_service.promise(sql);
     })
     return Promise.all(queries)
@@ -85,21 +86,21 @@ module.exports = {
             } IN ('${ filteredGeoids.join(`','`) }')
            GROUP BY 1
 				`
-// console.log("SQL:",sql)
+			 //console.log("SQL:",sql)
 			return db_service.promise(sql);
 		})
 		return Promise.all(queries)
 			.then(data => [].concat(...data));
 	},
 
-	byId: (db_service, parcelids) => {
+	byId: (db_service, parcelids, cols) => {
 		const sql = `
 			SELECT objectid AS id,
-				${ ATTRIBUTES }
+				${ cols.join() }
 			FROM parcel.parcel_2017_36
 			WHERE objectid IN (${ parcelids });
 		`
-		//console.log('SQL:',sql)
+		// console.log('SQL:',sql)
 
 		return db_service.promise(sql);
 	}

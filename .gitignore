@@ -2,3 +2,9 @@
 node_modules/
 config.py
 *.pyc
+database_backups/
+tasks/**/*.ndjson
+tasks/**/*.csv
+tasks/**/*.json
+tasks/**/*.geojson
+tasks/**/*.mbtiles

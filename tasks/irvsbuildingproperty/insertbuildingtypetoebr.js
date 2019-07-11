@@ -177,8 +177,8 @@ let getData = `
 			}
 
 			//console.log(building)
-			// let update = `update ebr set building_type = ${d.building_type} where building_id = ${d.building_id}`
-			// dbservice.query(update)
+			 let update = `update ebr set building_type = ${d.building_type} where building_id = ${d.building_id}`
+			 dbservice.query(update)
 
 		})
 

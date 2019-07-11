@@ -1,0 +1,41 @@
+avail@Hera:~/AVAIL/code/mitigate-api/tasks/ebr_building_to_parcel$ node createMsBuildingTable_nys.js 
+<db_service> ERROR: { error: Error performing intersection: TopologyException: Input geom 1 is invalid: Self-intersection at or near point -73.916072833821318 40.80671227894279 at -73.916072833821318 40.80671227894279
+    at Connection.parseE (/home/avail/AVAIL/code/mitigate-api/node_modules/pg/lib/connection.js:555:11)
+    at Connection.parseMessage (/home/avail/AVAIL/code/mitigate-api/node_modules/pg/lib/connection.js:380:19)
+    at Socket.<anonymous> (/home/avail/AVAIL/code/mitigate-api/node_modules/pg/lib/connection.js:120:22)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+  name: 'error',
+  length: 237,
+  severity: 'ERROR',
+  code: 'XX000',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'lwgeom_pg.c',
+  line: '162',
+  routine: 'pg_error' }
+(node:22241) UnhandledPromiseRejectionWarning: error: Error performing intersection: TopologyException: Input geom 1 is invalid: Self-intersection at or near point -73.916072833821318 40.80671227894279 at -73.916072833821318 40.80671227894279
+    at Connection.parseE (/home/avail/AVAIL/code/mitigate-api/node_modules/pg/lib/connection.js:555:11)
+    at Connection.parseMessage (/home/avail/AVAIL/code/mitigate-api/node_modules/pg/lib/connection.js:380:19)
+    at Socket.<anonymous> (/home/avail/AVAIL/code/mitigate-api/node_modules/pg/lib/connection.js:120:22)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+(node:22241) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 1)
+(node:22241) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.

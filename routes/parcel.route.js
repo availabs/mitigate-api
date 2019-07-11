@@ -11,6 +11,7 @@ module.exports = [
 		route: `parcel.byGeoid[{keys:geoids}].length`,
 		get: function(pathSet) {
 			const geoids = getGeoids(pathSet);
+			console.time('getNumParcels')
 			return parcelController.length(this.db_service, geoids)
 				.then(rows => {
 					const response = [];
@@ -21,6 +22,7 @@ module.exports = [
 							value
 						})
 					})
+					console.timeEnd('getNumParcels')
 					return response;
 				});
 		}
@@ -30,6 +32,7 @@ module.exports = [
 		get: function(pathSet) {
 			const geoids = getGeoids(pathSet),
 				indices = pathSet.indices;
+			console.time('get parcel ids')
 			return parcelController.byIndex(this.db_service, geoids)
 				.then(rows => {
 					const response = [];
@@ -51,6 +54,7 @@ module.exports = [
 							}
 						})
 					})
+					console.timeEnd('get parcel ids')
 					return response;
 				});
 		}
@@ -60,7 +64,8 @@ module.exports = [
 		get: function(pathSet) {
 			const parcelids = pathSet.parcelids,
 				attributes = pathSet[3];
-			return parcelController.byId(this.db_service, parcelids)
+			console.time('get parcel attributes')
+			return parcelController.byId(this.db_service, parcelids, attributes)
 				.then(rows => {
 					const response = [];
 					parcelids.forEach(id => {
@@ -80,6 +85,7 @@ module.exports = [
 							})
 						}
 					})
+					console.timeEnd('get parcel attributes')
 					return response;
 				});
 		}
