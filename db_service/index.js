@@ -20,6 +20,7 @@ const config = {
   database : process.env.POSTGRES_DB,
   max      : 40
 }
+
 const pool = new Pool(config)
 
  //code based on example found here: https://github.com/brianc/node-postgres/wiki/Example

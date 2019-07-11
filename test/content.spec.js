@@ -3,7 +3,7 @@ const falcorGraph = require('./graph'),
 
 describe('content', () => {
 
-	const content_id = `my-special-content-id`;
+	const project_name = `my-special-content-id`;
 
 	test('content.byIndex.length', (done) => {
 		const getEvent = {

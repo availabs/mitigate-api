@@ -84,6 +84,7 @@ const GeoByGeoid = function GeoByGeoid( db_service, geoids ) {
           FROM geo.tl_2017_${typeTables[geoLen]}
             where geoid in ('${filteredGeoids.join(`','`)}')
         `
+          console.log('sql',sql)
 
         // sql query for debugging
 // console.log(sql)

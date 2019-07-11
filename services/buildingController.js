@@ -76,15 +76,34 @@ module.exports = {
 	},
 
 	byId: (db_service, buildingids, cols) => {
+		var result = cols.map(col => 'a.'+col)
 		const sql = `
+<<<<<<< HEAD
 			SELECT id AS id,
 				${ cols.join() }
+=======
+			SELECT ${ result.join() }
+>>>>>>> 8c3300e5ceecb08f01c971bd6591855830c34db4
 			FROM irvs.buildings_2018 as a
 			join irvs.enhanced_building_risk as b on a.id = b.building_id 
+			WHERE id IN (${ buildingids });
+		`;
+		return db_service.promise(sql);
+	}
+}
+
+/*
+yId: (db_service, buildingids, cols) => {
+		console.log('cols',cols)
+		const sql = `
+			SELECT a.id AS id,
+				${ cols.join() }
+			FROM irvs.buildings_2018 as a
+			join irvs.enhanced_building_risk as b on a.id = b.building_id
 			WHERE id IN (${ buildingids });
 		`
 		// console.log('SQL:',sql)
 
 		return db_service.promise(sql);
 	}
-}
+ */

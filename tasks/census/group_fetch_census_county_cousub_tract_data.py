@@ -117,4 +117,3 @@ pd.DataFrame.to_csv(df_insert, 'data3.csv', header=None, index=False, na_rep='Na
 
 
 
-
