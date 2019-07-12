@@ -24,7 +24,8 @@ module.exports = {
 	ATTRIBUTES,
 
 	length: (db_service, geoids,buildingOwners) => {
-    const queries = getGeoidLengths(geoids).map(geoLen => {
+	if(buildingOwners){
+		const queries = getGeoidLengths(geoids).map(geoLen => {
 			const filteredGeoids = geoids.filter(d => d.length === geoLen),
 				sql = `
         	SELECT
@@ -45,11 +46,41 @@ module.exports = {
 			//console.log("SQL:",sql);
 			return db_service.promise(sql);
 
-    })
-    return Promise.all(queries)
-    	.then(data => {
-    		return [].concat(...data)
-    	});
+		})
+
+		return Promise.all(queries)
+			.then(data => {
+				return [].concat(...data)
+			})
+	}
+	else{
+		const queries = getGeoidLengths(geoids).map(geoLen => {
+			const filteredGeoids = geoids.filter(d => d.length === geoLen),
+				sql = `
+        	SELECT
+        		${ geoLen === 10 ?
+					`cousub_geoid`
+					: `substring(a.geoid, 1, ${ geoLen })`
+					} AS geoid,
+        		count(1) AS length
+        	FROM irvs.buildings_2018 as a 
+        	WHERE
+        		${ geoLen === 10 ?
+					`cousub_geoid`
+					: `substring(a.geoid, 1, ${ geoLen })`
+					} IN ('${ filteredGeoids.join(`','`) }')
+	        GROUP BY 1
+      	`;
+			//console.log("SQL:",sql);
+			return db_service.promise(sql);
+
+		});
+		return Promise.all(queries)
+			.then(data => {
+				return [].concat(...data)
+			})
+	}
+
 	},
 
 	byIndex: (db_service, geoids) => {
@@ -81,7 +112,7 @@ module.exports = {
 		var result = cols.map(col => 'a.'+col)
 		const sql = `
 			SELECT id AS id,
-				${ cols.join() }
+				${ result.join() }
 			FROM irvs.buildings_2018 as a
 			join irvs.enhanced_building_risk as b on a.id = b.building_id 
 			WHERE id IN (${ buildingids });
