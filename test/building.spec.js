@@ -7,11 +7,11 @@ describe('building', () => {
 
     const content_id = `my-special-content-id`
     const buildingOwners = [1,2,3,4,5,6,7,8,9,10,-999]
-    /*
+
     test('building.byId', (done) => {
         const getEvent = {
             'paths': [
-                ['building','byId', [1],['id', 'name', 'type', 'parcel_id']]
+                ['building','byId', [2281553],['id', 'name', 'type', 'parcel_id']]
             ],
             'method': 'get'
         }
@@ -21,13 +21,13 @@ describe('building', () => {
             done();
         });
     })
-     */
 
-    /*
+
+
     test('building.byGeoid', (done) => {
         const getEvent = {
             'paths': [
-                ['building','byGeoid', [36001],'owner',[1],'length']
+                ['building','byGeoid', [36001],'length']
             ],
             'method': 'get'
         }
@@ -37,12 +37,13 @@ describe('building', () => {
             done();
         });
     })
-     */
 
+
+    /*
     test('building.byGeoid.owner', (done) => {
         const getEvent = {
             'paths': [
-                ['building','byGeoid', [36001],'owner',buildingOwners,'sum',['count']]
+                ['building','byGeoid', [36001],'owner',buildingOwners,'sum',['replacement_value']]
             ],
             'method': 'get'
         }
@@ -52,6 +53,7 @@ describe('building', () => {
             done()
         });
     })
+     */
 
 
 
