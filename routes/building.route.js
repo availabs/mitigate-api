@@ -28,6 +28,89 @@ module.exports = [
 		}
 	},
 	{
+		route: `building.byGeoid[{keys:geoids}].owner[{keys:buildingOwners}].length`,
+		get: function(pathSet) {
+			const geoids = getGeoids(pathSet);
+			const buildingOwners = pathSet[4]
+			console.time('getNumbuildings')
+			return buildingController.length(this.db_service, geoids, buildingOwners)
+				.then(rows => {
+					const response = [];
+					geoids.forEach(geoid => {
+						const value = rows.reduce((a, c) => c.geoid === geoid ? +c.length : a, 0);
+						response.push({
+							path: ['building', 'byGeoid', geoid,'owner','length'],
+							value
+						})
+					})
+					console.timeEnd('getNumbuildings')
+					return response;
+				});
+		}
+	},
+
+	{
+		route: `building.byGeoid[{keys:geoids}].owner[{keys:buildingOwners}].sum['count','replacement_value']`,
+		get: function (pathSet) {
+			const geoids = getGeoids(pathSet);
+			const buildingOwners = pathSet[4];
+			const pathKeys = pathSet[6]
+			return buildingController.buildingOwnerByTypeByValue(this.db_service, geoids, buildingOwners)
+				.then(rows => {
+					const response = [];
+					geoids.forEach(geoid => {
+						buildingOwners.forEach((owner) => {
+							rows.forEach((row) => {
+								if (owner.toString() === row.owner_type) {
+									pathKeys.forEach((keys) => {
+										if (keys === 'count') {
+											response.push({
+												path: ['building', 'byGeoid', geoid, 'owner', owner, 'sum', [keys]],
+												value: row[keys]
+											})
+										}
+										else{
+											response.push({
+												path: ['building', 'byGeoid', geoid, 'owner', owner, 'sum', [keys]],
+												value: row[keys]
+											})
+										}
+									})
+								}
+							});
+
+						})
+					});
+					console.timeEnd('getNumbuildings')
+					return response;
+				})
+		}
+	},
+
+/*
+
+	{
+		route: `building.byGeoid[{keys:geoids}].propType[{keys:propTypes}].length`,
+		get: function(pathSet) {
+			const geoids = getGeoids(pathSet);
+			console.time('getNumbuildings')
+			return buildingController.length(this.db_service, geoids)
+				.then(rows => {
+					const response = [];
+					geoids.forEach(geoid => {
+						const value = rows.reduce((a, c) => c.geoid === geoid ? +c.length : a, 0);
+						response.push({
+							path: ['building', 'byGeoid', geoid, 'length'],
+							value
+						})
+					})
+					console.timeEnd('getNumbuildings')
+					return response;
+				});
+		}
+	},
+ */
+	{
 		route: 'building.byGeoid[{keys:geoids}].byIndex[{integers:indices}].id',
 		get: function(pathSet) {
 			const geoids = getGeoids(pathSet),

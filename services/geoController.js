@@ -85,6 +85,7 @@ const GeoByGeoid = function GeoByGeoid( db_service, geoids ) {
             where geoid in ('${filteredGeoids.join(`','`)}')
         `
 
+
         // sql query for debugging
 // console.log(sql)
         
