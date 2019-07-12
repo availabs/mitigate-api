@@ -43,7 +43,7 @@ module.exports = [
 							if (value) {
 								response.push({
 									path: ['building', 'byGeoid', geoid, 'byIndex', index, 'id'],
-									value
+									value : $atom(value)
 								})
 							}
 							else {

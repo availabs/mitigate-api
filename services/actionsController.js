@@ -1,6 +1,8 @@
 const ATTRIBUTES = [
     "project_name",
     "project_number",
+    "county",
+    "cousub",
     "hazard_of_concern",
     "problem_description",
     "solution_description",
