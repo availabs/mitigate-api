@@ -4,7 +4,7 @@ const metadata = require('../routes/metadata'),
     hazards2severeWeather = metadata.hazards2severeWeather
 
 const EARLIEST_YEAR = 1996,
-  LATEST_YEAR = 2017,
+  LATEST_YEAR = 2018,
   YEARS_OF_DATA = [];
 for (let year = EARLIEST_YEAR; year <= LATEST_YEAR; ++year) {
   YEARS_OF_DATA.push(year);
@@ -121,7 +121,7 @@ module.exports = {
           AND event_type IN ('${ hazardTypes.join(`','`) }')
           GROUP BY 1, 2
         `;
-      //console.log("SQL:",sql);
+      // console.log("SQL:",sql);
       return db_service.promise(sql);
     })
 
