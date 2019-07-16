@@ -127,7 +127,7 @@ module.exports = {
 				sql = `
 					SELECT
         		${ geoLen === 10 ?
-					`cousub_geoid`
+					`a.cousub_geoid`
 					: `substring(a.geoid, 1, ${ geoLen })`
 					} AS geoid,c.owner_type,
         		count(b.building_type) as count,
@@ -137,12 +137,14 @@ module.exports = {
 		  join parcel.parcel_2017_36 as c on a.parcel_id = c.objectid
           WHERE
         		${ geoLen === 10 ?
-					`cousub_geoid`
+					`a.cousub_geoid`
 					: `substring(a.geoid, 1, ${ geoLen })`
 					} IN ('${ filteredGeoids.join(`','`) }') AND c.owner_type IN  ('${buildingOwners.join(`','`)}')
-                   GROUP BY 1,2`
+                   GROUP BY 1,2`;
+			console.log('sql',sql)
 			return db_service.promise(sql);
 		});
+
 		return Promise.all(queries)
 			.then(data => [].concat(...data));
 	}

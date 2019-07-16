@@ -8,6 +8,7 @@ describe('building', () => {
     const content_id = `my-special-content-id`
     const buildingOwners = [1,2,3,4,5,6,7,8,9,10,-999]
 
+    /*
     test('building.byId', (done) => {
         const getEvent = {
             'paths': [
@@ -37,13 +38,14 @@ describe('building', () => {
             done();
         });
     })
+     */
 
 
-    /*
+
     test('building.byGeoid.owner', (done) => {
         const getEvent = {
             'paths': [
-                ['building','byGeoid', [36001],'owner',buildingOwners,'sum',['replacement_value']]
+                ['building','byGeoid', [3603555101],'owner',buildingOwners,'sum',['count','replacement_value']]
             ],
             'method': 'get'
         }
@@ -53,7 +55,7 @@ describe('building', () => {
             done()
         });
     })
-     */
+
 
 
 

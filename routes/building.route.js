@@ -66,13 +66,13 @@ module.exports = [
 										if (keys === 'count') {
 											response.push({
 												path: ['building', 'byGeoid', geoid, 'owner', owner, 'sum', [keys]],
-												value: row[keys]
+												value: $atom(row[keys])
 											})
 										}
 										else{
 											response.push({
 												path: ['building', 'byGeoid', geoid, 'owner', owner, 'sum', [keys]],
-												value: row[keys]
+												value: $atom(row[keys])
 											})
 										}
 									})
