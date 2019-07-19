@@ -87,12 +87,12 @@ module.exports = [
 		}
 	},
 
-/*
 
 	{
 		route: `building.byGeoid[{keys:geoids}].propType[{keys:propTypes}].length`,
 		get: function(pathSet) {
 			const geoids = getGeoids(pathSet);
+			const propType = pathSet[4];
 			console.time('getNumbuildings')
 			return buildingController.length(this.db_service, geoids)
 				.then(rows => {
@@ -100,16 +100,55 @@ module.exports = [
 					geoids.forEach(geoid => {
 						const value = rows.reduce((a, c) => c.geoid === geoid ? +c.length : a, 0);
 						response.push({
-							path: ['building', 'byGeoid', geoid, 'length'],
+							path: ['building', 'byGeoid', geoid,'propType','length'],
 							value
 						})
 					})
-					console.timeEnd('getNumbuildings')
+					console.timeEnd('getNumbuildings');
 					return response;
 				});
 		}
 	},
- */
+
+	{
+		route: `building.byGeoid[{keys:geoids}].propType[{keys:propType}].sum['count','replacement_value']`,
+		get: function (pathSet) {
+			const geoids = getGeoids(pathSet);
+			const buildingOwners = pathSet[4];
+			const pathKeys = pathSet[6]
+			return buildingController.(this.db_service, geoids, buildingOwners)
+				.then(rows => {
+					const response = [];
+					geoids.forEach(geoid => {
+						buildingOwners.forEach((owner) => {
+							rows.forEach((row) => {
+								if (owner.toString() === row.owner_type) {
+									pathKeys.forEach((keys) => {
+										if (keys === 'count') {
+											response.push({
+												path: ['building', 'byGeoid', geoid, 'owner', owner, 'sum', [keys]],
+												value: $atom(row[keys])
+											})
+										}
+										else{
+											response.push({
+												path: ['building', 'byGeoid', geoid, 'owner', owner, 'sum', [keys]],
+												value: $atom(row[keys])
+											})
+										}
+									})
+								}
+							});
+
+						})
+					});
+					console.timeEnd('getNumbuildings')
+					return response;
+				})
+		}
+	},
+
+
 	{
 		route: 'building.byGeoid[{keys:geoids}].byIndex[{integers:indices}].id',
 		get: function(pathSet) {
@@ -147,7 +186,6 @@ module.exports = [
 		get: function(pathSet) {
 			const buildingids = pathSet.buildingids,
 				attributes = pathSet[3];
-			console.time('get building attributes')
 			return buildingController.byId(this.db_service, buildingids, attributes)
 				.then(rows => {
 					// console.log('building rows', rows, '\n')

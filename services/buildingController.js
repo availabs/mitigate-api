@@ -1,11 +1,12 @@
 const { getGeoidLengths } = require("./utils");
 
 const ATTRIBUTES = [
-		"footprint", 
+
+		"footprint",
 		"footprint_source",
 		"footprint_id",
 		"owner",
-		"owner_type", 
+		"owner_type",
 		"type",
 		"name",
 		"parcel_id",
@@ -15,8 +16,8 @@ const ATTRIBUTES = [
 		"ogs_id",
 		"replacement_value",
 		"critical",
-		"flood_zone"
-		
+		"flood_zone",
+		"prop_class"
 
 ]
 
@@ -109,8 +110,11 @@ module.exports = {
 	},
 
 	byId: (db_service, buildingids, cols) => {
-		var result = cols.map(col => 'a.'+col)
-		const sql = `
+		//console.log('in the beginning',cols)
+			//if (cols.includes('parcel_id')){
+				//console.log('in if')
+			var result = cols.map(col => 'a.'+col)
+				const sql = `
 			SELECT id AS id,
 				${ cols.join() }
 			FROM irvs.buildings_2018 as a
@@ -118,7 +122,23 @@ module.exports = {
 			WHERE id IN (${ buildingids });
 		`;
 
-		return db_service.promise(sql);
+				return db_service.promise(sql);
+			//}
+		/*
+		else{
+			console.log('in else')
+			console.log('cols',cols)
+			const sql = `
+			SELECT id AS id,
+				${ cols.join() }
+			FROM irvs.buildings_2018 as a
+			join irvs.enhanced_building_risk as b on a.id = b.building_id
+			WHERE id IN (${ buildingids });
+		`;
+				return db_service.promise(sql);
+			}
+		 */
+
 	},
 
 	buildingOwnerByTypeByValue : (db_service,geoids,buildingOwners) =>{
@@ -141,12 +161,15 @@ module.exports = {
 					: `substring(a.geoid, 1, ${ geoLen })`
 					} IN ('${ filteredGeoids.join(`','`) }') AND c.owner_type IN  ('${buildingOwners.join(`','`)}')
                    GROUP BY 1,2`;
-			console.log('sql',sql)
 			return db_service.promise(sql);
 		});
 
 		return Promise.all(queries)
 			.then(data => [].concat(...data));
+	},
+
+	buildingByLandUseType : (db_service,geoids,propType) =>{
+
 	}
 }
 
