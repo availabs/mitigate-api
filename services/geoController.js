@@ -51,6 +51,7 @@ const ChildrenByGeoid = function ChildrenByGeoid(db_service, geoids, type) {
         })
 
         Promise.all(queries).then(geoData => {
+
             resolve(
                 geoData.reduce((out, curr) => {
                     //{36: [36001,...] }

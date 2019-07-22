@@ -1,3 +1,4 @@
+
 const { getGeoidLengths } = require("./utils");
 
 const ATTRIBUTES = [
@@ -110,10 +111,6 @@ module.exports = {
 	},
 
 	byId: (db_service, buildingids, cols) => {
-		//console.log('in the beginning',cols)
-			//if (cols.includes('parcel_id')){
-				//console.log('in if')
-			var result = cols.map(col => 'a.'+col)
 				const sql = `
 			SELECT id AS id,
 				${ cols.join() }
@@ -123,21 +120,6 @@ module.exports = {
 		`;
 
 				return db_service.promise(sql);
-			//}
-		/*
-		else{
-			console.log('in else')
-			console.log('cols',cols)
-			const sql = `
-			SELECT id AS id,
-				${ cols.join() }
-			FROM irvs.buildings_2018 as a
-			join irvs.enhanced_building_risk as b on a.id = b.building_id
-			WHERE id IN (${ buildingids });
-		`;
-				return db_service.promise(sql);
-			}
-		 */
 
 	},
 
@@ -169,7 +151,40 @@ module.exports = {
 	},
 
 	buildingByLandUseType : (db_service,geoids,propType) =>{
+			const queries = getGeoidLengths(geoids).map(geoLen => {
+				const filteredGeoids = geoids.filter(d => d.length === geoLen),
+					sql =
+						`SELECT
+					${geoLen === 10 ?
+							`a.cousub_geoid`
+							: `substring(a.geoid, 1, ${geoLen})`
+							} AS geoid,prop_class,
+				count(1) as count,
+				sum(replacement_value) as replacement_value
+				FROM irvs.buildings_2018 AS a
+				join irvs.enhanced_building_risk as b on a.id = b.building_id 
+				WHERE
+				${geoLen === 10 ?
+							`a.cousub_geoid`
+							: `substring(a.geoid, 1, ${geoLen})`
+							} IN ('${filteredGeoids.join(`','`)}') 
+				AND 
+				(prop_class ~ '${propType.map(prop => prop.toString().includes('0') ? '^' + prop.toString().replace(/^0+|0+$/g, "") :
+							prop.toString().replace(/^0+|0+$/g, "")).join('|')}'
+				)
+			   GROUP BY 1,2`;
+				// check if number includes 0 in trailing spaces and update the AND clause
+				console.log('sql', sql)
+				return db_service.promise(sql);
+			});
+
+		return Promise.all(queries)
+			.then(data => [].concat(...data));
 
 	}
 }
-
+/*
+OR prop_class IN ('${propType.filter(prop => !prop.toString().includes('/0') ?
+							propType.join(`','`) : ''
+						)}')
+ */

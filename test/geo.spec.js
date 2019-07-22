@@ -22,7 +22,7 @@ describe('Geography tools', () => {
 	})
 	 */
 
-	/*
+
 	test('nys counties', (done) => {
 		var getEvent = {
 	  		'paths': `[['geo','36','counties']]`,
@@ -37,7 +37,7 @@ describe('Geography tools', () => {
 			done()
 		});
 	})
-	 */
+
 
 	//----------------My code ----------------------
 
@@ -58,6 +58,7 @@ describe('Geography tools', () => {
 	})
 	 */
 
+	/*
 	test('nys counties', (done) => {
 		var getEvent = {
 			'paths': `[['geo',["3600161181", "3600106211", "3600140002", "3600179851", "3600131104", "3600150672", "3600116694", "3600117343", "3600101000", "3600106354", "3600116749", "3600178674", "3600130532"],['name']]]`,
@@ -69,6 +70,7 @@ describe('Geography tools', () => {
 			done()
 		});
 	})
+	 */
 	/*
 	test('nys tracts', (done) => {
 		var getEvent = {

@@ -40,6 +40,7 @@ describe('building', () => {
      */
 
 
+    /*
     test('building.byGeoid', (done) => {
         const getEvent = {
             'paths': [
@@ -51,6 +52,21 @@ describe('building', () => {
             console.log('response',JSON.stringify(response))
             //expect(get(response, 'jsonGraph.capabilities.byId.1.name.value', null)).toBe("Notify NYC");
             done();
+        });
+    })
+     */
+
+    test('building.byGeoid.propType', (done) => {
+        const getEvent = {
+            'paths': [
+                ['building','byGeoid', [36035],'propType',[112],'sum',['count']]
+            ],
+            'method': 'get'
+        }
+        falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+            console.log('response',JSON.stringify(response))
+            //expect(get(response, 'jsonGraph.capabilities.byId.1.name.value', null)).toBe("Notify NYC");
+            done()
         });
     })
 

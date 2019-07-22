@@ -89,7 +89,7 @@ module.exports = [
 
 
 	{
-		route: `building.byGeoid[{keys:geoids}].propType[{keys:propTypes}].length`,
+		route: `building.byGeoid[{keys:geoids}].propType[{keys:propType}].length`,
 		get: function(pathSet) {
 			const geoids = getGeoids(pathSet);
 			const propType = pathSet[4];
@@ -114,34 +114,35 @@ module.exports = [
 		route: `building.byGeoid[{keys:geoids}].propType[{keys:propType}].sum['count','replacement_value']`,
 		get: function (pathSet) {
 			const geoids = getGeoids(pathSet);
-			const buildingOwners = pathSet[4];
-			const pathKeys = pathSet[6]
-			return buildingController.(this.db_service, geoids, buildingOwners)
+			const propType = pathSet[4];
+			const pathKeys = pathSet[6];
+			return buildingController.buildingByLandUseType(this.db_service, geoids,propType)
 				.then(rows => {
 					const response = [];
 					geoids.forEach(geoid => {
-						buildingOwners.forEach((owner) => {
+						//propType.forEach((prop) => {
 							rows.forEach((row) => {
-								if (owner.toString() === row.owner_type) {
-									pathKeys.forEach((keys) => {
+								console.log('row',row)
+								//if (row.prop_class.includes(prop.toString().replace(/^0+|0+$/g, ""))) {
+									pathKeys.map((keys) => {
 										if (keys === 'count') {
 											response.push({
-												path: ['building', 'byGeoid', geoid, 'owner', owner, 'sum', [keys]],
+												path: ['building', 'byGeoid', geoid, 'propType',row.prop_class, 'sum', [keys]],
 												value: $atom(row[keys])
-											})
+											});
 										}
 										else{
 											response.push({
-												path: ['building', 'byGeoid', geoid, 'owner', owner, 'sum', [keys]],
+												path: ['building', 'byGeoid', geoid, 'propType',row.prop_class, 'sum', [keys]],
 												value: $atom(row[keys])
 											})
 										}
 									})
-								}
+								//}
 							});
-
-						})
+						//})
 					});
+					console.log('---',JSON.stringify(response))
 					console.timeEnd('getNumbuildings')
 					return response;
 				})
