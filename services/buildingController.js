@@ -179,4 +179,11 @@ module.exports = {
 			.then(data => [].concat(...data));
 
 	}
-}
+};
+
+/*
+(prop_class ~ '${propType.map(prop => prop.toString().includes('0') ? '^' + prop.toString().replace(/^0+|0+$/g, "") :
+							prop.toString().replace(/^0+|0+$/g, "")).join('|')}'
+				)
+
+ */
