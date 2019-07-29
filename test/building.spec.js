@@ -38,13 +38,11 @@ describe('building', () => {
         });
     })
      */
-
-
     /*
     test('building.byGeoid', (done) => {
         const getEvent = {
             'paths': [
-                ['building','byGeoid', [36001],'propType',[100],'length']
+                ['building','byGeoid', [36035],'byIndex',{from:0,to:5},'id']
             ],
             'method': 'get'
         }
@@ -55,7 +53,6 @@ describe('building', () => {
         });
     })
      */
-
     test('building.byGeoid.propType', (done) => {
         const getEvent = {
             'paths': [
@@ -69,9 +66,6 @@ describe('building', () => {
             done()
         });
     })
-
-
-
 
     /*
     test('building.byGeoid.owner', (done) => {
@@ -118,11 +112,12 @@ describe('building', () => {
      */
 
 
+
     /*
     test('actions.worksheet.byIndex', (done) => {
         const getEvent = {
             'paths': [
-                ['actions','worksheet','byIndex', [0],"id"]
+                ['actions','worksheet','byIndex',{from: 0,to:5},"id"]
             ],
             'method': 'get'
         }

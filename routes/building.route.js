@@ -122,7 +122,6 @@ module.exports = [
 					geoids.forEach(geoid => {
 						//propType.forEach((prop) => {
 							rows.forEach((row) => {
-								console.log('row',row)
 								//if (row.prop_class.includes(prop.toString().replace(/^0+|0+$/g, ""))) {
 									pathKeys.map((keys) => {
 										if (keys === 'count') {
@@ -163,6 +162,7 @@ module.exports = [
 						const reduced = rows.reduce((a, c) => c.geoid === geoid ? c : a, null);
 						indices.forEach(index => {
 							const value = reduced.ids[index];
+							console.log('value',value, typeof value)
 							if (value) {
 								response.push({
 									path: ['building', 'byGeoid', geoid, 'byIndex', index, 'id'],
@@ -171,12 +171,12 @@ module.exports = [
 							}
 							else {
 								response.push({
-									path: ['building', 'byGeoid', geoid, 'byIndex', index],
+									path: ['building', 'byGeoid', geoid, 'byIndex', index,'id'],
 									value: null
 								})
 							}
 						})
-					})
+					});
 					console.timeEnd('get building ids')
 					return response;
 				});

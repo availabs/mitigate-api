@@ -118,7 +118,7 @@ module.exports = {
 			join irvs.enhanced_building_risk as b on a.id = b.building_id 
 			WHERE id IN (${ buildingids });
 		`;
-
+		console.log('sql',sql);
 				return db_service.promise(sql);
 
 	},
@@ -168,10 +168,7 @@ module.exports = {
 							`a.cousub_geoid`
 							: `substring(a.geoid, 1, ${geoLen})`
 							} IN ('${filteredGeoids.join(`','`)}') 
-				AND 
-				(prop_class ~ '${propType.map(prop => prop.toString().includes('0') ? '^' + prop.toString().replace(/^0+|0+$/g, "") :
-							prop.toString().replace(/^0+|0+$/g, "")).join('|')}'
-				)
+				AND prop_class IN ('${ propType.join(`','`) }')
 			   GROUP BY 1,2`;
 				// check if number includes 0 in trailing spaces and update the AND clause
 				console.log('sql', sql)
@@ -183,8 +180,3 @@ module.exports = {
 
 	}
 }
-/*
-OR prop_class IN ('${propType.filter(prop => !prop.toString().includes('/0') ?
-							propType.join(`','`) : ''
-						)}')
- */
