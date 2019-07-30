@@ -104,7 +104,7 @@ module.exports = [//{
     						value: $atom(geodata[geoid])
     					})
 	    			})
-		    		resolve(resopnhse);
+		    		resolve(response);
 
 		    	})
 		    })
