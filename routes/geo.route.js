@@ -21,8 +21,7 @@ const typeByGeoidLength =  {
 	'14': 'blockgroup'
 }
 
-module.exports = [
-
+module.exports = [//{
 	{ // GeoByGeoid
 		route: `geo[{keys:geoids}]['geoid', 'name', 'type']`,
 	    get: function (pathSet) {
@@ -37,20 +36,18 @@ module.exports = [
     					pathKeys.forEach(key => {
 	    					response.push({
 	    						path: ['geo', row.geoid, key],
-	    						value: key === 'type'
-	    							? typeByGeoidLength[row.geoid.length]
+	    						value: key === 'type' 
+	    							? typeByGeoidLength[row.geoid.length] 
 	    							: row[key]
 	    					})
 	    				})
-
+		    			
 	    			})
 		    		resolve(response);
 		    	})
 		    })
 	    }
-	},
-
-
+	}, // END GeoByGeoid
 
 	{ // CountiesByGeoid
 		route: `geo[{keys:geoids}].counties`,
@@ -107,7 +104,7 @@ module.exports = [
     						value: $atom(geodata[geoid])
     					})
 	    			})
-		    		resolve(response);
+		    		resolve(resopnhse);
 
 		    	})
 		    })
