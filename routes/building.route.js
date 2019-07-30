@@ -141,7 +141,6 @@ module.exports = [
 							});
 						//})
 					});
-					console.log('---',JSON.stringify(response))
 					console.timeEnd('getNumbuildings')
 					return response;
 				})
@@ -210,6 +209,37 @@ module.exports = [
 						}
 					})
 					console.timeEnd('get building attributes')
+					return response;
+				});
+		}
+	},
+	{
+		route: `building.byGeoid[{keys:geoids}][{keys:hazard_risks}].sum['count','replacement_value']`,
+		get: function(pathSet) {
+			const geoids = getGeoids(pathSet),
+				hazard_risk = pathSet.hazard_risks,
+			pathKeys  = pathSet[5];
+			return buildingController.summary(this.db_service,geoids,hazard_risk)
+				.then(rows => {
+					const response = [];
+					console.log('rows',rows);
+					/*
+					geoids.forEach(geoid => {
+					rows.forEach((row) => {
+						pathKeys.forEach(key =>{
+							if(key === 'count'){
+								response.push({
+									path : ['building','byGeoid',geoid,hazard_risk[0],row[hazard_risk[0]],'sum',key],
+									value : row[key]
+								})
+							}
+						})
+
+					});
+
+					});
+					 */
+					console.log('response1',JSON.stringify(response))
 					return response;
 				});
 		}

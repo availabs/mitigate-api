@@ -18,9 +18,11 @@ const ATTRIBUTES = [
 		"replacement_value",
 		"critical",
 		"flood_zone",
-		"prop_class"
+		"prop_class",
+		"flood_velocity"
 
-]
+];
+
 
 module.exports = {
 	ATTRIBUTES,
@@ -171,13 +173,39 @@ module.exports = {
 				AND prop_class IN ('${ propType.join(`','`) }')
 			   GROUP BY 1,2`;
 				// check if number includes 0 in trailing spaces and update the AND clause
-				console.log('sql', sql)
 				return db_service.promise(sql);
 			});
 
 		return Promise.all(queries)
 			.then(data => [].concat(...data));
 
+	},
+
+	summary : (db_service,geoids,hazard_risks) =>{
+		const queries = getGeoidLengths(geoids).map(geoLen =>{
+			const filteredGeoids = geoids.filter(d => d.length === geoLen),
+				sql =
+					`SELECT
+					${ geoLen === 10 ?
+						`a.cousub_geoid`
+						: `substring(a.geoid, 1, ${ geoLen })`
+					} AS geoid,${hazard_risks},
+					COUNT(1) AS count,
+					SUM(replacement_value) AS replacement_value
+					FROM irvs.buildings_2018 AS a
+					join irvs.enhanced_building_risk AS b on a.id = b.building_id
+					WHERE
+        		${ geoLen === 10 ?
+						`a.cousub_geoid`
+						: `substring(a.geoid, 1, ${ geoLen })`
+					} IN ('${ filteredGeoids.join(`','`) }') AND ${hazard_risks} IS NOT NULL
+        		GROUP BY 1,2
+					`;
+			console.log('sql',sql)
+			return db_service.promise(sql)
+		})
+		return Promise.all(queries)
+			.then(data => [].concat(...data));
 	}
 };
 

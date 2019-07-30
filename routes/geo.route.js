@@ -187,18 +187,7 @@ module.exports = [
 					 pathSet.geoids.forEach(geoid => {
 					     pathSet.years.forEach(year => {
 					     	censusKeys.forEach(key => {
-									 var path = ['acs', geoid, year,key]
-									 //results.forEach(function(result,i){
-									 // 	Object.values(results).forEach(function(value,i){
-									 // 		let path = ['acs',value.geoid,value.year,value.censvar]
-										// 	returnData.push({
-										// 		value: value.value,
-										// 		path
-										// 	})
-										// })
-
-								 	//})
-									 
+									 var path = ['acs', geoid, year,key];
 									 result = results
 										 .reduce((a, c) => (c.geoid == geoid) && (c.year == year) && (c.censvar == key)? c : a, null);
 										 //console.log('result', result)
@@ -212,9 +201,8 @@ module.exports = [
 					 	})
 					 });
 					//console.log('returnData',results.length)
-					console.timeEnd('census prepare')
+					console.timeEnd('census prepare');
 					return returnData;
-
 				})
         }
     } // END CensusAcsByGeoidByKeys

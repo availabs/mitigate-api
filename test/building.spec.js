@@ -53,15 +53,16 @@ describe('building', () => {
         });
     })
      */
+
     test('building.byGeoid.propType', (done) => {
         const getEvent = {
             'paths': [
-                ['building','byGeoid', [36035],'propType',[112],'sum',['count']]
+                ['building','byGeoid', [36001],['flood_zone'],'sum',['count']]
             ],
             'method': 'get'
         }
         falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
-            console.log('response',JSON.stringify(response))
+            console.log('response2',JSON.stringify(response))
             //expect(get(response, 'jsonGraph.capabilities.byId.1.name.value', null)).toBe("Notify NYC");
             done()
         });
