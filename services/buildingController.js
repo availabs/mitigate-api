@@ -3,23 +3,23 @@ const { getGeoidLengths } = require("./utils");
 
 const ATTRIBUTES = [
 
-		"footprint",
-		"footprint_source",
-		"footprint_id",
-		"owner",
-		"owner_type",
-		"type",
-		"name",
-		"parcel_id",
-		"geoid",
-		"cousub_geoid",
-		"id",
-		"ogs_id",
-		"replacement_value",
-		"critical",
-		"flood_zone",
-		"prop_class",
-		"flood_velocity"
+	"footprint",
+	"footprint_source",
+	"footprint_id",
+	"owner",
+	"owner_type",
+	"type",
+	"name",
+	"parcel_id",
+	"geoid",
+	"cousub_geoid",
+	"id",
+	"ogs_id",
+	"replacement_value",
+	"critical",
+	"flood_zone",
+	"prop_class",
+	"flood_velocity"
 
 ];
 
@@ -28,62 +28,62 @@ module.exports = {
 	ATTRIBUTES,
 
 	length: (db_service, geoids,buildingOwners) => {
-	if(buildingOwners){
-		const queries = getGeoidLengths(geoids).map(geoLen => {
-			const filteredGeoids = geoids.filter(d => d.length === geoLen),
-				sql = `
+		if(buildingOwners){
+			const queries = getGeoidLengths(geoids).map(geoLen => {
+				const filteredGeoids = geoids.filter(d => d.length === geoLen),
+					sql = `
         	SELECT
         		${ geoLen === 10 ?
-					`cousub_geoid`
-					: `substring(a.geoid, 1, ${ geoLen })`
+						`cousub_geoid`
+						: `substring(a.geoid, 1, ${ geoLen })`
 					} AS geoid,c.owner_type,
         		count(1) AS length
         	FROM irvs.buildings_2018 as a 
         	JOIN parcel.parcel_2017_36 as c on a.parcel_id = c.objectid
         	WHERE
         		${ geoLen === 10 ?
-					`cousub_geoid`
-					: `substring(a.geoid, 1, ${ geoLen })`
+						`cousub_geoid`
+						: `substring(a.geoid, 1, ${ geoLen })`
 					} IN ('${ filteredGeoids.join(`','`) }') AND c.owner_type IN  ('${buildingOwners.join(`','`)}')
 	        GROUP BY 1,2
       	`;
-			//console.log("SQL:",sql);
-			return db_service.promise(sql);
+				//console.log("SQL:",sql);
+				return db_service.promise(sql);
 
-		})
-
-		return Promise.all(queries)
-			.then(data => {
-				return [].concat(...data)
 			})
-	}
-	else{
-		const queries = getGeoidLengths(geoids).map(geoLen => {
-			const filteredGeoids = geoids.filter(d => d.length === geoLen),
-				sql = `
+
+			return Promise.all(queries)
+				.then(data => {
+					return [].concat(...data)
+				})
+		}
+		else{
+			const queries = getGeoidLengths(geoids).map(geoLen => {
+				const filteredGeoids = geoids.filter(d => d.length === geoLen),
+					sql = `
         	SELECT
         		${ geoLen === 10 ?
-					`cousub_geoid`
-					: `substring(a.geoid, 1, ${ geoLen })`
+						`cousub_geoid`
+						: `substring(a.geoid, 1, ${ geoLen })`
 					} AS geoid,
         		count(1) AS length
         	FROM irvs.buildings_2018 as a 
         	WHERE
         		${ geoLen === 10 ?
-					`cousub_geoid`
-					: `substring(a.geoid, 1, ${ geoLen })`
+						`cousub_geoid`
+						: `substring(a.geoid, 1, ${ geoLen })`
 					} IN ('${ filteredGeoids.join(`','`) }')
 	        GROUP BY 1
       	`;
-			//console.log("SQL:",sql);
-			return db_service.promise(sql);
+				//console.log("SQL:",sql);
+				return db_service.promise(sql);
 
-		});
-		return Promise.all(queries)
-			.then(data => {
-				return [].concat(...data)
-			})
-	}
+			});
+			return Promise.all(queries)
+				.then(data => {
+					return [].concat(...data)
+				})
+		}
 
 	},
 
@@ -93,19 +93,19 @@ module.exports = {
 				sql = `
 					SELECT
         		${ geoLen === 10 ?
-            	`cousub_geoid`
-            	: `substring(geoid, 1, ${ geoLen })`
-            } AS geoid,
+					`cousub_geoid`
+					: `substring(geoid, 1, ${ geoLen })`
+				} AS geoid,
             ARRAY_AGG(id) AS ids
           FROM irvs.buildings_2018
           WHERE
         		${ geoLen === 10 ?
-            	`cousub_geoid`
-            	: `substring(geoid, 1, ${ geoLen })`
-            } IN ('${ filteredGeoids.join(`','`) }')
+					`cousub_geoid`
+					: `substring(geoid, 1, ${ geoLen })`
+				} IN ('${ filteredGeoids.join(`','`) }')
            GROUP BY 1
 				`
-			 //console.log("SQL:",sql)
+			//console.log("SQL:",sql)
 			return db_service.promise(sql);
 		})
 		return Promise.all(queries)
@@ -113,15 +113,15 @@ module.exports = {
 	},
 
 	byId: (db_service, buildingids, cols) => {
-				const sql = `
+		const sql = `
 			SELECT id AS id,
 				${ cols.join() }
 			FROM irvs.buildings_2018 as a
 			join irvs.enhanced_building_risk as b on a.id = b.building_id 
 			WHERE id IN (${ buildingids });
 		`;
-		console.log('sql',sql);
-				return db_service.promise(sql);
+
+		return db_service.promise(sql);
 
 	},
 
@@ -133,7 +133,7 @@ module.exports = {
         		${ geoLen === 10 ?
 					`a.cousub_geoid`
 					: `substring(a.geoid, 1, ${ geoLen })`
-					} AS geoid,c.owner_type,
+				} AS geoid,c.owner_type,
         		count(b.building_type) as count,
         		sum(b.replacement_value) as replacement_value
           FROM irvs.buildings_2018 AS a
@@ -143,7 +143,7 @@ module.exports = {
         		${ geoLen === 10 ?
 					`a.cousub_geoid`
 					: `substring(a.geoid, 1, ${ geoLen })`
-					} IN ('${ filteredGeoids.join(`','`) }') AND c.owner_type IN  ('${buildingOwners.join(`','`)}')
+				} IN ('${ filteredGeoids.join(`','`) }') AND c.owner_type IN  ('${buildingOwners.join(`','`)}')
                    GROUP BY 1,2`;
 			return db_service.promise(sql);
 		});
@@ -153,35 +153,35 @@ module.exports = {
 	},
 
 	buildingByLandUseType : (db_service,geoids,propType) =>{
-			const queries = getGeoidLengths(geoids).map(geoLen => {
-				const filteredGeoids = geoids.filter(d => d.length === geoLen),
-					sql =
-						`SELECT
+		const queries = getGeoidLengths(geoids).map(geoLen => {
+			const filteredGeoids = geoids.filter(d => d.length === geoLen),
+				sql =
+					`SELECT
 					${geoLen === 10 ?
-							`a.cousub_geoid`
-							: `substring(a.geoid, 1, ${geoLen})`
-							} AS geoid,prop_class,
+						`a.cousub_geoid`
+						: `substring(a.geoid, 1, ${geoLen})`
+					} AS geoid,prop_class,
 				count(1) as count,
 				sum(replacement_value) as replacement_value
 				FROM irvs.buildings_2018 AS a
 				join irvs.enhanced_building_risk as b on a.id = b.building_id 
 				WHERE
 				${geoLen === 10 ?
-							`a.cousub_geoid`
-							: `substring(a.geoid, 1, ${geoLen})`
-							} IN ('${filteredGeoids.join(`','`)}') 
+						`a.cousub_geoid`
+						: `substring(a.geoid, 1, ${geoLen})`
+					} IN ('${filteredGeoids.join(`','`)}') 
 				AND prop_class IN ('${ propType.join(`','`) }')
 			   GROUP BY 1,2`;
-				// check if number includes 0 in trailing spaces and update the AND clause
-				return db_service.promise(sql);
-			});
+			// check if number includes 0 in trailing spaces and update the AND clause
+			return db_service.promise(sql);
+		});
 
 		return Promise.all(queries)
 			.then(data => [].concat(...data));
 
 	},
 
-	summary : (db_service,geoids,hazard_risks) =>{
+	summary : (db_service,geoids,hazardRisk,zones) =>{
 		const queries = getGeoidLengths(geoids).map(geoLen =>{
 			const filteredGeoids = geoids.filter(d => d.length === geoLen),
 				sql =
@@ -189,7 +189,7 @@ module.exports = {
 					${ geoLen === 10 ?
 						`a.cousub_geoid`
 						: `substring(a.geoid, 1, ${ geoLen })`
-					} AS geoid,${hazard_risks},
+					} AS geoid,${hazardRisk},
 					COUNT(1) AS count,
 					SUM(replacement_value) AS replacement_value
 					FROM irvs.buildings_2018 AS a
@@ -198,12 +198,13 @@ module.exports = {
         		${ geoLen === 10 ?
 						`a.cousub_geoid`
 						: `substring(a.geoid, 1, ${ geoLen })`
-					} IN ('${ filteredGeoids.join(`','`) }') AND ${hazard_risks} IS NOT NULL
+					} IN ('${ filteredGeoids.join(`','`) }') AND ${hazardRisk} IN ('${ zones.join(`','`) }')
         		GROUP BY 1,2
 					`;
 			console.log('sql',sql)
 			return db_service.promise(sql)
 		})
+		//});
 		return Promise.all(queries)
 			.then(data => [].concat(...data));
 	}

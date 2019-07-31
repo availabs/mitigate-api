@@ -2,7 +2,9 @@ const falcorJsonGraph = require('falcor-json-graph'),
 	$atom = falcorJsonGraph.atom,
 
 	buildingController = require("../services/buildingController"),
-	ATTRIBUTES = buildingController.ATTRIBUTES;
+	ATTRIBUTES = buildingController.ATTRIBUTES,
+	META_DATA = require("./metadata"),
+	hazardRisks = META_DATA.HAZARD_META
 
 const getGeoids = pathSet => pathSet.geoids.map(geoid => geoid.toString());
 
@@ -121,24 +123,24 @@ module.exports = [
 					const response = [];
 					geoids.forEach(geoid => {
 						//propType.forEach((prop) => {
-							rows.forEach((row) => {
-								//if (row.prop_class.includes(prop.toString().replace(/^0+|0+$/g, ""))) {
-									pathKeys.map((keys) => {
-										if (keys === 'count') {
-											response.push({
-												path: ['building', 'byGeoid', geoid, 'propType',row.prop_class, 'sum', [keys]],
-												value: $atom(row[keys])
-											});
-										}
-										else{
-											response.push({
-												path: ['building', 'byGeoid', geoid, 'propType',row.prop_class, 'sum', [keys]],
-												value: $atom(row[keys])
-											})
-										}
+						rows.forEach((row) => {
+							//if (row.prop_class.includes(prop.toString().replace(/^0+|0+$/g, ""))) {
+							pathKeys.map((keys) => {
+								if (keys === 'count') {
+									response.push({
+										path: ['building', 'byGeoid', geoid, 'propType',row.prop_class, 'sum', [keys]],
+										value: $atom(row[keys])
+									});
+								}
+								else{
+									response.push({
+										path: ['building', 'byGeoid', geoid, 'propType',row.prop_class, 'sum', [keys]],
+										value: $atom(row[keys])
 									})
-								//}
-							});
+								}
+							})
+							//}
+						});
 						//})
 					});
 					console.timeEnd('getNumbuildings')
@@ -161,7 +163,6 @@ module.exports = [
 						const reduced = rows.reduce((a, c) => c.geoid === geoid ? c : a, null);
 						indices.forEach(index => {
 							const value = reduced.ids[index];
-							console.log('value',value, typeof value)
 							if (value) {
 								response.push({
 									path: ['building', 'byGeoid', geoid, 'byIndex', index, 'id'],
@@ -214,34 +215,55 @@ module.exports = [
 		}
 	},
 	{
-		route: `building.byGeoid[{keys:geoids}][{keys:hazard_risks}].sum['count','replacement_value']`,
+		route: `building.byGeoid[{keys:geoids}].hazardRisk[{keys:hazardKeys}].zones[{keys:zoneKeys}].sum['count','replacement_value']`,
 		get: function(pathSet) {
 			const geoids = getGeoids(pathSet),
-				hazard_risk = pathSet.hazard_risks,
-			pathKeys  = pathSet[5];
-			return buildingController.summary(this.db_service,geoids,hazard_risk)
+				hazardRisk = pathSet[4].toString(),
+				zones = pathSet[6],
+				pathKeys  = pathSet[8];
+			return buildingController.summary(this.db_service,geoids,hazardRisk,zones)
 				.then(rows => {
 					const response = [];
-					console.log('rows',rows);
-					/*
 					geoids.forEach(geoid => {
-					rows.forEach((row) => {
-						pathKeys.forEach(key =>{
-							if(key === 'count'){
-								response.push({
-									path : ['building','byGeoid',geoid,hazard_risk[0],row[hazard_risk[0]],'sum',key],
-									value : row[key]
-								})
-							}
-						})
+						rows.forEach((row) => {
+							zones.forEach((zone) =>{
+								if(row[hazardRisk] === zone){
+									pathKeys.forEach(key =>{
+										if(key === 'count'){
+											let path  = ['building','byGeoid',geoid,'hazardRisk',hazardRisk,'zones',zone,'sum',key]
+											response.push({
+												path : path,
+												value : $atom(row[hazardRisk] === zone ? row[key] : 0)
+											});
+										}
+										if(key === 'replacement_value'){
+											let path  = ['building','byGeoid',geoid,'hazardRisk',hazardRisk,'zones',zone,'sum',key]
+											response.push({
+												path : path,
+												value : $atom(row[hazardRisk] === zone ? row[key] : 0)
+											})
+										}
+									})
 
-					});
+								}
+							})
 
+						});
 					});
-					 */
-					console.log('response1',JSON.stringify(response))
 					return response;
 				});
+		}
+	},
+	{ // hazard meta
+		route: `building.hazard.meta`,
+		get: function(pathSet) {
+			return[
+				{
+					path: ['building','hazard','meta'],
+					value: $atom(hazardRisks)
+				}
+			]
+
 		}
 	}
 ]
