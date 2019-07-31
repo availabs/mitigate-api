@@ -25,7 +25,7 @@ describe('Geography tools', () => {
 
 	test('nys counties', (done) => {
 		var getEvent = {
-	  		'paths': `[['geo','36','counties']]`,
+	  		'paths': `[['geo', 36001, [2016], ['population']]]`,
 	  		'method': 'get'
 	  	}
 

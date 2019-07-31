@@ -186,7 +186,7 @@ const CensusAcsByGeoidByYear = (db_service, geoids, years) => {
     return db_service.promise(sql);
   })
   return Promise.all(queries)
-    .then(data => [].concat(...data),console.log('data',data));
+    .then(data => [].concat(...data));
 }
 
 
