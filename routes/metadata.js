@@ -4,7 +4,7 @@ let META_DATA = {
         'wildfire':{id:'wildfire', name:'Wildfire', description: '', sheldus: "Wildfire", zones: []},
         'tsunami':{id:'tsunami', name:'Tsunami/Seiche', description: '', sheldus: "Tsunami/Seiche", zones: []},
         'tornado':{id:'tornado', name:'Tornado', description: '', sheldus: "Tornado", zones: []},
-        'flood_zone':{id:'riverine', name:'Flooding', description: '', sheldus: "Flooding", zones: ['X', 'A', 'AR','AE','AO','VE',]},
+        'riverine':{id:'riverine', name:'Flooding', description: '', sheldus: "Flooding", zones: ['X', 'A', 'AR','AE','AO','VE',]},
         'lightning':{id:'lightning', name:'Lightning', description: '', sheldus: "Lightning", zones: []},
         'landslide':{id:'landslide', name:'Landslide', description: '', sheldus: "Landslide", zones: []},
         'icestorm':{id:'icestorm', name:'Ice Storm', description: '', sheldus: "", zones: []},
