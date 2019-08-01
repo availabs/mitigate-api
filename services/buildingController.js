@@ -19,7 +19,15 @@ const ATTRIBUTES = [
 	"critical",
 	"flood_zone",
 	"prop_class",
-	"flood_velocity"
+	"flood_velocity",
+    "flood_depth",
+    "flood_base_elevation",
+    'num_units',
+    'basement',
+    'num_stories',
+    'building_type',
+    'roof_type',
+	'address'
 
 ];
 
@@ -120,7 +128,6 @@ module.exports = {
 			join irvs.enhanced_building_risk as b on a.id = b.building_id 
 			WHERE id IN (${ buildingids });
 		`;
-
 		return db_service.promise(sql);
 
 	},
@@ -201,7 +208,6 @@ module.exports = {
 					} IN ('${ filteredGeoids.join(`','`) }') AND ${hazardRisk} IN ('${ zones.join(`','`) }')
         		GROUP BY 1,2
 					`;
-			console.log('sql',sql)
 			return db_service.promise(sql)
 		})
 		//});

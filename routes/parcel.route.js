@@ -64,7 +64,7 @@ module.exports = [
 		get: function(pathSet) {
 			const parcelids = pathSet.parcelids,
 				attributes = pathSet[3];
-			console.time('get parcel attributes')
+			console.time('get parcel attributes');
 			return parcelController.byId(this.db_service, parcelids, attributes)
 				.then(rows => {
 					const response = [];
@@ -73,8 +73,12 @@ module.exports = [
 						if (obj) {
 							attributes.forEach(attribute => {
 								response.push({
-									path: ['parcel', 'byId', id, attribute],
+									path: ['parcel', 'byId', id,attribute],
 									value: obj[attribute]
+								});
+								response.push({
+									path: ['parcel', 'byId', id,'address'],
+									value: obj['address']
 								})
 							})
 						}

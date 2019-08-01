@@ -34,7 +34,10 @@ const ATTRIBUTES = [
 	"ag_dist_code",
 	"ag_dist_name",
 	"primary_owner",
-	"owner_type"
+	"owner_type",
+	"parcel_addr",
+	"muni_name",
+	"loc_zip"
 
 ]
 
@@ -94,14 +97,15 @@ module.exports = {
 	},
 
 	byId: (db_service, parcelids, cols) => {
+		console.log('cols',cols)
 		const sql = `
 			SELECT objectid AS id,
-				${ cols.join() }
+				${ cols.join() },
+			CONCAT_WS(' ',"parcel_addr","muni_name","loc_zip") as address
 			FROM parcel.parcel_2017_36
 			WHERE objectid IN (${ parcelids });
 		`
 		// console.log('SQL:',sql)
-
 		return db_service.promise(sql);
 	}
 }

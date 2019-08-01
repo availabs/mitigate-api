@@ -5,6 +5,7 @@ jest.setTimeout(10000)
 
 describe('Parcel', () => {
 
+
 	test(`parcel.byGeoid[{keys:geoids}].length`, (done) => {
 		var getEvent = {
 	  		'paths': [
@@ -42,7 +43,7 @@ describe('Parcel', () => {
 	  	}
 	  	console.time('byGeoidByIndex')
 		falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
-			console.timeEnd('byGeoidByIndex')	
+			console.timeEnd('byGeoidByIndex')
 			let data = get(response, 'jsonGraph.parcel', null);
 
 			expect(+data.byGeoid['36001'].byIndex[0].id).toBe(97247)
@@ -52,28 +53,20 @@ describe('Parcel', () => {
 		});
 	})
 
-	test(`parcel.byId[{keys:parcelids}][ATTRIBUTES]`, (done) => {
+
+	test(`parcel.byId`, (done) => {
 		var getEvent = {
 	  		'paths': [
-	  			['parcel', 'byId',
-	  				[97247, 391252, -1],
-						["prop_class", "roll_secti", "land_av", "total_av", "full_marke"]
-					]
+	  			['parcel', 'byId', [2298507], ["parcel_addr","muni_name","loc_zip"]]
 	  		],
 	  		'method': 'get'
 	  	}
-	  	console.time('byIdSmall')
 		falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
-			console.timeEnd('byIdSmall')
-			let data = get(response, 'jsonGraph.parcel', null);
-
-			expect(data.byId[97247].prop_class).toBe("240");
-			expect(data.byId[391252].prop_class).toBe("270");
-			expect(data.byId[-1]).toBe(null);
-
-			done();
+			console.log('response',response)
+			done()
 		});
 	})
+
 
 })
 
