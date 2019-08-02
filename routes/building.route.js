@@ -233,14 +233,14 @@ module.exports = [
 											let path  = ['building','byGeoid',geoid,'hazardRisk',hazardRisk,'zones',zone,'sum',key]
 											response.push({
 												path : path,
-												value : $atom(row[hazardRisk] === zone ? row[key] : 0)
+												value : row[hazardRisk] === zone ? row[key] : 0
 											});
 										}
 										if(key === 'replacement_value'){
 											let path  = ['building','byGeoid',geoid,'hazardRisk',hazardRisk,'zones',zone,'sum',key]
 											response.push({
 												path : path,
-												value : $atom(row[hazardRisk] === zone ? row[key] : 0)
+												value : row[hazardRisk] === zone ? row[key] : 0
 											})
 										}
 									})
@@ -250,6 +250,7 @@ module.exports = [
 
 						});
 					});
+					console.log('response')
 					return response;
 				});
 		}
