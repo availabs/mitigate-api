@@ -6,6 +6,7 @@ let metadata = require('../routes/metadata'),
     { getGeoidLengths } = require("./utils");
 
 const HazardsByGeoid = function RiskIndexHazardGeo( db_service, geoids, hazardIds ) {
+  //console.log('hello', hazardIds)
   return new Promise((resolve, reject) => {
     
     // split geography type by geoid length
