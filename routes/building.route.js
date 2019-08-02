@@ -4,7 +4,7 @@ const falcorJsonGraph = require('falcor-json-graph'),
 	buildingController = require("../services/buildingController"),
 	ATTRIBUTES = buildingController.ATTRIBUTES,
 	META_DATA = require("./metadata"),
-	hazardRisks = META_DATA.HAZARD_META
+	hazardRisks = META_DATA.RISK_ZONES
 
 const getGeoids = pathSet => pathSet.geoids.map(geoid => geoid.toString());
 
@@ -256,11 +256,11 @@ module.exports = [
 		}
 	},
 	{ // hazard meta
-		route: `building.hazard.meta`,
+		route: `building.hazard.meta.risk_zones`,
 		get: function(pathSet) {
 			return[
 				{
-					path: ['building','hazard','meta'],
+					path: ['building','hazard','meta','risk_zones'],
 					value: $atom(hazardRisks)
 				}
 			]
