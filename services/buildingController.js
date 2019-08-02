@@ -205,7 +205,8 @@ module.exports = {
         		${ geoLen === 10 ?
 						`a.cousub_geoid`
 						: `substring(a.geoid, 1, ${ geoLen })`
-					} IN ('${ filteredGeoids.join(`','`) }') AND ${hazardRisk} IN ('${ zones.join(`','`) }')
+					} IN ('${ filteredGeoids.join(`','`) }') 
+        		AND ${hazardRisk} IN ('${ zones.join(`','`) }')
         		GROUP BY 1,2
 					`;
 			return db_service.promise(sql)
