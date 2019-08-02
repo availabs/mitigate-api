@@ -57,7 +57,7 @@ describe('building', () => {
     test('building.byGeoid.propType', (done) => {
         const getEvent = {
             'paths': [
-                ['building','byGeoid', [36001],['flood_zone'],'sum',['count']]
+                ['building','byGeoid', [36085,3608570915],'hazardRisk',['flood_zone'],'zones',['X', 'A', 'AR','AE','AO','VE'],'sum',['count']]
             ],
             'method': 'get'
         }
@@ -68,11 +68,12 @@ describe('building', () => {
         });
     })
 
+
     /*
     test('building.byGeoid.owner', (done) => {
         const getEvent = {
             'paths': [
-                ['building','byGeoid', [3603555101],'owner',buildingOwners,'sum',['count','replacement_value']]
+                ['building','byGeoid', [36035,3603555101],'owner',buildingOwners,'sum',['count','replacement_value']]
             ],
             'method': 'get'
         }
@@ -83,6 +84,7 @@ describe('building', () => {
         });
     })
      */
+
     /*
     test('actions.worksheet.byId::set', (done) => {
         const setEvent = {
