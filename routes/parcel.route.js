@@ -93,5 +93,32 @@ module.exports = [
 					return response;
 				});
 		}
+	},
+	{
+		route: `parcel.meta[{keys:fields}]`,
+		get : function(pathSet){
+			const parcelFields = pathSet.fields;
+			return parcelController.meta(this.db_service,parcelFields)
+				.then(rows =>{
+					let response = [];
+					parcelFields.forEach(field =>{
+						var newArray = [];
+						rows.filter(row => {
+							if(row.field === field){
+								newArray.push({
+									name: row.name,
+									value : row.value
+								})
+								response.push({
+									path : ['parcel','meta',field],
+									value : $atom(newArray)
+								})
+							}
+						});
+
+					})
+					return response
+				})
+		}
 	}
 ]
