@@ -102,7 +102,7 @@ module.exports = [
 				.then(rows =>{
 					let response = [];
 					parcelFields.forEach(field =>{
-						var newArray = [];
+						let newArray = [];
 						rows.filter(row => {
 							if(row.field === field){
 								newArray.push({
