@@ -97,7 +97,6 @@ module.exports = {
 	},
 
 	byId: (db_service, parcelids, cols) => {
-		console.log('cols',cols)
 		const sql = `
 			SELECT objectid AS id,
 				${ cols.join() },
@@ -107,5 +106,15 @@ module.exports = {
 		`
 		// console.log('SQL:',sql)
 		return db_service.promise(sql);
+	},
+
+	meta: (db_service,parcelFields) =>{
+		const sql = `
+			SELECT *
+			FROM parcel.parcel_meta
+			WHERE field IN ('${ parcelFields.join(`','`) }')
+		`;
+		return db_service.promise(sql)
+
 	}
 }
