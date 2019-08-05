@@ -4,8 +4,7 @@ const falcorGraph = require('./graph'),
 jest.setTimeout(10000)
 
 describe('Parcel', () => {
-
-
+	/*
 	test(`parcel.byGeoid[{keys:geoids}].length`, (done) => {
 		var getEvent = {
 	  		'paths': [
@@ -46,7 +45,7 @@ describe('Parcel', () => {
 			console.timeEnd('byGeoidByIndex')
 			let data = get(response, 'jsonGraph.parcel', null);
 
-			expect(+data.byGeoid['36001'].byIndex[0].id).toBe(97247)
+			expect(+data.byGeoid['36001'].byIndex[0].id).toBe(101838)
 			expect(+data.byGeoid['36011'].byIndex[0].id).toBe(391252)
 
 			done();
@@ -63,6 +62,20 @@ describe('Parcel', () => {
 	  	}
 		falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
 			console.log('response',response)
+			done()
+		});
+	})
+	 */
+
+	test(`parcel.meta`, (done) =>{
+		var getEvent = {
+			'paths' : [
+				['parcel','meta',['owner_type','heat_type']]
+			],
+			'method':'get'
+		}
+		falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
+			console.log('response',JSON.stringify(response))
 			done()
 		});
 	})
