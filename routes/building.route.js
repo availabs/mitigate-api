@@ -212,6 +212,33 @@ module.exports = [
 					console.timeEnd('get building attributes')
 					return response;
 				});
+		},
+		set: function(jsonGraph) {
+			const buildingsById = jsonGraph.building.byId,
+				ids = Object.keys(buildingsById);
+			return buildingController.update(this.db_service,buildingsById)
+				.then(rows => {
+					const result = [];
+					ids.forEach(id => {
+						const row = rows.reduce((a, c) => c.building_id === id ? c : a, null);
+						if (!row) {
+							result.push({
+								path: ['building','byId', id],
+								value: $atom(null)
+							})
+						}
+						else {
+							for (const key in row) {
+								//console.log('key',key)
+								result.push({
+									path: ['building','byId', id, key],
+									value: $atom(row[key])
+								})
+							}
+						}
+					})
+					return result;
+				});
 		}
 	},
 	{
@@ -250,7 +277,6 @@ module.exports = [
 
 						});
 					});
-					console.log('response')
 					return response;
 				});
 		}
