@@ -27,7 +27,9 @@ const ATTRIBUTES = [
     'num_stories',
     'building_type',
     'roof_type',
-	'address'
+	'address',
+	'num_residents',
+	'num_employees'
 
 ];
 
@@ -214,7 +216,27 @@ module.exports = {
 		//});
 		return Promise.all(queries)
 			.then(data => [].concat(...data));
-	}
+	},
+	update: (db_service, updates) => {
+		return Promise.all(
+			Object.keys(updates)
+				.map(id => {
+					const keys = Object.keys(updates[id]).filter(key => !['id'].includes(key)),
+						sql = `
+							UPDATE irvs.enhanced_building_risk
+							SET ${ keys.map((key, i) => `${ key } = $${ i + 1 }`) }
+							WHERE building_id = $${ keys.length + 1 }
+							RETURNING *;
+						`,
+						args = [
+							...keys.map(key => updates[id][key] === null ? null : updates[id][key].value || updates[id][key]),
+							id
+						];
+					return db_service.promise(sql, args);
+				})
+		)
+			.then(results => [].concat(...results));
+	},
 };
 
 /*
