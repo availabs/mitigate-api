@@ -84,7 +84,6 @@ module.exports = {
                             ...keys.map(key => updates[id][key] === null ? null : updates[id][key].value || updates[id][key]),
                             id
                         ]
-                    console.log('sql',sql)
                     return db_service.promise(sql, args);
                 })
         )
@@ -112,7 +111,7 @@ module.exports = {
 			DELETE FROM actions.actions_worksheet
 			WHERE id IN (${ ids });
 		`;
-        console.log('sql',sql)
+
         return db_service.promise(sql)
             .then(() => length(db_service))
     }
