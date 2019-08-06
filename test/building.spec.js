@@ -8,6 +8,28 @@ describe('building', () => {
     const content_id = `my-special-content-id`
     const buildingOwners = [1,2,3,4,5,6,7,8,9,10,-999]
 
+    test('building.byId::set', (done) => {
+        const setEvent = {
+            'method': 'set',
+            'jsonGraph': {
+                'paths': [['building','byId',[2281553], ['basement']]],
+                'jsonGraph': {
+                    'building': {
+                            'byId': {
+                                [2281553]: {
+                                    'basement':false
+                                }
+                            }
+                    }
+                }
+            }
+        }
+        falcorGraph.respond({ queryStringParameters: setEvent }, (error, response) => {
+            console.log('response',JSON.stringify(response))
+            //expect(get(response, `jsonGraph.content.byId.${ content_id }.body.value`)).toBe("New body text here!");
+            done();
+        });
+    })
 
     /*
     test('building.byId', (done) => {
@@ -24,19 +46,6 @@ describe('building', () => {
         });
     })
 
-    test('building.byId', (done) => {
-        const getEvent = {
-            'paths': [
-                ['building','byId', [2281553],["id","name","type","parcel_id"]]
-            ],
-            'method': 'get'
-        }
-        falcorGraph.respond({ queryStringParameters: getEvent }, (error, response) => {
-            console.log('response',JSON.stringify(response))
-            //expect(get(response, 'jsonGraph.capabilities.byId.1.name.value', null)).toBe("Notify NYC");
-            done();
-        });
-    })
      */
     /*
     test('building.byGeoid', (done) => {
@@ -54,6 +63,7 @@ describe('building', () => {
     })
      */
 
+    /*
     test('building.byGeoid.propType', (done) => {
         const getEvent = {
             'paths': [
@@ -67,6 +77,7 @@ describe('building', () => {
             done()
         });
     })
+     */
 
 
     /*
