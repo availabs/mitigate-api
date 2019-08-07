@@ -65,7 +65,7 @@ const ChildrenByGeoid = function ChildrenByGeoid(db_service, geoids, type) {
 
 const GeoByGeoid = function GeoByGeoid( db_service, geoids ) {
   return new Promise((resolve, reject) => {
-    
+
     // split geography type by geoid length
     let geoidLengths = geoids.reduce((out, g) => {
       if (!out.includes(g.length)) { out.push(g.length) }   
@@ -74,7 +74,8 @@ const GeoByGeoid = function GeoByGeoid( db_service, geoids ) {
     
     // create query promises for all geography types
     let queries = geoidLengths.map(geoLen => {
-      return new Promise((resolve, reject) => {
+
+        return new Promise((resolve, reject) => {
         let filteredGeoids = geoids.filter(d => d.length === geoLen)
         // console.log('geoids', geoids,filteredGeoids)
         
