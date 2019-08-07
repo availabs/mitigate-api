@@ -20,16 +20,42 @@ const ATTRIBUTES = [
 	"flood_zone",
 	"prop_class",
 	"flood_velocity",
-    "flood_depth",
-    "flood_base_elevation",
-    'num_units',
-    'basement',
-    'num_stories',
-    'building_type',
-    'roof_type',
+	"flood_depth",
+	"flood_base_elevation",
+	'num_units',
+	'basement',
+	'num_stories',
+	'building_type',
+	'roof_type',
 	'address',
 	'num_residents',
+	'heat_type',
+	'naics_code',
+	'census_industry_code',
+	'contents_replacement_value',
+	'inventory_replacement_value',
+	'establishment_revenue',
+	'business_hours',
+	'seismic_zone',
+	'flood_plain',
+	'flood_duration',
+	'high_wind_speed',
+	'soil_type',
+	'storage_hazardous_materials',
+	'topography',
+	'critical_infrastructure',
+	'num_occupants',
+	'num_vehicles_inhabitants',
+	'height',
+	'structure_type',
+	'bldg_style',
+	'sqft_living',
+	'nbr_kitchens',
+	'nbr_full_baths',
+	'nbr_bedrooms',
+	'first_floor_elevation',
 	'num_employees'
+
 
 ];
 
@@ -244,4 +270,37 @@ module.exports = {
 							prop.toString().replace(/^0+|0+$/g, "")).join('|')}'
 				)
 
+ */
+
+/*
+"prop_class",
+	"replacement_value",
+	"critical",
+	"flood_zone",
+	"flood_velocity",
+    "flood_depth",
+    "flood_base_elevation",
+    'num_units',
+    'basement',
+    'num_stories',
+    'building_type',
+    'roof_type',
+	'address',
+	'num_residents',
+	'num_employees',
+
+
+
+	"footprint",
+	"footprint_source",
+	"footprint_id",
+	"owner",
+	"owner_type",
+	"type",
+	"name",
+	"parcel_id",
+	"geoid",
+	"cousub_geoid",
+	"id",
+	"ogs_id",
  */
