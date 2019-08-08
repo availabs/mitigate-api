@@ -4,9 +4,23 @@ import database_config
 def createTable(cursor):
     print "UPDATING TABLE..."
     sql = '''
-		UPDATE irvs.enhanced_building_risk SET heat_type = b.heat_type
-        FROM irvs.enhanced_building_risk as a
-        JOIN parcel.parcel_2017_36 as b on a.building_id = b.objectid
+		UPDATE irvs.enhanced_building_risk as b SET
+        address = CONCAT_WS('',a.parcel_addr,a.muni_name,a.loc_zip),
+        heat_type = a.heat_type,
+        bldg_style = a.bldg_style,
+        sqft_living = a.sqft_living,
+        nbr_kitchens = a.nbr_kitchens,
+        nbr_full_baths = a.nbr_full_baths,
+        nbr_bedrooms = a.nbr_bedrooms,
+        fuel_type = a.fuel_type,
+        water_supply = a.water_supply,
+        sewer_type = a.sewer_type,
+        geoid = a.geoid,
+        cousub_geoid = a.cousub_geoid,
+        tract_geoid = a.tract_geoid,
+        dup_geoid = a.dup_geo
+        FROM parcel.parcel_2017_36 as a
+        WHERE a.objectid = b.building_id
 	'''
     cursor.execute(sql)
     print "TABLE UPDATED."
