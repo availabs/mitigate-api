@@ -6,12 +6,6 @@ from collections import OrderedDict, defaultdict
 import random
 
 building_population_data = pandas.read_csv('output_population.csv')
-building_housing_data = pandas.read_csv('output_housing.csv')
-
-
-housing_units = building_housing_data['housing_units'][0]
-total_population = building_population_data['population'][0]
-
 single_family_residential_count = 0
 two_family_residential_count = 0
 single_family_residential_accessory_count = 0
