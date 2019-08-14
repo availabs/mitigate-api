@@ -114,6 +114,7 @@ for geoid in geoids:
     prop_class_lower_count_dict.update({
         geoid : 0
     })
+#--------------------------------- Categorizing according to prop_classes------------------------------------
 for row in building_population_data.index:
     if building_population_data.at[row,'prop_class'] in prop_class_upper:
         if math.isnan(building_population_data.at[row,'nbr_bedrooms']):
@@ -149,6 +150,7 @@ for geoid in geoids:
         to_be_assigned_lower_dict.update({
             geoid : 0.1 * (population_dict[geoid] - total_residents_previous[geoid]) / prop_class_lower_count_dict[geoid]
         })
+#-------------------------------------------assigning num_residents according to the percentage-----------------------------------------------------
 for row in building_population_data.index :
     if building_population_data.at[row,'prop_class'] in prop_class_upper:
         if math.isnan(building_population_data.at[row,'nbr_bedrooms']):
