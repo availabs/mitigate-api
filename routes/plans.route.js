@@ -32,6 +32,32 @@ module.exports = [
                 });
         }
     },
+    {
+        route: `plans.county.byGeoid[{integers:geoids}].id`,
+        get: function(pathSet) {
+            return plansController.byGeoid(this.db_service)
+                .then(rows => {
+                    const result = [];
+                    pathSet.geoids.forEach(geoid => {
+                        const row = rows.filter(f => f.fips === geoid.toString())[0];
+                        if (!row) {
+                            result.push({
+                                path: ['plans','county','byGeoid', geoid],
+                                value: $atom(null)
+                            })
+                        }
+                        else {
+                            console.log(row['id'])
+                            result.push({
+                                path: ['plans','county','byGeoid', geoid, 'id'],
+                                value: $atom(row['id'])
+                            })
+                        }
+                    })
+                    return result;
+                });
+        }
+    },
 
     {
         route: 'plans.county.length',

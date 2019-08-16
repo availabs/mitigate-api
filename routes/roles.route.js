@@ -6,7 +6,8 @@ const falcorJsonGraph = require('falcor-json-graph'),
 module.exports = [
     {
         route: 'roles.insert',
-        call: function(callPath, args) {
+        call: function(callPath, args, refPaths, thisPaths) {
+            console.log('inresting...', args);
             return rolesController.insert(this.db_service, args)
                 .then(([length, row]) => {
                     return [
@@ -107,5 +108,48 @@ module.exports = [
                     return result;
                 })
         }
-    }
+    },
+
+    {
+        route: `roles.byIndex[{integers:indices}].id`,
+        get: function(pathSet) {
+            return rolesController.byIndex(this.db_service)
+                .then(rows => {
+                    const result = [];
+                    pathSet.indices.forEach(index => {
+                        const row = rows[index];
+                        if (!row) {
+                            result.push({
+                                path: ['roles', 'byIndex', index],
+                                value: $atom(null)
+                            })
+                        }
+                        else {
+                            result.push({
+                                path: ['roles', 'byIndex', index, 'id'],
+                                value: $atom(row['id'])
+                            })
+                        }
+                    })
+                    return result;
+                });
+        }
+    },
+
+    {
+        route: 'roles.length',
+        get: function(pathSet) {
+            return rolesController.length(this.db_service)
+                .then(length => {
+                    console.log('length',length)
+                    return [
+                        {
+                            path: ['roles', 'length'],
+                            value: $atom(+length)
+                        }
+                    ]
+                });
+        }
+    },
+
 ]

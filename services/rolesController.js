@@ -22,7 +22,7 @@ const length = db_service => {
 
 module.exports = {
     cols,
-
+    length,
     insert: (db_service, args) => {
         const sql = `
         INSERT INTO roles.roles(${cols})
@@ -80,5 +80,13 @@ module.exports = {
         )
             .then(results => [].concat(...results));
     },
+
+    byIndex: db_service => {
+        const sql = `
+			SELECT id
+			FROM roles.roles
+		`
+        return db_service.promise(sql);
+    }
 
 }

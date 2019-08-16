@@ -33,6 +33,14 @@ module.exports = {
         return db_service.promise(sql);
     },
 
+    byGeoid: db_service => {
+        const sql = `
+			SELECT *
+			FROM plans.county
+		`
+        return db_service.promise(sql);
+    },
+
 
     get: (db_service, ids) => {
 
