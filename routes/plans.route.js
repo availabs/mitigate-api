@@ -187,7 +187,7 @@ module.exports = [
                         let ids = rows
                             .filter(row => row.groups.includes( group))//
                             .map(row => row.id)
-
+                        ids = [...new Set(ids)]
                         result.push({
                             path: ['plans', 'authGroups', group, 'plans'],
                             value: $atom(ids)

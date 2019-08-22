@@ -82,6 +82,7 @@ module.exports = [
         },
 
         set: function(jsonGraph) {
+            console.log('jsonGraph', jsonGraph)
             const actionsById = jsonGraph.roles.byId,
                 ids = Object.keys(actionsById);
             return rolesController.update(this.db_service,  actionsById)
@@ -100,7 +101,7 @@ module.exports = [
                             for (const key in row) {
                                 result.push({
                                     path: ['roles', 'byId', id, key],
-                                    value: $atom(row[key])
+                                    value: row[key]
                                 })
                             }
                         }
@@ -109,7 +110,37 @@ module.exports = [
                 })
         }
     },
-
+    {
+        route: `roles.byPlanId[{keys:ids}]['${ cols.join("','") }']`,
+        get: function(pathSet) {
+            const IDs = pathSet.ids;
+            return rolesController
+                .byPlanId(this.db_service, IDs)
+                .then(rows => {
+                    const result = [];
+                    IDs.forEach(id => {
+                        console.log(id)
+                        const row = rows.reduce((a, c) => c.associated_plan === id ? c : a, null);
+                        if (!row) {
+                            result.push({
+                                path: ['roles','byPlanId', id],
+                                value: $atom(null)
+                            })
+                        }
+                        else {
+                            pathSet[3].forEach(col => {
+                                result.push({
+                                    path: ['roles','byPlanId', id, col],
+                                    value: $atom(row[col])
+                                })
+                            })
+                        }
+                    })
+                    console.log('byPlanId', result)
+                    return result;
+                })
+        },
+    },
     {
         route: `roles.byIndex[{integers:indices}].id`,
         get: function(pathSet) {

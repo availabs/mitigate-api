@@ -1,4 +1,5 @@
 const cols = [
+    "id",
     "contact_name",
     "contact_email",
     "contact_phone",
@@ -25,7 +26,7 @@ module.exports = {
     length,
     insert: (db_service, args) => {
         const sql = `
-        INSERT INTO roles.roles(${cols})
+        INSERT INTO roles.roles(${cols.filter(f => f !== 'id')})
         VALUES (${args.map( (a,i) => `$${i+1}`)})
         returning *
         `;
@@ -58,6 +59,17 @@ module.exports = {
         console.log(sql)
         return db_service.promise(sql);
     },
+
+    byPlanId: (db_service, ids) => {
+        const sql = `
+			SELECT *
+			FROM roles.roles
+			WHERE associated_plan IN (${ ids })
+
+		`
+        console.log(sql)
+        return db_service.promise(sql);
+    },
     
     update: (db_service, updates) => {
         return Promise.all(
@@ -74,6 +86,7 @@ module.exports = {
                             ...keys.map(key => updates[id][key] === null ? null : updates[id][key].value || updates[id][key]),
                             id
                         ]
+                    console.log(updates)
                     console.log(sql)
                     return db_service.promise(sql, args);
                 })
