@@ -60,6 +60,34 @@ module.exports = [
     },
 
     {
+        route: `plans.county.bySubdomain[{keys:subdomains}].id`,
+        get: function(pathSet) {
+            console.log(pathSet)
+            return plansController.byGeoid(this.db_service)
+                .then(rows => {
+                    const result = [];
+                    pathSet.subdomains.forEach(subdomain => {
+                        const row = rows.filter(f => f.subdomain === subdomain.toString())[0];
+                        if (!row) {
+                            result.push({
+                                path: ['plans','county','bySubdomain', subdomain],
+                                value: $atom(null)
+                            })
+                        }
+                        else {
+                            console.log(row['id'])
+                            result.push({
+                                path: ['plans','county','bySubdomain', subdomain, 'id'],
+                                value: $atom(row['id'])
+                            })
+                        }
+                    })
+                    return result;
+                });
+        }
+    },
+
+    {
         route: 'plans.county.length',
         get: function(pathSet) {
             return plansController.length(this.db_service)

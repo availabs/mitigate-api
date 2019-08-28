@@ -7,7 +7,8 @@ const ATTRIBUTES = [
     "plan_status",
     "groups",
     "id",
-    "county"
+    "county",
+    "subdomain"
 ]
 
 const length = db_service => {
