@@ -55,7 +55,7 @@
     "gulp-license": "~1.0.0",
     "gulp-mocha": "^2.0.1",
     "gulp-rename": "~1.2.0",
-    "lodash": "^3.8.0",
+    "lodash": "^4.17.15",
     "promise": "^7.0.1",
     "sinon": "^1.15.4",
     "through2": "~0.6.3"
